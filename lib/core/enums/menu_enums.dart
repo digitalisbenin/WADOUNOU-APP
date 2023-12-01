@@ -1,0 +1,1 @@
+enum MenuState { home, reservations, orders, profile }
