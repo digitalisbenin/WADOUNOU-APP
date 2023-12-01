@@ -2,16 +2,18 @@ import 'dart:io';
 
 import 'package:digitalis_restaurant_app/core/routing/app_route.dart';
 import 'package:digitalis_restaurant_app/core/services/storage_service.dart';
-import 'package:digitalis_restaurant_app/module/restaurants_page/presentation/home/homePage/home_screen.dart';
 import 'package:digitalis_restaurant_app/module/start/presentation/splash_screen/splash_screen.dart';
+import 'package:digitalis_restaurant_app/provider/app_provider.dart';
 import 'package:digitalis_restaurant_app/provider/auth_provider.dart';
 import 'package:digitalis_restaurant_app/provider/booking_provider.dart';
 import 'package:digitalis_restaurant_app/provider/cart_provider.dart';
+import 'package:digitalis_restaurant_app/provider/comment_provider.dart';
 import 'package:digitalis_restaurant_app/provider/database/db_provider.dart';
 import 'package:digitalis_restaurant_app/provider/database/user_model_provider.dart';
 import 'package:digitalis_restaurant_app/provider/order_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -64,6 +66,8 @@ class MyApp extends StatelessWidget {
     ));
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => AppProvider()),
+        ChangeNotifierProvider(create: (_) => CommentProvider()),
         ChangeNotifierProvider(create: (_) => OrderProvider()),
         ChangeNotifierProvider(create: (_) => BookingProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
@@ -71,15 +75,17 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => DatabaseProvider()),
         ChangeNotifierProvider(create: (_) => UserModel())
       ],  
-      child: MaterialApp(
+      child: GetMaterialApp(
           title: 'WADOUNOU',
+          defaultTransition: Transition.rightToLeft,
           theme: ThemeData(
+            useMaterial3: true,
             primarySwatch: Colors.orange,
           ),
           debugShowCheckedModeBanner: false,
-          initialRoute:
-          showSplashScreen ? SplashScreen.routeName : HomeScreen.routeName,
+          initialRoute: SplashScreen.routeName,
           routes: routes,
         ));
+        
       }
   }

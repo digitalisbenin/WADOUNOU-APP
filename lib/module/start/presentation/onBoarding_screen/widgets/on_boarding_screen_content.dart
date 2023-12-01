@@ -15,17 +15,17 @@ class SplashScreenContent extends StatelessWidget {
     return Column(
       children: [
         const Spacer(),
-        
         SizedBox(
-          height: SizeConfig.screenHeight* 0.02,
+          height: SizeConfig.screenHeight * 0.02,
         ),
         Padding(
           padding: const EdgeInsets.all(15.0),
-          child: Text(
-            text,
-            textAlign: TextAlign.start,
-            style: TextStyle(color: Colors.white, fontSize: SizeConfig.screenHeight * 0.024, fontWeight: FontWeight.bold)
-          ),
+          child: Text(text,
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: SizeConfig.screenHeight * 0.024,
+                  fontWeight: FontWeight.bold)),
         ),
         const Spacer(
           flex: 2,

@@ -28,9 +28,9 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> checkFirstRun() async {
     WidgetsFlutterBinding.ensureInitialized();
     final prefs = await SharedPreferences.getInstance();
-   // final isFirstRun = prefs.getBool('isFirstRun') ?? true;
+    final isFirstRun = prefs.setBool('isFirstRun', true);
 
-    await Future.delayed(Duration(seconds: 5), () {
+    /* await Future.delayed(Duration(seconds: 5), () {
       DatabaseProvider().getToken().then((value) {
         if (value == '') {
           Navigator.pushNamed(context, OnBoardingScreen.routeName);
@@ -38,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
           Navigator.pushNamed(context, AccountViewPage.routeName);
         }
       });
-    });
+    }); */
 
     /* if (isFirstRun) {
       Navigator.of(context).pushReplacementNamed('/onboarding');

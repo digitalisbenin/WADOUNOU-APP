@@ -1,6 +1,5 @@
 import 'package:digitalis_restaurant_app/core/constants/constant.dart';
 import 'package:digitalis_restaurant_app/core/utils/size_config.dart';
-import 'package:digitalis_restaurant_app/module/restaurants_page/presentation/home/homePage/home_screen.dart';
 import 'package:digitalis_restaurant_app/module/start/presentation/landing/presentation/landing_screen.dart';
 import 'package:digitalis_restaurant_app/module/start/presentation/onBoarding_screen/widgets/on_boarding_screen_content.dart';
 import 'package:digitalis_restaurant_app/widgets/default_button.dart';
@@ -19,17 +18,14 @@ class _OnBoardingScreenBodyState extends State<OnBoardingScreenBody> {
   List<Map<String, String>> splashData = [
     {
       "text": "Bienvenue sur WADOUNOU !",
-      /* "image": "assets/images/splash_2.png", */
       "lottie": "assets/lotties/restaurant_edited.json",
     },
     {
       "text": "Commandez et faites vos réservations depuis chez vous et ceci dans des restaurants de marque !",
-      /* "image": "assets/images/splash_3.png", */
       "lottie": "assets/lotties/order_received.json",
     },
     {
-      "text": "Nos livreurs vous apporte vos commande de façon express",
-      /* "image": "assets/images/splash_2.png", */
+      "text": "Nos livreurs vous apportent vos commandes de façon express",
       "lottie": "assets/lotties/deliver_person_edited.json",
     }
   ];

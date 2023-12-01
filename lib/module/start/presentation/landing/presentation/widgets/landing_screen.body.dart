@@ -6,14 +6,26 @@ import 'package:digitalis_restaurant_app/shared/ui/ui_helpers.dart';
 import 'package:flutter/material.dart';
 
 class LandingScreenBody extends StatelessWidget {
-  const LandingScreenBody({super.key});
+  LandingScreenBody({super.key});
+
+  var ctime;
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        return false;
-      },
+          DateTime now = DateTime.now();
+          if (ctime == null || now.difference(ctime) > Duration(seconds: 2)) {
+            //add duration of press gap
+            ctime = now;
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                    'Appuyer encore pour quitter'))); //scaffold message, you can show Toast message too.
+            return Future.value(false);
+          }
+
+          return Future.value(true);
+        },
       child: Stack(
         children: [
           const BackgroundImage(),
@@ -72,8 +84,6 @@ class LandingScreenBody extends StatelessWidget {
                           fontWeight: FontWeight.w500),
                     ),
                     verticalSpaceTiny,
-                    verticalSpaceTiny,
-                    verticalSpaceTiny,
                     Padding(
                       padding: const EdgeInsets.all(50),
                       child: Column(
@@ -127,10 +137,11 @@ class LandingScreenBody extends StatelessWidget {
                               borderRadius: BorderRadius.circular(8.0)
                             ),
                             child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: SizeConfig.screenHeight * 0.012),
+                              padding: EdgeInsets.symmetric(vertical: SizeConfig.screenHeight * 0.017, horizontal: SizeConfig.screenWidth * 0.017),
                               child: Text("Commandez ou Réservez en cliquant ici", style: TextStyle(
                                 fontSize: SizeConfig.screenHeight * 0.016,
                                 color: kPrimaryColor,
+                                fontWeight: FontWeight.bold,
                               ),),
                             ),
                           )

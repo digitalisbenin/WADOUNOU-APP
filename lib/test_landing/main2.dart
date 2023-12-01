@@ -1,15 +1,12 @@
-/* import 'package:digitalis_restaurant_app/core/constants/constant.dart';
-import 'package:digitalis_restaurant_app/core/routing/app_route.dart';
-import 'package:digitalis_restaurant_app/shared/ui/colors.dart';
-import 'package:digitalis_restaurant_app/shared/ui/ui_helpers.dart';
-import 'package:digitalis_restaurant_app/test_landing/widgets/login_page.dart';
-import 'package:digitalis_restaurant_app/test_landing/widgets/payment_methods_screen.dart';
+/* import 'package:digitalis_restaurant_app/test_landing/widgets/fedaPay_sample.dart';
+import 'package:digitalis_restaurant_app/test_landing/widgets/kkiaPay_sample.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 void main() {
-  runApp(MyApp2());
+  runApp(const MyApp2());
 }
+
+
 
 class MyApp2 extends StatelessWidget {
   const MyApp2({super.key});
@@ -17,12 +14,41 @@ class MyApp2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MLanding Testing',
+      title: 'Payemnt Methods',
       theme: ThemeData(
         primarySwatch: Colors.amber,
       ),
-      home: HomeScreen(),
-      routes: routes,
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Payment Methods'),
+          centerTitle: true,
+        ),
+        body: const Home(),
+      ),
     );
   }
-} */
+}
+
+class Home extends StatelessWidget {
+  const Home({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const KkiapaySample()));
+          }, child: const Text("KkiaPay"),),
+
+          ElevatedButton(onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const Accueil()));
+          }, child: const Text("FedaPay"),)
+        ],
+      ),
+    );
+  }
+}
+
+ */

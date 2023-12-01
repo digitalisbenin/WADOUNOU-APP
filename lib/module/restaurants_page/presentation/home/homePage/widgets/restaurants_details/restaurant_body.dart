@@ -13,7 +13,8 @@ import 'package:provider/provider.dart';
 
 class RestaurantBody extends StatefulWidget {
   const RestaurantBody({
-    super.key, required this.restaurant,
+    super.key,
+    required this.restaurant,
   });
 
   final Restaurant restaurant;
@@ -28,8 +29,6 @@ class _RestaurantBodyState extends State<RestaurantBody> {
   final _formKey = GlobalKey<FormState>();
 
   String? restaurantId;
-
-  Restaurant? _selectedRestaurant;
 
   RestaurantDetailArgument? arguments;
 
@@ -53,11 +52,11 @@ class _RestaurantBodyState extends State<RestaurantBody> {
     _descriptionController.clear();
   }
 
-  void _showBottomSheet(
-      BuildContext context) {
+  void _showBottomSheet(BuildContext context) {
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
+        backgroundColor: kWhite,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
         builder: (BuildContext context) {
@@ -118,7 +117,8 @@ class _RestaurantBodyState extends State<RestaurantBody> {
                                     ]),
                                 child: TextFormField(
                                   controller: _nameController,
-                                  cursorColor: kTextColor,
+                                  cursorColor: kPrimaryColor,
+                                  textCapitalization: TextCapitalization.words,
                                   style: const TextStyle(color: Colors.black),
                                   decoration: const InputDecoration(
                                       hintText: "Nom & prénoms",
@@ -160,7 +160,7 @@ class _RestaurantBodyState extends State<RestaurantBody> {
                                 child: TextFormField(
                                   keyboardType: TextInputType.phone,
                                   controller: _phoneController,
-                                  cursorColor: kTextColor,
+                                  cursorColor: kPrimaryColor,
                                   style: const TextStyle(color: Colors.black),
                                   decoration: const InputDecoration(
                                       hintText: "Numéro de téléphone",
@@ -193,8 +193,7 @@ class _RestaurantBodyState extends State<RestaurantBody> {
                                     context: context,
                                     initialDate: DateTime.now(),
                                     firstDate: DateTime.now(),
-                                    lastDate:
-                                        DateTime(DateTime.now().year + 1),
+                                    lastDate: DateTime(DateTime.now().year + 1),
                                   );
                                   if (selectedDate != null) {
                                     final selectedTime = await showTimePicker(
@@ -220,87 +219,127 @@ class _RestaurantBodyState extends State<RestaurantBody> {
                                   }
                                 },
                                 child: AbsorbPointer(
-                                  child: TextFormField(
-                                    controller: _dateTimeController,
-                                    style:
-                                        const TextStyle(color: Colors.black),
-                                    decoration: const InputDecoration(
-                                      hintText:
-                                          'Date et Heure de la réservation',
-                                      border: InputBorder.none,
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.black),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(8.0)),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        spreadRadius: 1,
+                                        blurRadius: 2,
+                                        offset: const Offset(0, 0),
+                                      )
+                                    ]),
+                                    child: TextFormField(
+                                      controller: _dateTimeController,
+                                      style: const TextStyle(color: Colors.black),
+                                      decoration: const InputDecoration(
+                                        hintText:
+                                            'Date et Heure de la réservation',
+                                        border: InputBorder.none,
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: Colors.black),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8.0)),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: Colors.black),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8.0)),
+                                        ),
                                       ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.black),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(8.0)),
-                                      ),
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return 'Veuillez sélectionner une date et une heure';
+                                        }
+                                        return null;
+                                      },
                                     ),
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return 'Veuillez sélectionner une date et une heure';
-                                      }
-                                      return null;
-                                    },
                                   ),
                                 ),
                               ),
                               SizedBox(
                                 height: SizeConfig.screenHeight * 0.02,
                               ),
-                              TextFormField(
-                                keyboardType: TextInputType.number,
-                                controller: _partySizeController,
-                                cursorColor: kTextColor,
-                                style: const TextStyle(color: Colors.black),
-                                decoration: const InputDecoration(
-                                    hintText: "Nombre de places à réserver",
-                                    border: InputBorder.none,
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.black),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(8.0))),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.black),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(8.0))),
-                                    hintStyle: TextStyle(color: kTextColor)),
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return "Le nombre de places à réserver est obligatoire";
-                                  }
-                                  return null;
-                                },
+                              Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        spreadRadius: 1,
+                                        blurRadius: 2,
+                                        offset: const Offset(0, 0),
+                                      )
+                                    ]),
+                                child: TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  controller: _partySizeController,
+                                  cursorColor: kPrimaryColor,
+                                  style: const TextStyle(color: Colors.black),
+                                  decoration: const InputDecoration(
+                                      hintText: "Nombre de places à réserver",
+                                      border: InputBorder.none,
+                                      enabledBorder: OutlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: Colors.black),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8.0))),
+                                      focusedBorder: OutlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: Colors.black),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8.0))),
+                                      hintStyle: TextStyle(color: kTextColor)),
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Le nombre de places à réserver est obligatoire";
+                                    }
+                                    return null;
+                                  },
+                                ),
                               ),
                               SizedBox(
                                 height: SizeConfig.screenHeight * 0.02,
                               ),
-                              TextFormField(
-                                controller: _descriptionController,
-                                cursorColor: kTextColor,
-                                style: const TextStyle(color: Colors.black),
-                                decoration: const InputDecoration(
-                                    hintText:
-                                        "Dites nous plus sur la réservation (facultatif)",
-                                    border: InputBorder.none,
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.black),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(8.0))),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.black),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(8.0))),
-                                    hintStyle: TextStyle(color: kTextColor)),
+                              Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        spreadRadius: 1,
+                                        blurRadius: 2,
+                                        offset: const Offset(0, 0),
+                                      )
+                                    ]),
+                                child: TextFormField(
+                                  controller: _descriptionController,
+                                  cursorColor: kPrimaryColor,
+                                  maxLines: 3,
+                                  textCapitalization: TextCapitalization.sentences,
+                                  style: const TextStyle(color: Colors.black),
+                                  decoration: const InputDecoration(
+                                      hintText:
+                                          "Dites nous plus sur la réservation (facultatif)",
+                                      border: InputBorder.none,
+                                      enabledBorder: OutlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: Colors.black),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8.0))),
+                                      focusedBorder: OutlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: Colors.black),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8.0))),
+                                      hintStyle: TextStyle(color: kTextColor)),
+                                ),
                               ),
                               SizedBox(
                                 height: SizeConfig.screenHeight * 0.04,
@@ -340,6 +379,10 @@ class _RestaurantBodyState extends State<RestaurantBody> {
                                         context: context,
                                       );
 
+                                      dispose();
+
+                                      Navigator.of(context).pop();
+
                                       if (bookInRestaurant
                                           .resMessage.isNotEmpty) {
                                         // Afficher le SnackBar avec la couleur appropriée
@@ -351,15 +394,9 @@ class _RestaurantBodyState extends State<RestaurantBody> {
                                                   ? Colors.green
                                                   : Colors.red,
                                         );
+
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(snackBar);
-
-                                        // Fermer le Bottom Sheet après un délai (par exemple, 2 secondes)
-                                        Future.delayed(Duration(seconds: 2),
-                                            () {
-                                          Navigator.of(context).pop();
-                                         /*  Navigator.pop(context); */
-                                        });
                                       }
 
                                       // submitReservationForm(arguments);
@@ -424,15 +461,6 @@ class _RestaurantBodyState extends State<RestaurantBody> {
             SizedBox(
               height: SizeConfig.screenHeight * 0.05,
             ),
-            /* const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: Text(
-                "Nouveau Venus",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              ),
-            ),
-            const RestaurantsNewArrivalScreen(),
-            verticalSpaceRegular, */
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.0),
               child: Text(
@@ -440,7 +468,9 @@ class _RestaurantBodyState extends State<RestaurantBody> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
             ),
-            DailyFood(restaurant: widget.restaurant,),
+            DailyFood(
+              restaurant: widget.restaurant,
+            ),
           ],
         ),
       ),

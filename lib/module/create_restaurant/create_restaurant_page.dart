@@ -224,7 +224,7 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
                                       borderRadius:
                                           BorderRadius.circular(12.0)),
                                   child: const Center(
-                                    child: CircularProgressIndicator(),
+                                    child: CircularProgressIndicator(color: kPrimaryColor,),
                                   ),
                                 ),
                                 const SizedBox(height: 16.0),

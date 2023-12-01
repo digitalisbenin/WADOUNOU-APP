@@ -24,7 +24,6 @@ class OrderProvider extends ChangeNotifier {
     required String description,
     required String status,
     required String repas_id,
-    required String restaurant_id,
     required String montant,
     required String quantite,
     BuildContext? context,
@@ -43,7 +42,6 @@ class OrderProvider extends ChangeNotifier {
       "description": description,
       "status": status,
       "repas_id": repas_id,
-      "restaurant_id": restaurant_id,
       "montant": montant,
       "quantite": quantite,
     };
@@ -80,6 +78,140 @@ class OrderProvider extends ChangeNotifier {
     }
   }
   void clear() {
+    _resMessage = "";
+    // _isLoading = false;
+    notifyListeners();
+  }
+
+
+  void postQuickOrder({
+    required String name,
+    required String adresse,
+    required String contact,
+    required String description,
+    required String status,
+    required String repas_id,
+    required String montant,
+    required String quantite,
+    BuildContext? context,
+}) async {
+    _isLoading = true;
+    notifyListeners();
+    
+    var addOrderUrl = Uri.https(requesBaseUrl, '/api/commandes');
+
+    var client = http.Client();
+
+    final body = {
+      "name": name,
+      "adresse": adresse,
+      "contact": contact,
+      "description": description,
+      "status": status,
+      "repas_id": repas_id,
+      "montant": montant,
+      "quantite": quantite,
+    };
+    print(body);
+
+    try {
+      var response = await client.post(addOrderUrl, body: body);
+      print(response.statusCode);
+      print(response.body);
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        _isLoading = false;
+        _resMessage = "Votre order à été bien placé";
+        notifyListeners();
+        // transition vers une page
+      } else {
+        final res = jsonDecode(response.body);
+
+        _resMessage = res['message'];
+        print(res);
+        _isLoading = false;
+        notifyListeners();
+      }
+    } on SocketException catch (_) {
+      _isLoading = false;
+      _resMessage = "Aucune connexion internet";
+      notifyListeners();
+    } catch (e) {
+      _isLoading = false;
+      _resMessage = "Please try again";
+      notifyListeners();
+
+      print(":::: $e");
+    }
+  }
+  void quickClear() {
+    _resMessage = "";
+    // _isLoading = false;
+    notifyListeners();
+  }
+
+
+  void postOrderFromRestaurant({
+    required String name,
+    required String adresse,
+    required String contact,
+    required String description,
+    required String status,
+    required String repas_id,
+    required String montant,
+    required String quantite,
+    BuildContext? context,
+}) async {
+    _isLoading = true;
+    notifyListeners();
+    
+    var addOrderUrl = Uri.https(requesBaseUrl, '/api/commandes');
+
+    var client = http.Client();
+
+    final body = {
+      "name": name,
+      "adresse": adresse,
+      "contact": contact,
+      "description": description,
+      "status": status,
+      "repas_id": repas_id,
+      "montant": montant,
+      "quantite": quantite,
+    };
+    print(body);
+
+    try {
+      var response = await client.post(addOrderUrl, body: body);
+      print(response.statusCode);
+      print(response.body);
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        _isLoading = false;
+        _resMessage = "Votre order à été bien placé";
+        notifyListeners();
+        // transition vers une page
+      } else {
+        final res = jsonDecode(response.body);
+
+        _resMessage = res['message'];
+        print(res);
+        _isLoading = false;
+        notifyListeners();
+      }
+    } on SocketException catch (_) {
+      _isLoading = false;
+      _resMessage = "Aucune connexion internet";
+      notifyListeners();
+    } catch (e) {
+      _isLoading = false;
+      _resMessage = "Please try again";
+      notifyListeners();
+
+      print(":::: $e");
+    }
+  }
+  void clearFromRestaurant() {
     _resMessage = "";
     // _isLoading = false;
     notifyListeners();

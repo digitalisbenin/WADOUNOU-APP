@@ -9,6 +9,7 @@ class RestaurantList {
 
   Future<List<Restaurant>> restaurants = getRestaurants();
 
+
   static Future<List<Restaurant>> getRestaurants() async {
     const restaurantUrl = 'https://apiv6.sevenservicesplus.com/api/menus';
 
@@ -29,6 +30,7 @@ class RestaurantList {
         (jsonDecode(responseRestaurantNoMenu.body)['data'] as List)
             .map((data) => Restaurant.fromJsonNoMenu(data))
             .toList();
+    
 
     restaurantsNoMenus.forEach((restaurant2) {
       bool restaurantDejaPresent =
@@ -55,9 +57,37 @@ class RestaurantList {
         restaurantsByName.values.toList();
 
     return restaurantsWithoutRedundancy;
-
-    /*  body["data"].map<Restaurant>((e) => Restaurant.fromJson(e)).toList(); */
   }
+
+  Future<List<dynamic>>checkResto(String nameMenu) async{
+  //Url vers l'API pour checker les menus
+    const restaurantUrl = 'https://apiv6.sevenservicesplus.com/api/menus';
+
+    final response = await http.get(Uri.parse(restaurantUrl));
+
+      if(response.statusCode == 200){
+      // Decodage du json récupéré 
+      Map<String, dynamic> responseData = json.decode(response.body);
+      if (responseData.containsKey('data') && responseData['data'] is List) {
+        List<dynamic> restaurantsData = responseData['data'];
+
+        List<dynamic> restaurantNames = restaurantsData.map((restaurant) {
+          if(restaurant.containsKey('restaurant') && restaurant['restaurant'] is Map)
+          {
+            var restoInfo = restaurant['restaurant'];
+              if( restoInfo.containsKey('name') && restoInfo['name'] is String){
+                return restoInfo['name'];
+              }
+          }
+        
+          return null;
+      }).where((name) => name != null).toList();
+
+        return restaurantNames;
+      }
+      }
+      return [];
+}
 
   static Future<Restaurant> getRestaurantById(String restaurantId) async {
     var client = http.Client();

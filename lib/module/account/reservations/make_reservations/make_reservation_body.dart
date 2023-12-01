@@ -3,20 +3,12 @@ import 'package:digitalis_restaurant_app/core/model/Users/Restaurant.dart';
 import 'package:digitalis_restaurant_app/core/model/restaurant.dart';
 import 'package:digitalis_restaurant_app/core/utils/size_config.dart';
 import 'package:digitalis_restaurant_app/core/utils/widgets/snack_message.dart';
+import 'package:digitalis_restaurant_app/module/restaurants_page/presentation/home/homePage/home_screen.dart';
 import 'package:digitalis_restaurant_app/provider/booking_provider.dart';
 import 'package:digitalis_restaurant_app/shared/ui/widgets/buttons/app_fill_button.dart';
-import 'package:digitalis_restaurant_app/widgets/default_button.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
-/*class Restaurant {
-  final String name;
-  final int stars;
-  final String location;
-
-  Restaurant(this.name, this.stars, this.location);
-}*/
 
 class MakeReservationBody extends StatefulWidget {
   const MakeReservationBody({
@@ -29,8 +21,6 @@ class MakeReservationBody extends StatefulWidget {
 
 class _MakeReservationBodyState extends State<MakeReservationBody> {
   final _formKey = GlobalKey<FormState>();
-
-  //Restaurant? _selectedRestaurant;
 
   Restaurant? selectedRestaurants;
 
@@ -64,7 +54,9 @@ class _MakeReservationBodyState extends State<MakeReservationBody> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                CircularProgressIndicator(),
+                CircularProgressIndicator(
+                  color: kPrimaryColor,
+                ),
                 SizedBox(
                   height: 8.0,
                 ),
@@ -73,7 +65,10 @@ class _MakeReservationBodyState extends State<MakeReservationBody> {
             ),
           );
         } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
+          return const Text(
+            'Erreur : La connexion au serveur à échouée ! Vérifier votre connexion internet',
+            textAlign: TextAlign.center,
+          );
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return const Text('No data available');
         } else {
@@ -140,7 +135,7 @@ class _MakeReservationBodyState extends State<MakeReservationBody> {
                     child: TextFormField(
                       keyboardType: TextInputType.number,
                       controller: _partySizeController,
-                      cursorColor: kTextColor,
+                      cursorColor: kPrimaryColor,
                       style: const TextStyle(color: Colors.black),
                       decoration: const InputDecoration(
                           hintText: "Nombre de places à réserver",
@@ -202,6 +197,7 @@ class _MakeReservationBodyState extends State<MakeReservationBody> {
                       child: AbsorbPointer(
                         child: TextFormField(
                           controller: _dateTimeController,
+                          cursorColor: kPrimaryColor,
                           style: const TextStyle(color: Colors.black),
                           decoration: const InputDecoration(
                             hintText: 'Date et Heure de la réservation',
@@ -235,7 +231,8 @@ class _MakeReservationBodyState extends State<MakeReservationBody> {
                         horizontal: 8.0, vertical: 2.0),
                     child: TextFormField(
                       controller: _nameController,
-                      cursorColor: kTextColor,
+                      cursorColor: kPrimaryColor,
+                      textCapitalization: TextCapitalization.words,
                       style: const TextStyle(color: Colors.black),
                       decoration: const InputDecoration(
                           hintText: "Nom & prénoms",
@@ -266,7 +263,7 @@ class _MakeReservationBodyState extends State<MakeReservationBody> {
                     child: TextFormField(
                       keyboardType: TextInputType.phone,
                       controller: _phoneController,
-                      cursorColor: kTextColor,
+                      cursorColor: kPrimaryColor,
                       style: const TextStyle(color: Colors.black),
                       decoration: const InputDecoration(
                           hintText: "Numéro de téléphone",
@@ -288,8 +285,6 @@ class _MakeReservationBodyState extends State<MakeReservationBody> {
                       },
                     ),
                   ),
-                  
-                  
                   SizedBox(
                     height: SizeConfig.screenHeight * 0.02,
                   ),
@@ -298,11 +293,13 @@ class _MakeReservationBodyState extends State<MakeReservationBody> {
                         horizontal: 10.0, vertical: 3.0),
                     child: TextFormField(
                       controller: _descriptionController,
-                      cursorColor: kTextColor,
+                      cursorColor: kPrimaryColor,
+                      textCapitalization: TextCapitalization.sentences,
+                      maxLines: 3,
                       style: const TextStyle(color: Colors.black),
                       decoration: const InputDecoration(
                           hintText:
-                              "Motif de la reservation (Une Occasion spéciale)",
+                              "Dites nous plus sur la réservation (facultatif)",
                           border: InputBorder.none,
                           enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.black),
@@ -343,6 +340,8 @@ class _MakeReservationBodyState extends State<MakeReservationBody> {
                               restaurant_id: selectedRestaurants!.id.toString(),
                               context: context,
                             );
+                            dispose();
+                            Navigator.pushNamed(context, HomeScreen.routeName);
                           } else if (_nameController.text.isEmpty ||
                               _phoneController.text.isEmpty ||
                               _dateTimeController.text.isEmpty ||

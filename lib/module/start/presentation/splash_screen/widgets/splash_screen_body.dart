@@ -1,8 +1,10 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:digitalis_restaurant_app/core/constants/constant.dart';
 import 'package:digitalis_restaurant_app/core/utils/size_config.dart';
+import 'package:digitalis_restaurant_app/module/restaurants_page/presentation/home/homePage/home_screen.dart';
 import 'package:digitalis_restaurant_app/module/start/presentation/onBoarding_screen/on_boarding_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreenBody extends StatefulWidget {
   const SplashScreenBody({super.key});
@@ -12,6 +14,17 @@ class SplashScreenBody extends StatefulWidget {
 }
 
 class _SplashScreenBodyState extends State<SplashScreenBody> {
+
+  // La fonction pour initialiser l'interface
+  @override
+  void initState(){
+    // Appel de la fonction d'initialisation
+    super.initState();
+    // Appel de la fonction de shared Preferences
+    //checkPreferences();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(
@@ -49,14 +62,18 @@ class _SplashScreenBodyState extends State<SplashScreenBody> {
       duration: 5000,
       splashTransition: SplashTransition.scaleTransition,
       animationDuration: const Duration(seconds: 1),
-      nextScreen: const OnBoardingScreen(),
-      
+      nextScreen: OnBoardingScreen(),
+
+    
       
       /* FutureBuilder<String>(future:  DatabaseProvider().getToken(), builder: (context, snapshot){
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return const CircularProgressIndicator(color: kPrimaryColor,);
         } else if (snapshot.hasError) {
-          return Text('Error : ${snapshot.error}');
+          return Text(
+              'Erreur : La connexion au serveur à échouée ! Vérifier votre connexion internet',
+              textAlign: TextAlign.center,
+            );
         } else {
           final userToken = snapshot.data;
           if (userToken!.isNotEmpty) {
@@ -68,4 +85,23 @@ class _SplashScreenBodyState extends State<SplashScreenBody> {
       }) */
     );
   }
+
+  checkPreferences() async {
+    // Initialisation d'une instance de Shared Preferences
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    // Creation d'une preference
+    final bool isFirstRun = preferences.getBool('isFirstRun') ?? true;
+
+    if(isFirstRun){
+      // Navigation vers l'interface de OnBoardingScreen
+      Navigator.pushReplacementNamed(context, OnBoardingScreen.routeName);
+      // Ici comme il n'y a aucune valeur dans la preference on initialise une preference à false
+      preferences.setBool('isFirstRun', false);
+    }else{
+      // ici il existe déjà une valeur dans la preference on passe directement à l'interface de HomeScreen
+      Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+      preferences.setBool('isFirstRun', true);
+    }
+  }
+
 }

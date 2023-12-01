@@ -3,7 +3,9 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  feda
   file_selector_linux
+  flash_api
   url_launcher_linux
 )
 
