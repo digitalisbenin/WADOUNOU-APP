@@ -29,6 +29,7 @@ import 'package:digitalis_restaurant_app/module/register_delivery_person_pages/a
 import 'package:digitalis_restaurant_app/module/register_delivery_person_pages/account_view_delivery_person/options_routs/delivery_status/pending_deliver_page.dart';
 import 'package:digitalis_restaurant_app/module/register_delivery_person_pages/register_as_delivery_person/register_delivery_person.dart';
 import 'package:digitalis_restaurant_app/module/register_delivery_person_pages/register_as_delivery_person/widgets/register_delivery_person_success.dart';
+import 'package:digitalis_restaurant_app/module/restaurants_page/presentation/home/homePage/widgets/restaurants_details/all_meals/all_meals_screen.dart';
 import 'package:digitalis_restaurant_app/module/restaurants_page/presentation/home/homePage/widgets/restaurants_details/widgets/restaurants_new_items/other_arrivals_widgets/widgets/daily_food_details_page.dart';
 import 'package:digitalis_restaurant_app/module/restaurants_page/presentation/home/homePage/widgets/restaurants_details/widgets/restaurants_new_items/restaurant_other_arrivals_page.dart';
 import 'package:digitalis_restaurant_app/module/restaurants_page/presentation/home/homePage/widgets/restaurants_details/widgets/restaurants_new_items/restaurants_new_arrivals_page.dart';
@@ -92,7 +93,9 @@ final Map<String, WidgetBuilder> routes = {
   RestaurantsNewArrivalPages.routeName : (context) => const RestaurantsNewArrivalPages(),
   RestaurantsOtherArrivalPages.routeName : (context) => const RestaurantsOtherArrivalPages(),
   MakeOrderScreen.routeName : (context) => const MakeOrderScreen(),
-  DailyFoodDetailPage.routeName :(context) => const DailyFoodDetailPage(),
+  DailyFoodDetailPage.routeName : (context) => const DailyFoodDetailPage(),
+  AllMealsScreen.routeName : (context) => const AllMealsScreen(),
+
 
 
 };

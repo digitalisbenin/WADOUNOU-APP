@@ -13,23 +13,20 @@ class SingleRestaurantCard extends StatefulWidget {
   final GestureTapCallback press;
 
   @override
-  _SingleRestaurantCardState createState() =>
-      _SingleRestaurantCardState();
+  _SingleRestaurantCardState createState() => _SingleRestaurantCardState();
 }
 
-class _SingleRestaurantCardState
-    extends State<SingleRestaurantCard> {
-
+class _SingleRestaurantCardState extends State<SingleRestaurantCard> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: EdgeInsets.symmetric(vertical: SizeConfig.screenHeight * 0.01),
       child: GestureDetector(
         onTap: widget.press,
-        child:  Container(
+        child: Container(
           width: SizeConfig.screenWidth,
           height: SizeConfig.screenHeight,
           decoration: BoxDecoration(
@@ -50,38 +47,32 @@ class _SingleRestaurantCardState
               InkWell(
                 onTap: widget.press,
                 child: Container(
+                  width: SizeConfig.screenWidth * 0.4,
                   alignment: Alignment.center,
-                  child:Image.network(
+                  child: Image.network(
                     widget.restaurants.image_url.toString(),
                     height: SizeConfig.screenHeight * 0.5,
                     width: SizeConfig.screenWidth * 0.4,
                   ),
                 ),
               ),
-               SizedBox(
+              SizedBox(
+                 width: SizeConfig.screenWidth * 0.5, 
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text(
-                (widget.restaurants.name.toString()),
-
+                      widget.restaurants.name.toString(),
                       style: TextStyle(
-                        fontSize: SizeConfig.screenHeight * 0.025,
-                        fontWeight: FontWeight.bold,
-                      ),
+                          fontSize: SizeConfig.screenHeight * 0.025,
+                          fontWeight: FontWeight.bold,
+                          overflow: TextOverflow.ellipsis),
                     ),
                     Row(
                       children: [
-                        Text("Adresse : ", style: TextStyle(
-                          fontSize: SizeConfig.screenHeight * 0.016,
-                          color: Colors.grey.shade500,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.w400,
-                        ),),
                         Text(
-                          (widget.restaurants.adresse.toString()),
-                          maxLines: 2,
+                          "Adresse : ",
                           style: TextStyle(
                             fontSize: SizeConfig.screenHeight * 0.016,
                             color: Colors.grey.shade500,
@@ -89,20 +80,48 @@ class _SingleRestaurantCardState
                             fontWeight: FontWeight.w400,
                           ),
                         ),
+                        Expanded(
+                          child: Text(
+                            widget.restaurants.adresse.toString(),
+                            style: TextStyle(
+                                fontSize: SizeConfig.screenHeight * 0.016,
+                                color: Colors.grey.shade500,
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.w400,),
+                                overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                       ],
                     ),
                     Row(
                       children: [
-                        Text("Spécialité : ", style: TextStyle(
-                          fontSize: SizeConfig.screenHeight * 0.016,
-                          color: Colors.grey.shade500,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.w400,
-                        ),),
                         Text(
-                          (widget.restaurants.specilite.toString()),
-                          // widget.restaurant.specilite.toString(),
-                          maxLines: 2,
+                          "Spécialité : ",
+                          style: TextStyle(
+                              fontSize: SizeConfig.screenHeight * 0.016,
+                              color: Colors.grey.shade500,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w400,
+                              overflow: TextOverflow.ellipsis),
+                        ),
+                        Expanded(
+                          child: Text(
+                            widget.restaurants.specilite.toString(),
+                            style: TextStyle(
+                              fontSize: SizeConfig.screenHeight * 0.016,
+                              color: Colors.grey.shade500,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "Heure d'ouverture : ",
                           style: TextStyle(
                             fontSize: SizeConfig.screenHeight * 0.016,
                             color: Colors.grey.shade500,
@@ -110,36 +129,29 @@ class _SingleRestaurantCardState
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text("Heure d'ouverture : ", style: TextStyle(
-                          fontSize: SizeConfig.screenHeight * 0.016,
-                          color: Colors.grey.shade500,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.w400,
-                        ),),
                         Text(
                           "${widget.restaurants.heure_douverture}",
                           maxLines: 2,
                           style: TextStyle(
-                            fontSize: SizeConfig.screenHeight * 0.016,
-                            color: Colors.grey.shade500,
-                            fontStyle: FontStyle.italic,
-                            fontWeight: FontWeight.w400,
-                          ),
+                              fontSize: SizeConfig.screenHeight * 0.016,
+                              color: Colors.grey.shade500,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w400,
+                              overflow: TextOverflow.ellipsis),
                         ),
                       ],
                     ),
                     Row(
                       children: [
-                        Text("Heure de fermerture : ", style: TextStyle(
-                          fontSize: SizeConfig.screenHeight * 0.016,
-                          color: Colors.grey.shade500,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.w400,
-                        ),),
+                        Text(
+                          "Heure de fermerture : ",
+                          style: TextStyle(
+                              fontSize: SizeConfig.screenHeight * 0.016,
+                              color: Colors.grey.shade500,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w400,
+                              overflow: TextOverflow.ellipsis),
+                        ),
                         Text(
                           "${widget.restaurants.heure_fermeture}",
                           maxLines: 2,
@@ -154,15 +166,17 @@ class _SingleRestaurantCardState
                     ),
                     Row(
                       children: [
-                        Text("Contacts : ", style: TextStyle(
-                          fontSize: SizeConfig.screenHeight * 0.016,
-                          color: Colors.grey.shade500,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.w400,
-                        ),),
                         Text(
-                         widget.restaurants.phone.toString(),
-                          //widget.restaurant.phone.toString(),
+                          "Contacts : ",
+                          style: TextStyle(
+                            fontSize: SizeConfig.screenHeight * 0.016,
+                            color: Colors.grey.shade500,
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        Text(
+                          widget.restaurants.phone.toString(),
                           maxLines: 2,
                           style: TextStyle(
                             fontSize: SizeConfig.screenHeight * 0.016,
@@ -183,5 +197,3 @@ class _SingleRestaurantCardState
     );
   }
 }
-
-

@@ -1,6 +1,5 @@
 
 import 'package:digitalis_restaurant_app/core/utils/widgets/routers.dart';
-import 'package:digitalis_restaurant_app/module/screens/login/login_page.dart';
 import 'package:digitalis_restaurant_app/module/start/presentation/landing/presentation/landing_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -3,11 +3,17 @@ import 'package:digitalis_restaurant_app/core/constants/constant.dart';
 import 'package:digitalis_restaurant_app/core/model/arguments/repas_detail_arguments.dart';
 import 'package:digitalis_restaurant_app/core/utils/size_config.dart';
 import 'package:digitalis_restaurant_app/core/utils/widgets/snack_message.dart';
+import 'package:digitalis_restaurant_app/module/payment_methods/kkiapay_methods/kkiaPay_sample.dart';
+import 'package:digitalis_restaurant_app/module/payment_methods/kkiapay_methods/success_screen_from_restaurant.dart';
 import 'package:digitalis_restaurant_app/provider/order_provider.dart';
 import 'package:digitalis_restaurant_app/shared/ui/widgets/buttons/app_fill_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
+import 'package:kkiapay_flutter_sdk/src/widget_builder_view.dart';
+import 'package:kkiapay_flutter_sdk/utils/config.dart';
 
 class DailyFoodDetailPage extends StatefulWidget {
   const DailyFoodDetailPage({super.key});
@@ -21,10 +27,9 @@ class DailyFoodDetailPage extends StatefulWidget {
 class _DailyFoodDetailPageState extends State<DailyFoodDetailPage> {
   double newPrice = 0.0;
   int _numberOfItem = 1;
+  String? transactionId;
 
   final _formkey = GlobalKey<FormState>();
-
-  String? repasId;
 
   String? name;
   String? address;
@@ -54,6 +59,10 @@ class _DailyFoodDetailPageState extends State<DailyFoodDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: kBackground,
+      statusBarIconBrightness: Brightness.dark
+    ));
     final ProductDetailArguments? arguments =
         ModalRoute.of(context)?.settings.arguments as ProductDetailArguments?;
 
@@ -109,7 +118,7 @@ class _DailyFoodDetailPageState extends State<DailyFoodDetailPage> {
                             children: [
                               const SizedBox(),
                               Text(
-                                "$newPrice FCFA",
+                                "${(newPrice).toStringAsFixed(0)} FCFA",
                                 style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -128,6 +137,8 @@ class _DailyFoodDetailPageState extends State<DailyFoodDetailPage> {
                               children: [
                                 Text(
                                   arguments.repas.name.toString(),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
                                       fontSize: 26,
                                       fontWeight: FontWeight.bold),
@@ -203,7 +214,7 @@ class _DailyFoodDetailPageState extends State<DailyFoodDetailPage> {
                           onPressed: () {
                             String repasId = arguments.repas.id ?? "";
                             print("ID du repas sélectionné : $repasId");
-                            _showBottomSheet(context, arguments!);
+                            _showBottomSheet(context, arguments);
                           },
                         ),
                         SizedBox(
@@ -223,9 +234,74 @@ class _DailyFoodDetailPageState extends State<DailyFoodDetailPage> {
 
   void _showBottomSheet(
       BuildContext context, ProductDetailArguments arguments) {
+    void postOrderFromRestaurant(ProductDetailArguments arguments) {
+      // Appeler ordering.postOrder ici avec les données nécessaires
+      Provider.of<OrderProvider>(context, listen: false)
+          .postOrderFromRestaurant(
+        name: _nameController.text.trim(),
+        adresse: _addressController.text.trim(),
+        contact: _contactController.text.trim(),
+        description: _descriptionController.text.trim(),
+        status: "En attente",
+        repas_id: arguments.repas.id!.toString(),
+        restaurant_id: arguments.restaurant!.id.toString(),
+        quantite: _numberOfItem.toString(),
+        montant: newPrice.toString(),
+        transactionId: transactionId.toString(),
+        context: context,
+      );
+    }
+
+    void successCallback(response, context) {
+      transactionId = response['transactionId'];
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SuccessScreenFromRestaurant(
+            amount: newPrice,
+            transactionId: transactionId.toString(),
+            postOrderCallback: postOrderFromRestaurant,
+          ),
+        ),
+      );
+      Provider.of<OrderProvider>(context, listen: false).postPaymentMethod(
+        transactionId: transactionId,
+        context: context,
+      );
+      postOrderFromRestaurant(arguments);
+    }
+
+    Future<bool> openKkiapayPayment() async {
+      // Créez une instance KKiaPay avec le montant actuel
+      final kkiapay = KKiaPay(
+          amount: newPrice.toInt(),
+          countries: ["BJ"],
+          phone: _contactController.text.trim().toString(),
+          name: _nameController.text.trim().toString(),
+          email: "",
+          reason: 'transaction reason',
+          data: 'Fake data',
+          sandbox: true,
+          apikey: 'd81f7db084ba11eea99e794f985e5009',
+          callback: successCallback,
+          theme: defaultTheme,
+          paymentMethods: ["momo", "card"]);
+
+// Ouvrez l'écran Kkiapay
+      final success = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => KkiapaySample(kkiapay: kkiapay)),
+      );
+
+      return success ?? false;
+    }
+
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
+        backgroundColor: kWhite,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
         builder: (BuildContext context) {
@@ -276,7 +352,9 @@ class _DailyFoodDetailPageState extends State<DailyFoodDetailPage> {
                                       horizontal: 8.0, vertical: 2.0),
                                   child: TextFormField(
                                     controller: _nameController,
-                                    cursorColor: kTextColor,
+                                    cursorColor: kPrimaryColor,
+                                    textCapitalization:
+                                        TextCapitalization.words,
                                     style: const TextStyle(color: Colors.black),
                                     decoration: const InputDecoration(
                                         hintText: "Nom complet",
@@ -309,7 +387,9 @@ class _DailyFoodDetailPageState extends State<DailyFoodDetailPage> {
                                       horizontal: 8.0, vertical: 2.0),
                                   child: TextFormField(
                                     controller: _addressController,
-                                    cursorColor: kTextColor,
+                                    cursorColor: kPrimaryColor,
+                                    textCapitalization:
+                                        TextCapitalization.sentences,
                                     style: const TextStyle(color: Colors.black),
                                     decoration: const InputDecoration(
                                         hintText: "Adresse de livraison",
@@ -341,8 +421,9 @@ class _DailyFoodDetailPageState extends State<DailyFoodDetailPage> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0, vertical: 2.0),
                                   child: TextFormField(
+                                    keyboardType: TextInputType.phone,
                                     controller: _contactController,
-                                    cursorColor: kTextColor,
+                                    cursorColor: kPrimaryColor,
                                     style: const TextStyle(color: Colors.black),
                                     decoration: const InputDecoration(
                                         hintText: "Numéro de téléphone",
@@ -361,9 +442,16 @@ class _DailyFoodDetailPageState extends State<DailyFoodDetailPage> {
                                             TextStyle(color: kTextColor)),
                                     validator: (value) {
                                       if (value!.isEmpty) {
-                                        return "Vous devez nous fournir un numéro de téléphone";
+                                        return "Renseignez votre numéro de téléphone";
                                       }
-                                      return null;
+
+                                      if (value.length == 8 ||
+                                          value.length == 12 ||
+                                          value.length == 13) {
+                                        return null; // La taille du numéro de téléphone est valide
+                                      } else {
+                                        return "Le numéro de téléphone n'est pas valide";
+                                      }
                                     },
                                   ),
                                 ),
@@ -375,11 +463,14 @@ class _DailyFoodDetailPageState extends State<DailyFoodDetailPage> {
                                       horizontal: 8.0, vertical: 2.0),
                                   child: TextFormField(
                                     controller: _descriptionController,
-                                    cursorColor: kTextColor,
+                                    cursorColor: kPrimaryColor,
+                                    maxLines: 3,
+                                    textCapitalization:
+                                        TextCapitalization.sentences,
                                     style: const TextStyle(color: Colors.black),
                                     decoration: const InputDecoration(
                                         hintText:
-                                            "Description de la commande (facultatif)",
+                                            "Motif de la commande (facultatif)",
                                         enabledBorder: OutlineInputBorder(
                                             borderSide:
                                                 BorderSide(color: Colors.black),
@@ -393,54 +484,77 @@ class _DailyFoodDetailPageState extends State<DailyFoodDetailPage> {
                                         border: InputBorder.none,
                                         hintStyle:
                                             TextStyle(color: kTextColor)),
-                                    /* validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return "Vous devez nous fournir une adresse de livraison";
-                                      }
-                                      return null;
-                                    },*/
                                   ),
                                 ),
                                 SizedBox(
                                   height: SizeConfig.screenHeight * 0.04,
                                 ),
-                                Consumer<OrderProvider>(
-                                    builder: (context, quickOrder, child) {
+                                Consumer<OrderProvider>(builder:
+                                    (context, quickOrderFromRestaurant, child) {
                                   WidgetsBinding.instance
                                       .addPostFrameCallback((_) {
-                                    if (quickOrder.resMessage != '') {
+                                    if (quickOrderFromRestaurant.resMessage !=
+                                        '') {
                                       showMessage(
-                                          message: quickOrder.resMessage,
+                                          message: quickOrderFromRestaurant
+                                              .resMessage,
                                           context: context);
-                                      quickOrder.clear();
+                                      quickOrderFromRestaurant
+                                          .clearFromRestaurant();
                                     }
                                   });
                                   return AppFilledButton(
                                     text: "Commander maintenant !",
-                                    onPressed: () {
+                                    onPressed: () async {
                                       if (_formkey.currentState!.validate()) {
                                         _formkey.currentState!.save();
 
                                         String? repasId = arguments.repas.id;
+                                        String? restaurantId =
+                                            arguments.restaurant!.id;
                                         print(
                                             'ID du repas sélectionné : $repasId');
 
-                                        quickOrder.postOrder(
-                                            name: _nameController.text.trim(),
-                                            adresse:
-                                                _addressController.text.trim(),
-                                            contact:
-                                                _contactController.text.trim(),
-                                            description: _descriptionController
-                                                .text
-                                                .trim(),
-                                            status: 'En cours',
-                                            repas_id:
-                                                arguments.repas.id!.toString(),
-                                            restaurant_id: "",
-                                            montant: newPrice.toString(),
-                                            quantite: _numberOfItem.toString(),
-                                            context: context);
+                                        print(
+                                            'ID du restaurant sélectionné : $restaurantId');
+
+                                        final success =
+                                            await openKkiapayPayment();
+
+                                        if (success) {
+                                          quickOrderFromRestaurant
+                                              .postOrderFromRestaurant(
+                                                  name: _nameController.text
+                                                      .trim(),
+                                                  adresse:
+                                                      _addressController
+                                                          .text
+                                                          .trim(),
+                                                  contact:
+                                                      _contactController
+                                                          .text
+                                                          .trim(),
+                                                  description:
+                                                      _descriptionController
+                                                          .text
+                                                          .trim(),
+                                                  status: 'En attente',
+                                                  repas_id:
+                                                      arguments
+                                                          .repas.id!
+                                                          .toString(),
+                                                          restaurant_id: arguments.restaurant!.id.toString(),
+                                                  montant: newPrice.toString(),
+                                                  quantite:
+                                                      _numberOfItem.toString(),
+                                                  context: context);
+                                          print('Succes : $success');
+                                        } else {
+                                          // Gérer l'échec du paiement
+                                          showMessage(
+                                              message: 'Échec du paiement',
+                                              context: context);
+                                        }
                                       } else if (_nameController.text.isEmpty ||
                                           _contactController.text.isEmpty ||
                                           _addressController.text.isEmpty) {
@@ -451,25 +565,20 @@ class _DailyFoodDetailPageState extends State<DailyFoodDetailPage> {
                                         );
                                         dispose();
                                       }
+                                      quickOrderFromRestaurant.postOrderToCommandLineBackend(
+                                          quantite: _numberOfItem.toString(),
+                                          montant: newPrice.toString(),
+                                          repas_id:
+                                              arguments.repas.id!.toString(),
+                                          /* commande_id: arguments.commandes!.id
+                                              .toString() */);
+                                              /* quickOrderFromRestaurant.postPaymentMethod(transactionId: transactionId.toString()); */
                                     },
                                   );
                                 }),
                                 SizedBox(
                                   height: SizeConfig.screenHeight * 0.06,
                                 ),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: const Text(
-                                          "Fermer",
-                                          style: TextStyle(color: Colors.grey),
-                                        ))
-                                  ],
-                                )
                               ],
                             ),
                           ),

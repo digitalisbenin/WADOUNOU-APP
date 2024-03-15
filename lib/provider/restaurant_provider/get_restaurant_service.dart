@@ -1,4 +1,44 @@
+import 'dart:convert';
+import 'package:digitalis_restaurant_app/core/constants/url.dart';
+import 'package:digitalis_restaurant_app/core/model/Users/Restaurant.dart';
+import 'package:http/http.dart' as http;
 
+class GetRestaurant {
+  final requestBaseUrl = AppUrl.baseUrl;
+
+  Future<List<Restaurant>> getRestaurants() async {
+    var client = http.Client();
+    var restaurantUrl = Uri.https(requestBaseUrl, '/api/restaurants');
+
+    try {
+      final response = await client.get(restaurantUrl);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final responseData = jsonDecode(response.body);
+        if (responseData != null && responseData['data'] != null) {
+          List<dynamic> restaurantsData = responseData['data'];
+          List<Restaurant> restaurantsList = restaurantsData
+              .map((restaurant) => Restaurant.fromJson(restaurant))
+              .toList();
+          return restaurantsList;
+        } else {
+          return [];
+        }
+      } else {
+        print('Failed to load restaurants, status code: ${response.statusCode}');
+        return [];
+      }
+    } catch (e) {
+      print('Error fetching restaurants: $e');
+      return [];
+    } finally {
+      client.close();
+    }
+  }
+}
+
+
+/* 
 import 'dart:convert';
 
 import 'package:digitalis_restaurant_app/core/constants/url.dart';
@@ -16,7 +56,7 @@ class GetRestaurant {
     try {
       final response = await client.get(oneRestaurantUrl);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         final responseData = jsonDecode(response.body);
         if (responseData != null) {
           _restaurantId = responseData['id'];
@@ -64,3 +104,4 @@ class GetRestaurant {
     }
   }
 }
+ */

@@ -1,0 +1,51 @@
+{
+    "data": [
+        {
+            "id": "51457756-fd53-4f89-8448-76c41d4454b2",
+            "name": "*",
+            "description": "nous",
+            "prix": "2500.00",
+            "repas": {
+                "id": "72c797b3-46c9-43cd-a364-1995a25d1f3a",
+                "name": "Igname pilée",
+                "description": "Igname pilée avec viande de Mouton et sauce d'arrachide",
+                "prix": "2000.00",
+                "like": null,
+                "image_url": "https://bucetwadounou.s3.amazonaws.com/images/1700478727igname.jfif",
+                "categoris": {
+                    "id": "30d60817-97be-4760-a10b-200af9902597",
+                    "name": "Benin Nord",
+                    "description": "*"
+                },
+                "user": null
+            },
+            "restaurant": {
+                "id": "718f5378-f6e6-47aa-a30e-4963a15aa9b4",
+                "name": "Diner lieux",
+                "description": "Nous vous proposons des plats à la saveurs Béninois et Africaine pour vous donner un aperçus de notre gastronomie",
+                "adresse": "calavi iita",
+                "phone": "61210058",
+                "image_url": "https://bucetwadounou.s3.amazonaws.com/images/1700478647adult-blur-blurred-background-687824.png",
+                "specilite": "Africa",
+                "heure_douverture": "15:10:00",
+                "heure_fermeture": "13:11:00",
+                "document_url": null,
+                "capacite": "200",
+                "user": {
+                    "id": "40754ffe-cd12-45b6-a0b8-7b6d139f7ad0",
+                    "name": "Gagnon1",
+                    "role": {
+                        "id": "b2e2d7d4-a41c-43e7-8f9e-0dd50fec2245",
+                        "name": "Restaurant"
+                    },
+                    "email": "gaglozoungagnon@gmail.com",
+                    "email_verified_at": null,
+                    "profile_photo_path": null,
+                    "created_at": "2023-11-20T11:08:24.000000Z",
+                    "updated_at": "2023-11-20T11:08:24.000000Z"
+                },
+                "abonnement": null
+            }
+        }
+    ]
+}

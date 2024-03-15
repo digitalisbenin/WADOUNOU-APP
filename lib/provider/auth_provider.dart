@@ -146,8 +146,7 @@ class AuthenticationProvider extends ChangeNotifier {
         _isLoading = false;
         _resMessage = "Login successfull!";
         notifyListeners();
-
-
+        
 
         ///Save users data and then navigate to homepage
          _token = res['access_token'];

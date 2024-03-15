@@ -1,3 +1,4 @@
+import 'package:digitalis_restaurant_app/core/constants/constant.dart';
 import 'package:digitalis_restaurant_app/module/restaurants_page/presentation/home/homePage/widgets/search_field.dart';
 import 'package:digitalis_restaurant_app/module/restaurants_page/presentation/home/homePage/widgets/search_restaurant_field_for_users.dart';
 import 'package:digitalis_restaurant_app/provider/database/db_provider.dart';
@@ -12,16 +13,20 @@ class AppBarWidget extends StatefulWidget {
 }
 
 class _AppBarWidgetState extends State<AppBarWidget> {
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String>(
       future: DatabaseProvider().getToken(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return const CircularProgressIndicator(
+            color: kPrimaryColor,
+          );
         } else if (snapshot.hasError) {
-          return Text('Error : ${snapshot.error}');
+          return Text(
+            'Erreur : La connexion au serveur à échouée ! Vérifier votre connexion internet',
+            textAlign: TextAlign.center,
+          );
         } else {
           final userToken = snapshot.data;
           if (userToken!.isNotEmpty) {
@@ -32,7 +37,9 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                     Scaffold.of(context).openDrawer();
                   },
                   child: Container(
-                    margin: const EdgeInsets.only(right: 12,),
+                    margin: const EdgeInsets.only(
+                      right: 12,
+                    ),
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                         color: Colors.white,
@@ -42,20 +49,20 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                               color: Colors.grey.withOpacity(0.5),
                               spreadRadius: 1,
                               blurRadius: 3,
-                              offset: const Offset(0, 0)
-                          )
-                        ]
-                    ),
+                              offset: const Offset(0, 0))
+                        ]),
                     child: const Icon(CupertinoIcons.bars),
                   ),
                 ),
                 const SearchField(),
-              ],);
+              ],
+            );
           } else {
-           return const Row(
+            return const Row(
               children: [
-              //  SearchFieldForUsers(),
-              ],);
+                //  SearchFieldForUsers(),
+              ],
+            );
           }
         }
       },

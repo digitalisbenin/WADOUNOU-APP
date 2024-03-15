@@ -1,3 +1,4 @@
+import 'package:digitalis_restaurant_app/core/constants/constant.dart';
 import 'package:digitalis_restaurant_app/core/utils/size_config.dart';
 import 'package:digitalis_restaurant_app/module/simple_users_widgets/my_bookings/userBookingsPage.dart';
 import 'package:digitalis_restaurant_app/module/simple_users_widgets/my_orders/usersOdersPage.dart';
@@ -22,9 +23,12 @@ class _PopUpMenuState extends State<PopUpMenu> {
       future: DatabaseProvider().getToken(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return const CircularProgressIndicator(color: kPrimaryColor,);
         } else if (snapshot.hasError) {
-          return Text('Error : ${snapshot.error}');
+          return Text(
+              'Erreur : La connexion au serveur à échouée ! Vérifier votre connexion internet',
+              textAlign: TextAlign.center,
+            );
         } else {
           final userToken = snapshot.data;
           if (userToken!.isNotEmpty) {
@@ -54,6 +58,7 @@ class _PopUpMenuState extends State<PopUpMenu> {
                 height: 50,
                 width: 50,
                 child: PopupMenuButton<String>(
+                  color: Colors.white,
                   iconSize: 27,
                   onSelected: (String choice) {
                     if (choice == 'Mes commandes') {
@@ -62,7 +67,7 @@ class _PopUpMenuState extends State<PopUpMenu> {
                     if (choice == 'Mes réservations') {
                       Navigator.pushNamed(context, UsersBookingsPage.routeName);
                     }
-                    if (choice == 'Sortir de l\'application') {
+                    if (choice == 'Quitter l\'application') {
                       SystemNavigator.pop();
                     }
                   },
@@ -70,7 +75,7 @@ class _PopUpMenuState extends State<PopUpMenu> {
                     return [
                       'Mes commandes',
                       'Mes réservations',
-                      'Sortir de l\'application'
+                      'Quitter l\'application'
                     ].map((String choice) {
                       return PopupMenuItem(value: choice, child: Text(choice));
                     }).toList();

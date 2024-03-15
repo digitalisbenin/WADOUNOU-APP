@@ -1,5 +1,6 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:digitalis_restaurant_app/core/constants/constant.dart';
 import 'package:flutter/material.dart';
 
 class CachedNetworkImageWidget extends StatelessWidget {
@@ -25,7 +26,7 @@ class CachedNetworkImageWidget extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(6.0)),
                 ),
               ),
-              child: Center(child: CircularProgressIndicator()))),
+              child: Center(child: CircularProgressIndicator(color: kPrimaryColor,)))),
       errorWidget: (context, url, error) => Center(
           child: Container(
               decoration: const ShapeDecoration(

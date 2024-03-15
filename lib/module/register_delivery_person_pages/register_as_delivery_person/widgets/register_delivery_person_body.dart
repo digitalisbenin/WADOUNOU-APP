@@ -140,7 +140,7 @@ class _RegisterDeliveryPersonFormState
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(12.0)),
                         child: const Center(
-                          child: CircularProgressIndicator(),
+                          child: CircularProgressIndicator(color: kPrimaryColor,),
                         ),
                       ),
                       const SizedBox(height: 10.0),

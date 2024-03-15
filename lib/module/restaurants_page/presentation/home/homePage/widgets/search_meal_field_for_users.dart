@@ -34,6 +34,7 @@ class SearchMealFieldForUsers extends StatelessWidget {
             onChanged: (value) {
               onSearchMeal(value);
             },
+            cursorColor: Colors.orange,
             decoration: InputDecoration(
                 enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,

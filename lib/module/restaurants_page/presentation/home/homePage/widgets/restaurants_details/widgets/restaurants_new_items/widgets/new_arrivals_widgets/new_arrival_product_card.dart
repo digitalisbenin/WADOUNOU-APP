@@ -77,43 +77,7 @@ class _NewArrivalSingleProductCardState extends State<NewArrivalSingleProductCar
                           fontWeight: FontWeight.bold),
                     ),
                     InkWell(
-                      /*onTap: () async {
-                        final productId = widget.product.id
-                            .toString(); // L'identifiant du produit
-                        try {
-                          // Essayez d'ajouter le produit au panier
-                          await cartDBHelper!.insert(CartModel(
-                            id: widget.product.indexInList,
-                            productId: productId,
-                            productName: widget.product.productName,
-                            initialPrice: widget.product.productPrice,
-                            productPrice: widget.product.productPrice,
-                            quantity: 1,
-                            description: widget.product.description,
-                            image: widget.product.image[0],
-                          ));
-
-                          print("Product is added to cart");
-                          cart.addTotalPrice(widget.product.productPrice);
-                          cart.addCounter();
-                          const snackbar = SnackBar(
-                            backgroundColor: Colors.green,
-                            content: Text('Product is added to cart'),
-                            duration: Duration(seconds: 1),
-                          );
-
-                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                        } catch (e) {
-                          print("Error: $e");
-                          const snackbar = SnackBar(
-                            backgroundColor: Colors.red,
-                            content: Text('Déjà disponible dans votre panier'),
-                            duration: Duration(seconds: 2),
-                          );
-
-                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                        }
-                      },*/
+                      
                       // ... Le reste de votre code
                       child: Container(
                           decoration: BoxDecoration(

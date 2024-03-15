@@ -36,8 +36,10 @@ class SearchRestaurantFieldForUsers extends StatelessWidget {
             onChanged: (value) {
               onSearch(value);
             },
+            cursorColor: Colors.orange,
             decoration: InputDecoration(
                 enabledBorder: InputBorder.none,
+                focusColor: Colors.orange,
                 focusedBorder: InputBorder.none,
                 hintText: "Rechercher un restaurant",
                 prefixIcon: const Icon(CupertinoIcons.search),

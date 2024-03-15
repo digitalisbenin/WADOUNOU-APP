@@ -98,6 +98,7 @@ class AppText extends StatelessWidget {
       this.handleNull = false})
       : style = bodyStyle.copyWith(
           color: color,
+          fontSize: 16.5
         ),
         alignment = align;
 

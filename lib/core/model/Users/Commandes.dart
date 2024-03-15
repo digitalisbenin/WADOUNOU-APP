@@ -11,6 +11,7 @@ String commandesToJson(Commandes commandes) => json.encode(commandes.toJson());
 
 @JsonSerializable()
 class Commandes {
+  String? id;
   String? name;
   String? adresse;
   String? contact;
@@ -20,6 +21,7 @@ class Commandes {
   String? quantite;
 
   Commandes({
+    this.id,
     this.name,
     this.adresse,
     this.contact,

@@ -59,21 +59,21 @@ class Restaurant {
   });
 
   factory Restaurant.fromJson(Map<String, dynamic> json) {
-    return Restaurant(
-      id: json['restaurant']['id'],
-      name: json['restaurant']['name'],
-      adresse: json['restaurant']['adresse'],
-      phone: json['restaurant']['phone'],
-      description: json['restaurant']['description'],
-      specilite: json['restaurant']['specilite'],
-      menu: Menu.fromJson(json),
-      heure_douverture: json['restaurant']['heure_douverture'],
-      heure_fermeture: json['restaurant']['heure_fermeture'],
-      document_url: json['restaurant']['document_url'],
-      capacite: json['restaurant']['capacite'],
-      image_url: json['restaurant']['image_url'],
-    );
-  }
+  return Restaurant(
+    id: json['id'],
+    name: json['name'],
+    adresse: json['adresse'],
+    phone: json['phone'],
+    description: json['description'],
+    specilite: json['specilite'],
+    menu: json['repas'] == null ? null : Menu.fromJson(json['repas']),
+    heure_douverture: json['heure_douverture'],
+    heure_fermeture: json['heure_fermeture'],
+    document_url: json['document_url'],
+    capacite: json['capacite'],
+    image_url: json['image_url'],
+  );
+}
 
   factory Restaurant.fromJsonNoMenu(Map<String, dynamic> json) {
     return Restaurant(

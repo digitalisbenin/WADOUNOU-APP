@@ -18,9 +18,14 @@ class DrawerWidget extends StatelessWidget {
         future: DatabaseProvider().getToken(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            return const CircularProgressIndicator(
+              color: kPrimaryColor,
+            );
           } else if (snapshot.hasError) {
-            return Text('Error : ${snapshot.error}');
+            return Text(
+              'Erreur : La connexion au serveur à échouée ! Vérifier votre connexion internet',
+              textAlign: TextAlign.center,
+            );
           } else {
             final userToken = snapshot.data;
             if (userToken!.isNotEmpty) {

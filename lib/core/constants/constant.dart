@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 // import 'package:shop_app/size_config.dart';
 
-const kPrimaryColor = Color.fromRGBO(253, 99, 4, 1);
+const kPrimaryColor = Color.fromRGBO(255, 123, 0, 1);
 const kOnBoardingBackgroundColor = Color(0xFFFF9D61);
 const kStandartDeepGreenColor = Color.fromRGBO(106, 173, 96, 1);
 const kLightGreenColor = Color.fromRGBO(211, 229, 207, 1);
@@ -38,7 +38,7 @@ const String kInvalidEmailError = "S'il vous plaît, entrez un email valide";
 const String kPassNullError = "Entrez votre mot de passe s'il vous plait";
 const String kShortPassError = "Le mot de passe est trop court";
 const String kMatchPassError = "Mot de passe différents";
-const String kNamelNullError = "Entrez votre nom complet s'il vous plaît";
+const String kNameNullError = "Entrez votre nom complet s'il vous plaît";
 const String kPhoneNumberNullError = "Entrez votre numéro de téléphone s'il vous plaît";
 const String kAddressNullError = "Saisissez votre adresse svp";
 const String kRestaurantNameNullError = "Entrez le nom de votre restaurant";

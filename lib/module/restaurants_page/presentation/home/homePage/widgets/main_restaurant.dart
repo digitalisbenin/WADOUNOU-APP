@@ -1,3 +1,4 @@
+import 'package:digitalis_restaurant_app/core/constants/constant.dart';
 import 'package:digitalis_restaurant_app/core/model/Users/Restaurant.dart';
 import 'package:digitalis_restaurant_app/core/model/arguments/restaurant_detail_arguments.dart';
 import 'package:digitalis_restaurant_app/core/model/restaurant.dart';
@@ -29,7 +30,7 @@ class _NewestItemWidgetState extends State<NewestItemWidget> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                CircularProgressIndicator(),
+                CircularProgressIndicator(color: kPrimaryColor,),
                 SizedBox(
                   height: 8.0,
                 ),

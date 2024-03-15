@@ -7,6 +7,7 @@ part of 'Commandes.dart';
 // **************************************************************************
 
 Commandes _$CommandesFromJson(Map<String, dynamic> json) => Commandes(
+      id: json['id'] as String?,
       name: json['name'] as String?,
       adresse: json['adresse'] as String?,
       contact: json['contact'] as String?,
@@ -17,6 +18,7 @@ Commandes _$CommandesFromJson(Map<String, dynamic> json) => Commandes(
     );
 
 Map<String, dynamic> _$CommandesToJson(Commandes instance) => <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
       'adresse': instance.adresse,
       'contact': instance.contact,
