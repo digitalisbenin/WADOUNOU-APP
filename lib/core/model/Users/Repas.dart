@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:digitalis_restaurant_app/core/model/Users/Categoris.dart';
+import 'package:digitalis_restaurant_app/core/model/Users/Restaurant.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'Repas.g.dart';
 
@@ -30,7 +31,8 @@ class Repas {
   String? description;
   String? prix;
   String? image_url;
-  Categoris? categoris; 
+  Categoris? categoris;
+  Restaurant? restaurant;
 
 
   Repas({
@@ -40,6 +42,7 @@ class Repas {
     this.prix,
     this.image_url,
     this.categoris,
+    this.restaurant
   });
 
   factory Repas.fromJson(Map<String, dynamic> json) {
@@ -50,6 +53,7 @@ class Repas {
       prix: json['prix'],
       image_url: json['image_url'],
       categoris: Categoris.fromJson(json['categoris'] ?? {}), // Conversion de la partie categoris en objet Categoris
+      restaurant: Restaurant.fromJson(json['restaurant'] ?? {}),
     );
   }
 

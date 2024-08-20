@@ -9,11 +9,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:digitalis_restaurant_app/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  
+  
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+
+    final splashScreenPrefs = await SharedPreferences.getInstance();
+    final showSplashScreen =
+        splashScreenPrefs.getBool('showSplashScreen') ?? true;
+
+    final onBoardingPrefs = await SharedPreferences.getInstance();
+    final showOnboarding = onBoardingPrefs.getBool('showOnboarding') ?? true;
+    
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(MyApp(showSplashScreen: showSplashScreen, showOnboarding: showOnboarding,));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

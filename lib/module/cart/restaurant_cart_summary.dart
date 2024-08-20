@@ -3,13 +3,16 @@ import 'package:digitalis_restaurant_app/core/model/Cart.dart';
 import 'package:digitalis_restaurant_app/core/model/RestaurantCart.dart';
 import 'package:digitalis_restaurant_app/core/model/restaurant_order_item.dart';
 import 'package:digitalis_restaurant_app/core/utils/size_config.dart';
+import 'package:digitalis_restaurant_app/core/utils/widgets/routers.dart';
 import 'package:digitalis_restaurant_app/core/utils/widgets/snack_message.dart';
 import 'package:digitalis_restaurant_app/module/payment_methods/kkiapay_methods/kkiaPay_sample.dart';
 import 'package:digitalis_restaurant_app/module/payment_methods/kkiapay_methods/success_screen.dart';
+import 'package:digitalis_restaurant_app/module/restaurants_page/presentation/home/homePage/home_screen.dart';
 import 'package:digitalis_restaurant_app/provider/order_provider.dart';
 import 'package:digitalis_restaurant_app/shared/ui/widgets/buttons/app_fill_button.dart';
 import 'package:digitalis_restaurant_app/core/model/order_items.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kkiapay_flutter_sdk/src/widget_builder_view.dart';
@@ -21,6 +24,10 @@ class RestaurantCartSummary extends StatefulWidget {
   final double total;
   final List<RestaurantCart> restaurantCartItems;
   final String restaurantId;
+  final String restaurantName;
+  final String restaurantMtnPay;
+  final String restaurantMoovPay;
+  final String restaurantCeltiisPay;
 
   RestaurantCartSummary({
     required this.subTotal,
@@ -28,6 +35,10 @@ class RestaurantCartSummary extends StatefulWidget {
     required this.total,
     required this.restaurantCartItems,
     required this.restaurantId,
+    required this.restaurantName,
+    required this.restaurantMtnPay,
+    required this.restaurantMoovPay,
+    required this.restaurantCeltiisPay,
   });
 
   @override
@@ -310,12 +321,6 @@ class _RestaurantCartSummaryState extends State<RestaurantCartSummary> {
                                         border: InputBorder.none,
                                         hintStyle:
                                             TextStyle(color: kTextColor)),
-                                    /* validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return "Vous devez nous fournir une adresse de livraison";
-                                      }
-                                      return null;
-                                    },*/
                                   ),
                                 ),
                                 SizedBox(
@@ -353,6 +358,7 @@ class _RestaurantCartSummaryState extends State<RestaurantCartSummary> {
                                                       .trim(),
                                                   status: 'En cours',
                                                   repasId: e.repas.id,
+                                                  restaurantId: e.repas.restaurant!.id,
                                                   quantity:
                                                       e.quantity.toString(),
                                                   totalPrice: e
@@ -360,41 +366,206 @@ class _RestaurantCartSummaryState extends State<RestaurantCartSummary> {
                                                       .toString(),
                                                 ))
                                             .toList();
-                                        /* orderingFromCart.sayHello(); */
+
+                                        orderingFromRestaurantCart.placeOrderFromRestaurantCart(
+                                            name: _nameController.text
+                                                .toString()
+                                                .trim(),
+                                            address: _addressController.text
+                                                .toString()
+                                                .trim(),
+                                            contact: _contactController.text
+                                                .toString()
+                                                .trim(),
+                                            description:
+                                            _descriptionController.text
+                                                .toString()
+                                                .trim(),
+                                            status: 'En cours',
+                                            restaurantItems: restaurantOrderItems,
+                                            montant:
+                                            getTotalRestaurantItemsPrice().toString(),
+                                            quantite:
+                                            getNumOfItems().toString());
 
                                         debugPrint(
                                             "::::::::::::::: id du restaurant :  ${widget.restaurantId}");
 
-                                        final success =
-                                            await openKkiapayPayment();
-
-                                        if (success) {
-                                          orderingFromRestaurantCart.placeOrderFromRestaurantCart(
-                                              name: _nameController.text
-                                                  .toString()
-                                                  .trim(),
-                                              address: _addressController.text
-                                                  .toString()
-                                                  .trim(),
-                                              contact: _contactController.text
-                                                  .toString()
-                                                  .trim(),
-                                              description:
-                                                  _descriptionController.text
-                                                      .toString()
-                                                      .trim(),
-                                              status: 'En cours',
-                                              restaurantItems: restaurantOrderItems,
-                                              montant:
-                                                  getTotalRestaurantItemsPrice().toString(),
-                                              quantite:
-                                                  getNumOfItems().toString());
-                                        } else {
-                                          // Gérer l'échec du paiement
-                                          showMessage(
-                                              message: 'Échec du paiement',
-                                              context: context);
-                                        }
+                                        showDialog(context: context, builder: (context){
+                                          return Dialog(
+                                            insetPadding:
+                                            const EdgeInsets.all(10),
+                                            child: Container(
+                                              width: double.infinity,
+                                              height: SizeConfig.screenHeight *0.33,
+                                              decoration: BoxDecoration(
+                                                color: kWhite,
+                                                borderRadius:
+                                                BorderRadius.circular(
+                                                    12),
+                                              ),
+                                              padding: const EdgeInsets
+                                                  .fromLTRB(
+                                                  20, 30, 20, 20),
+                                              child: SingleChildScrollView(
+                                                child: Stack(
+                                                  children: [
+                                                    Positioned(
+                                                        right: 5,
+                                                        child: IconButton(onPressed: () {
+                                                          ScaffoldMessenger.of(
+                                                              context)
+                                                              .showSnackBar(const SnackBar(
+                                                              content:
+                                                              Text('Votre commande est bien reçue et est en cours de traitement')));
+                                                          PageNavigator(
+                                                              ctx:
+                                                              context)
+                                                              .nextPageOnly(
+                                                              page:
+                                                              const HomeScreen());
+                                                        }, icon: const Icon(Icons.cancel_outlined))),
+                                                    Column(
+                                                      children: [
+                                                        /*Center(
+                                                          child: Text(widget.restaurantName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),),
+                                                        ),*/
+                                                        Center(
+                                                          child: Padding(
+                                                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                                            child: Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                const Text("MTN"),
+                                                                if (widget.restaurantMtnPay == "")
+                                                                  const Text("Non disponible"),
+                                                                const SizedBox(height: 5.0,),
+                                                                // MTNPAY
+                                                                if (widget.restaurantMtnPay != "")
+                                                                  Row(
+                                                                    children: [
+                                                                      GestureDetector(
+                                                                        onLongPress: () {
+                                                                          Clipboard.setData(
+                                                                              ClipboardData(text: widget.restaurantMtnPay.toString()));
+                                                                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                                              content: Text(
+                                                                                  'Le code a été copié dans le presse-papier')));
+                                                                        },
+                                                                        child: SelectableText(
+                                                                          widget.restaurantMtnPay.toString(),
+                                                                          style: TextStyle(
+                                                                              fontSize: SizeConfig.screenHeight * 0.02,
+                                                                              color: kPrimaryColor,
+                                                                              fontWeight: FontWeight.bold),
+                                                                        ),
+                                                                      ),
+                                                                      const SizedBox(height: 5.0,),
+                                                                      IconButton(onPressed: () {
+                                                                        Clipboard.setData(
+                                                                            ClipboardData(text: widget.restaurantMtnPay.toString()));
+                                                                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                                            content: Text(
+                                                                                'Le code a été copié dans le presse-papier')));
+                                                                      }, icon: const Icon(Icons.copy))
+                                                                    ],
+                                                                  ),
+                                                                const Text("MOOV"),
+                                                                if (widget.restaurantMoovPay == "")
+                                                                  const Text("Non disponible"),
+                                                                const SizedBox(height: 5.0,),
+                                                                // MOOVPAY
+                                                                if (widget.restaurantMoovPay != "")
+                                                                  Row(
+                                                                    children: [
+                                                                      GestureDetector(
+                                                                        onLongPress: () {
+                                                                          Clipboard.setData(
+                                                                              ClipboardData(text: widget.restaurantMoovPay.toString()));
+                                                                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                                              content: Text(
+                                                                                  'Le code a été copié dans le presse-papier')));
+                                                                        },
+                                                                        child: SelectableText(
+                                                                          widget.restaurantMoovPay.toString(),
+                                                                          style: TextStyle(
+                                                                              fontSize: SizeConfig.screenHeight * 0.02,
+                                                                              color: kPrimaryColor,
+                                                                              fontWeight: FontWeight.bold),
+                                                                        ),
+                                                                      ),
+                                                                      const SizedBox(height: 5.0,),
+                                                                      IconButton(onPressed: () {
+                                                                        Clipboard.setData(ClipboardData(text: widget.restaurantMoovPay.toString()));
+                                                                        ScaffoldMessenger.of(context).showSnackBar(
+                                                                          const SnackBar(content: Text('Le code a été copié dans le presse-papier')),
+                                                                        );
+                                                                      }, icon: const Icon(Icons.copy)),
+                                                                    ],
+                                                                  ),
+                                                                const Text("CELTIIS"),
+                                                                // CELTIISPAY
+                                                                if (widget.restaurantCeltiisPay == "")
+                                                                  const Text("Non disponible"),
+                                                                const SizedBox(height: 5.0,),
+                                                                if (widget.restaurantCeltiisPay != "")
+                                                                  Row(
+                                                                    children: [
+                                                                      GestureDetector(
+                                                                        onLongPress: () {
+                                                                          Clipboard.setData(
+                                                                              ClipboardData(text: widget.restaurantCeltiisPay.toString()));
+                                                                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                                              content: Text(
+                                                                                  'Le code a été copié dans le presse-papier')));
+                                                                        },
+                                                                        child: SelectableText(
+                                                                          widget.restaurantCeltiisPay.toString(),
+                                                                          style: TextStyle(
+                                                                              fontSize: SizeConfig.screenHeight * 0.02,
+                                                                              color: kPrimaryColor,
+                                                                              fontWeight: FontWeight.bold),
+                                                                        ),
+                                                                      ),
+                                                                      const SizedBox(height: 5.0,),
+                                                                      IconButton(onPressed: () {
+                                                                        Clipboard.setData(
+                                                                            ClipboardData(text: widget.restaurantCeltiisPay.toString()));
+                                                                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                                            content: Text(
+                                                                                'Le code a été copié dans le presse-papier')));
+                                                                      }, icon: const Icon(Icons.copy)),
+                                                                    ],
+                                                                  ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        /*AppFilledButton(
+                                                          text: "Fermer",
+                                                          color: Colors.red,
+                                                          onPressed: () {
+                                                            ScaffoldMessenger.of(
+                                                                context)
+                                                                .showSnackBar(const SnackBar(
+                                                                content:
+                                                                Text('Votre commande est bien reçue et est en cours de traitement')));
+                                                            PageNavigator(
+                                                                ctx:
+                                                                context)
+                                                                .nextPageOnly(
+                                                                page:
+                                                                const HomeScreen());
+                                                          },
+                                                        )*/
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        });
                                         debugPrint(
                                             "------ ${restaurantOrderItems.length}");
                                         debugPrint(

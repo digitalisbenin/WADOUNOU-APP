@@ -54,26 +54,6 @@ class _SplashScreenBodyState extends State<SplashScreenBody> {
       splashTransition: SplashTransition.scaleTransition,
       animationDuration: const Duration(seconds: 1),
       nextScreen:widget.nextScreen,
-
-    
-      
-      /* FutureBuilder<String>(future:  DatabaseProvider().getToken(), builder: (context, snapshot){
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator(color: kPrimaryColor,);
-        } else if (snapshot.hasError) {
-          return Text(
-              'Erreur : La connexion au serveur à échouée ! Vérifier votre connexion internet',
-              textAlign: TextAlign.center,
-            );
-        } else {
-          final userToken = snapshot.data;
-          if (userToken!.isNotEmpty) {
-            return const HomeScreen();
-          } else {
-            return const OnBoardingScreen();
-          }
-        }
-      }) */
     );
   }
 

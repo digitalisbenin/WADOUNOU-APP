@@ -77,7 +77,7 @@ class _CartPageState extends State<CartPage> {
                             child: Text(
                               'Votre panier est vide pour le moment 🤪',
                               textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.headline6,
+                              style: Theme.of(context).textTheme.headlineMedium,
                             ),
                           ),
                         ],

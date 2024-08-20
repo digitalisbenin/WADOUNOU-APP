@@ -3,13 +3,19 @@ import 'package:digitalis_restaurant_app/core/model/Users/Repas.dart';
 import 'package:digitalis_restaurant_app/core/model/arguments/repas_detail_arguments.dart';
 import 'package:digitalis_restaurant_app/core/model/repas.dart';
 import 'package:digitalis_restaurant_app/core/utils/size_config.dart';
+import 'package:digitalis_restaurant_app/core/utils/widgets/routers.dart';
 import 'package:digitalis_restaurant_app/module/cart/cart_screen.dart';
 import 'package:digitalis_restaurant_app/module/restaurants_page/presentation/home/homePage/widgets/item_details_page.dart';
 import 'package:digitalis_restaurant_app/module/restaurants_page/presentation/home/homePage/widgets/restaurants_details/all_meals/widgets/single_all_meals_card.dart';
 import 'package:digitalis_restaurant_app/module/restaurants_page/presentation/home/homePage/widgets/search_meal_field_for_users.dart';
+import 'package:digitalis_restaurant_app/module/screens/login/login_page.dart';
+import 'package:digitalis_restaurant_app/module/selected_role_page/selected_role_screen.dart';
 import 'package:digitalis_restaurant_app/provider/cart_provider.dart';
 import 'package:badges/badges.dart' as badge;
+import 'package:digitalis_restaurant_app/shared/ui/widgets/buttons/app_fill_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 
 class AllMealsScreenBody extends StatefulWidget {
@@ -33,10 +39,19 @@ class _AllMealsScreenBodyState extends State<AllMealsScreenBody> {
 
   late TextEditingController _searchMealController;
 
+  final nomUser = GetStorage().read('userName') ?? 'Nom d\'utilisateur';
+
+  final token = GetStorage().read('token');
+
+  final mailUser = GetStorage().read('userMail') ?? 'test@gmail.com';
+
+  String? globalRoleId;
+
   @override
   void initState() {
     super.initState();
     _searchMealController = TextEditingController();
+    globalRoleId = GetStorage().read('role_id');
   }
 
   void updateMealSearch(String query_meal) {
@@ -47,9 +62,15 @@ class _AllMealsScreenBodyState extends State<AllMealsScreenBody> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        statusBarColor: kOnBoardingBackgroundColor, statusBarIconBrightness: Brightness.light));
     return Scaffold(
+      backgroundColor: kWhite,
       appBar: AppBar(
-        title: const Text("Repas"),
+        title: const Text("Repas", style: TextStyle(color: kWhite),),
+        backgroundColor: kOnBoardingBackgroundColor,
+        iconTheme: const IconThemeData(color: kWhite),
+        automaticallyImplyLeading: false,
         centerTitle: true,
         elevation: 0,
       ),
@@ -168,13 +189,82 @@ class _AllMealsScreenBodyState extends State<AllMealsScreenBody> {
                                     return SingleAllMealCard(
                                       repas: filteredMeals[index],
                                       press: () {
-                                        Navigator.pushNamed(
-                                          context,
-                                          ItemDetailsPage.routeName,
-                                          arguments: ProductDetailArguments(
-                                            repas: filteredMeals[index],
-                                          ),
-                                        );
+                                        if (token == null && globalRoleId == null) {
+                                          showDialog(context: context, builder: (context){
+                                            return Dialog(
+                                              insetPadding:
+                                              const EdgeInsets.all(10),
+                                              child: Container(
+                                                width: double.infinity,
+                                                height: SizeConfig.screenHeight *0.33,
+                                                decoration: BoxDecoration(
+                                                  color: kWhite,
+                                                  borderRadius:
+                                                  BorderRadius.circular(
+                                                      12),
+                                                ),
+                                                padding: const EdgeInsets
+                                                    .fromLTRB(
+                                                    20, 30, 20, 20),
+                                                child: SingleChildScrollView(
+                                                  child: Stack(
+                                                    children: [
+                                                      Positioned(
+                                                          right: 5,
+                                                          child: IconButton(onPressed: () => Navigator.of(context).pop(), icon: const Icon(Icons.cancel_outlined))),
+                                                      Column(
+                                                        children: [
+                                                          SizedBox(
+                                                            height: SizeConfig.screenHeight * 0.05,
+                                                          ),
+                                                          Padding(
+                                                            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                                            child: SizedBox(
+                                                              width: double.infinity,
+                                                              child: AppFilledButton(
+                                                                text: "Se connecter",
+                                                                onPressed: () {
+                                                                  PageNavigator(ctx: context).nextPageOnly(page: const LoginPage());
+                                                                  /*Navigator.pushNamed(
+                                    context, LoginPage.routeName);*/
+                                                                },
+                                                                color: kWhite,
+                                                                txtColor: kPrimaryColor,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          const Text("ou", style: TextStyle(fontSize: 18)),
+                                                          Padding(
+                                                            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                                            child: SizedBox(
+                                                              width: double.infinity,
+                                                              child: AppFilledButton(
+                                                                text: "S'inscrire",
+                                                                onPressed: () {
+                                                                  PageNavigator(ctx: context).nextPageOnly(page: const SelectedRoleScreen());
+                                                                },
+                                                                color: kPrimaryColor,
+                                                                txtColor: kWhite,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          });
+                                        } else {
+                                          Navigator.pushNamed(
+                                            context,
+                                            ItemDetailsPage.routeName,
+                                            arguments: ProductDetailArguments(
+                                              repas: filteredMeals[index],
+                                            ),
+                                          );
+                                        }
                                       },
                                     );
                                   } else {
@@ -198,7 +288,7 @@ class _AllMealsScreenBodyState extends State<AllMealsScreenBody> {
           ],
         ),
       ),
-      floatingActionButton: Container(
+      /*floatingActionButton: Container(
         decoration:
             BoxDecoration(borderRadius: BorderRadius.circular(20), boxShadow: [
           BoxShadow(
@@ -234,7 +324,7 @@ class _AllMealsScreenBodyState extends State<AllMealsScreenBody> {
             ),
           );
         }),
-      ),
+      ),*/
     );
   }
 }

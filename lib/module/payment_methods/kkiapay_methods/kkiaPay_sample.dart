@@ -37,8 +37,8 @@ class KkiapaySample extends StatelessWidget {
                 height: 100.0,
                 child: TextButton(
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(const Color(0xff222F5A)),
-                    foregroundColor: MaterialStateProperty.all(Colors.white),
+                    backgroundColor: WidgetStateProperty.all(const Color(0xff222F5A)),
+                    foregroundColor: WidgetStateProperty.all(Colors.white),
                   ),
                   child: const Text(
                     'Procéder au paiement',

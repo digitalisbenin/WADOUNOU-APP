@@ -1,5 +1,6 @@
 import 'package:digitalis_restaurant_app/core/constants/constant.dart';
 import 'package:digitalis_restaurant_app/core/model/Cart.dart';
+import 'package:digitalis_restaurant_app/core/model/Users/Repas.dart';
 import 'package:digitalis_restaurant_app/core/utils/size_config.dart';
 import 'package:digitalis_restaurant_app/core/utils/widgets/snack_message.dart';
 import 'package:digitalis_restaurant_app/module/payment_methods/kkiapay_methods/kkiaPay_sample.dart';
@@ -8,6 +9,7 @@ import 'package:digitalis_restaurant_app/provider/order_provider.dart';
 import 'package:digitalis_restaurant_app/shared/ui/widgets/buttons/app_fill_button.dart';
 import 'package:digitalis_restaurant_app/core/model/order_items.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kkiapay_flutter_sdk/src/widget_builder_view.dart';
@@ -18,12 +20,14 @@ class CartSummary extends StatefulWidget {
   final double shipping_cost;
   final double total;
   final List<Cart> cartItems;
+  final Repas? repas;
 
   CartSummary({
     required this.subTotal,
     required this.shipping_cost,
     required this.total,
     required this.cartItems,
+    this.repas
   });
 
   @override
@@ -357,6 +361,7 @@ class _CartSummaryState extends State<CartSummary> {
                                                       .trim(),
                                                   status: 'En cours',
                                                   repasId: e.repas.id,
+                                                  restaurantId: e.repas.restaurant!.id,
                                                   quantity:
                                                       e.numOfItems.toString(),
                                                   totalPrice: e
@@ -364,9 +369,192 @@ class _CartSummaryState extends State<CartSummary> {
                                                       .toString(),
                                                 ))
                                             .toList();
+
+                                        showDialog(context: context, builder: (context){
+                                          return Dialog(
+                                            insetPadding:
+                                            const EdgeInsets.all(10),
+                                            child: Container(
+                                              width: double.infinity,
+                                              height: SizeConfig.screenHeight *0.33,
+                                              decoration: BoxDecoration(
+                                                color: kWhite,
+                                                borderRadius:
+                                                BorderRadius.circular(
+                                                    12),
+                                              ),
+                                              padding: const EdgeInsets
+                                                  .fromLTRB(
+                                                  20, 30, 20, 20),
+                                              child: SingleChildScrollView(
+                                                child: Stack(
+                                                  children: [
+                                                    Positioned(
+                                                        right: 5,
+                                                        child: IconButton(onPressed: () => Navigator.of(context).pop(), icon: Icon(Icons.cancel_outlined))),
+                                                    Column(
+                                                      children: [
+                                                        Center(
+                                                          child: Text(widget.repas!.restaurant!.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),),
+                                                        ),
+                                                        Center(
+                                                          child: Padding(
+                                                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                                            child: Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                const Text("MTN"),
+                                                                if (widget.repas!.restaurant!.mtnpay == "")
+                                                                  const Text("Pas disponible"),
+                                                                const SizedBox(height: 5.0,),
+                                                                // MTNPAY
+                                                                if (widget.repas!.restaurant!.mtnpay != "")
+                                                                  Row(
+                                                                    children: [
+                                                                      /*Text(arguments.restaurant!.mtnpay, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0),),*/
+                                                                      GestureDetector(
+                                                                        // GestureDetector pour détecter le long appui.
+                                                                        onLongPress: () {
+                                                                          // Le presse-papiers pour copier le texte.
+                                                                          Clipboard.setData(
+                                                                              ClipboardData(text: widget.repas!.restaurant!.mtnpay.toString()));
+                                                                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                                              content: Text(
+                                                                                  'Le code a été copié dans le presse-papier')));
+                                                                        },
+                                                                        child: SelectableText(
+                                                                          widget.repas!.restaurant!.mtnpay.toString(),
+                                                                          style: TextStyle(
+                                                                              fontSize: SizeConfig.screenHeight * 0.02,
+                                                                              color: kPrimaryColor,
+                                                                              fontWeight: FontWeight.bold),
+                                                                        ),
+                                                                      ),
+                                                                      const SizedBox(height: 5.0,),
+                                                                      IconButton(onPressed: () {
+                                                                        Clipboard.setData(
+                                                                            ClipboardData(text: widget.repas!.restaurant!.mtnpay.toString()));
+                                                                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                                            content: Text(
+                                                                                'Le code a été copié dans le presse-papier')));
+                                                                      }, icon: const Icon(Icons.copy))
+                                                                      /*ElevatedButton(onPressed: () {}, child: const Row(
+                                                                    children: [
+                                                                      Icon(Icons.copy),
+                                                                      Text("COPIER"),
+                                                                    ],
+                                                                  ))*/
+                                                                    ],
+                                                                  ),
+                                                                const Text("MOOV"),
+                                                                if (widget.repas!.restaurant!.moovpay == "")
+                                                                  const Text("Pas disponible"),
+                                                                const SizedBox(height: 5.0,),
+                                                                // MOOVPAY
+                                                                if (widget.repas!.restaurant!.moovpay != "")
+                                                                  Row(
+                                                                    children: [
+                                                                      // Text(arguments.restaurant!.moovpay, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0),),
+                                                                      GestureDetector(
+                                                                        // GestureDetector pour détecter le long appui.
+                                                                        onLongPress: () {
+                                                                          // Le presse-papiers pour copier le texte.
+                                                                          Clipboard.setData(
+                                                                              ClipboardData(text: widget.repas!.restaurant!.moovpay.toString()));
+                                                                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                                              content: Text(
+                                                                                  'Le code a été copié dans le presse-papier')));
+                                                                        },
+                                                                        child: SelectableText(
+                                                                          widget.repas!.restaurant!.moovpay.toString(),
+                                                                          style: TextStyle(
+                                                                              fontSize: SizeConfig.screenHeight * 0.02,
+                                                                              color: kPrimaryColor,
+                                                                              fontWeight: FontWeight.bold),
+                                                                        ),
+                                                                      ),
+                                                                      const SizedBox(height: 5.0,),
+                                                                      IconButton(onPressed: () {
+                                                                        Clipboard.setData(ClipboardData(text: widget.repas!.restaurant!.moovpay.toString()));
+                                                                        ScaffoldMessenger.of(context).showSnackBar(
+                                                                          const SnackBar(content: Text('Le code a été copié dans le presse-papier')),
+                                                                        );
+                                                                      }, icon: const Icon(Icons.copy)),
+                                                                      /*ElevatedButton(onPressed: () {
+                                                                      Clipboard.setData(ClipboardData(text: arguments.restaurant!.moovpay.toString()));
+                                                                      ScaffoldMessenger.of(context).showSnackBar(
+                                                                        const SnackBar(content: Text('Le matricule a été copié dans le presse-papier')),
+                                                                      );
+                                                                    }, child: const Row(
+                                                                      children: [
+                                                                        Icon(Icons.copy),
+                                                                        Text("COPIER"),
+                                                                      ],
+                                                                    ))*/
+                                                                    ],
+                                                                  ),
+                                                                const Text("CELTIIS"),
+                                                                // CELTIISPAY
+                                                                if (widget.repas!.restaurant!.celtispay == "")
+                                                                  const Text("Pas disponible"),
+                                                                const SizedBox(height: 5.0,),
+                                                                if (widget.repas!.restaurant!.celtispay != "")
+                                                                  Row(
+                                                                    children: [
+                                                                      // Text(arguments.restaurant!.celtispay, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0),),
+                                                                      GestureDetector(
+                                                                        // GestureDetector pour détecter le long appui.
+                                                                        onLongPress: () {
+                                                                          // Le presse-papiers pour copier le texte.
+                                                                          Clipboard.setData(
+                                                                              ClipboardData(text: widget.repas!.restaurant!.celtispay.toString()));
+                                                                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                                              content: Text(
+                                                                                  'Le code a été copié dans le presse-papier')));
+                                                                        },
+                                                                        child: SelectableText(
+                                                                          widget.repas!.restaurant!.celtispay.toString(),
+                                                                          style: TextStyle(
+                                                                              fontSize: SizeConfig.screenHeight * 0.02,
+                                                                              color: kPrimaryColor,
+                                                                              fontWeight: FontWeight.bold),
+                                                                        ),
+                                                                      ),
+                                                                      const SizedBox(height: 5.0,),
+                                                                      IconButton(onPressed: () {
+                                                                        Clipboard.setData(
+                                                                            ClipboardData(text: widget.repas!.restaurant!.celtispay.toString()));
+                                                                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                                            content: Text(
+                                                                                'Le code a été copié dans le presse-papier')));
+                                                                      }, icon: const Icon(Icons.copy)),
+                                                                      /*ElevatedButton(onPressed: () {}, child: const Row(
+                                                                      children: [
+                                                                        Icon(Icons.copy),
+                                                                        Text("COPIER"),
+                                                                      ],
+                                                                    ))*/
+                                                                    ],
+                                                                  ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        AppFilledButton(text: "Fermer", color: Colors.red, onPressed: () {
+                                                          Navigator.pop(context);
+                                                        },)
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        });
+
                                         /* orderingFromCart.sayHello(); */
 
-                                         final success =
+                                         /*final success =
                                             await openKkiapayPayment();
 
                                             if (success) {
@@ -393,7 +581,7 @@ class _CartSummaryState extends State<CartSummary> {
                                           showMessage(
                                               message: 'Échec du paiement',
                                               context: context);
-                                            }
+                                            }*/
                                         debugPrint(
                                             "------ ${orderItems.length}");
                                         debugPrint(

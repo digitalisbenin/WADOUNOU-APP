@@ -5,14 +5,20 @@ import 'package:digitalis_restaurant_app/core/constants/url.dart';
 import 'package:digitalis_restaurant_app/core/utils/widgets/routers.dart';
 import 'package:digitalis_restaurant_app/module/account/account_view_page.dart';
 import 'package:digitalis_restaurant_app/module/create_restaurant/create_restaurant_page.dart';
+import 'package:digitalis_restaurant_app/module/restaurants_page/presentation/home/homePage/home_screen.dart';
+import 'package:digitalis_restaurant_app/module/screens/login/login_page.dart';
 import 'package:digitalis_restaurant_app/provider/database/db_provider.dart';
 import 'package:digitalis_restaurant_app/provider/database/user_model_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationProvider extends ChangeNotifier {
+  /// Le stockage de get
+  final userData = GetStorage();
+
   ///Base Url
   final requestBaseUrl = AppUrl.baseUrl;
 
@@ -26,36 +32,14 @@ class AuthenticationProvider extends ChangeNotifier {
 
   //Getter
   bool get isLoading => _isLoading;
+
   String get resMessage => _resMessage;
-
-  Future<void> profile() async {
-    _token = await DatabaseProvider().getToken();
-    //final userId = await DatabaseProvider().getUserId();
-    var client = http.Client();
-    var profileUrl = Uri.https(requestBaseUrl, '/api/profile');
-    try {
-      final response = await client.get(profileUrl, headers: {'Authorization': 'Bearer $_token'});
-      print("etape 1");
-      if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.body);
-        print("response data : $responseData");
-        print("response body : ${response.body}");
-        if (responseData != null) {
-          _userId = responseData['id'];
-          print('id : $_userId');
-
-
-        }
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
 
   void registerUser({
     required String name,
     required String email,
     required String password,
+    required String role_id,
     BuildContext? context,
   }) async {
     _isLoading = true;
@@ -68,6 +52,7 @@ class AuthenticationProvider extends ChangeNotifier {
     var client = http.Client();
 
     final body = {
+      "role_id": role_id,
       "name": name,
       "email": email,
       "password": password,
@@ -75,36 +60,66 @@ class AuthenticationProvider extends ChangeNotifier {
     print(body);
 
     try {
-      var response = await client.post(registerUrl,
-          body: body);
+      var response = await client.post(registerUrl, body: body);
       print(response.statusCode);
       print(response.body);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final res = jsonDecode(response.body);
         _isLoading = false;
-        _resMessage = "Account created!";
+
+        _resMessage = "Compte créé avec succès!";
         notifyListeners();
-        PageNavigator(ctx: context)
-            .nextPageOnly(page: const CreateRestaurant());
+        PageNavigator(ctx: context).nextPageOnly(page: const LoginPage());
       } else {
         final res = jsonDecode(response.body);
 
         _resMessage = res['message'];
 
-        print(res);
+        print("res $res");
         _isLoading = false;
         notifyListeners();
       }
     } on SocketException catch (_) {
       _isLoading = false;
-      _resMessage = "Internet connection is not available";
+      _resMessage = "Aucune connexion internet disponible";
       notifyListeners();
     } catch (e) {
       _isLoading = false;
-      _resMessage = "Please try again";
+      _resMessage = "Rééssayez encore";
+      print("reponse ::::::: $e");
       notifyListeners();
 
       print(":::: $e");
+    }
+  }
+
+  Future<void> usersProfile(String? token) async {
+    //final userId = await DatabaseProvider().getUserId();
+    print("le token ::::: $token");
+    var client = http.Client();
+    var profileUrl = Uri.https(requestBaseUrl, '/api/profile');
+    try {
+      final response = await client
+          .get(profileUrl, headers: {'Authorization': 'Bearer $token'});
+      debugPrint("etape 1");
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        debugPrint("response data : $responseData");
+        debugPrint("response body : ${response.body}");
+        if (responseData != null) {
+          _userId = responseData['id'];
+          userData.write('userName', responseData['name']);
+          userData.write('userMail', responseData['email']);
+          userData.write('userPhone', responseData['phone']);
+          userData.write('userRoleId', responseData['role_id']);
+          userData.write('userId', _userId);
+          userData.write('token', token);
+          debugPrint('id : $_userId');
+        }
+      }
+    } catch (e) {
+      debugPrint('$e');
     }
   }
 
@@ -114,14 +129,6 @@ class AuthenticationProvider extends ChangeNotifier {
     required String password,
     BuildContext? context,
   }) async {
-
-   _token = await DatabaseProvider().getToken();
-
-    await profile();
-
-    print('user token :::: $_token');
-
-    print('id utilisateur ::: $_userId');
     _isLoading = true;
     notifyListeners();
 
@@ -130,52 +137,66 @@ class AuthenticationProvider extends ChangeNotifier {
     var client = http.Client();
 
     final body = {"email": email, "password": password};
-    print('réponse du body ::: $body');
-    print('id utilisateur ::: $_userId');
+    debugPrint('réponse du body ::: $body');
 
     try {
-      var request = await client.post(
-          loginUrl,
-          body: body /* headers: {'Authorization': 'Bearer $token'}*/);
-      print(request.body);
+      var request = await client.post(loginUrl, body: body);
+      debugPrint(request.body.toString());
 
-      if (request.statusCode == 200 /*  || request.statusCode == 201 */) {
-        final res = jsonDecode(request.body);
+      if (request.statusCode == 200 || request.statusCode == 201) {
+        final Map<String, dynamic> res = jsonDecode(request.body);
 
-        print(res);
+        _token = res['access_token'] as String?;
+        userData.write('token', _token);
+        debugPrint('token utilisateur ::: $_token');
+
+        await usersProfile(_token!);
+
+        debugPrint('user token :::: $_token');
+
+        // Stocker le token et le role_id
+        final roleId = GetStorage()
+            .read("userRoleId"); // Suppose que votre API retourne le `role_id`
+
         _isLoading = false;
-        _resMessage = "Login successfull!";
+        _resMessage = "Connexion réussie";
         notifyListeners();
-        
 
-        ///Save users data and then navigate to homepage
-         _token = res['access_token'];
-        print(_token);
-        _userId = res['id'];
-        print('id user : $_userId');
-        DatabaseProvider().saveToken(_token!);
+        print("object ::::::::::::: $roleId");
 
-        PageNavigator(ctx: context)
-            .nextPageOnly(page: const AccountViewPage());
+        void storeRoleId(String roleId) {
+          GetStorage().write('role_id', roleId);
+          print(
+              'Stored role_id in GetStorage: $roleId'); // Pour vérifier l'écriture
+        }
+
+        if (_token != null) {
+          DatabaseProvider().saveToken(_token!);
+        }
+
+        if (roleId != null) {
+          storeRoleId(roleId); // Stocker le `role_id`
+        }
+
+        print('Utilisateur connecté. Role ID: $roleId'); // Pour déboguer
+
+        // Naviguer vers la page d'accueil, en passant le `role_id`
+        Navigator.pushNamed(context!, '/home', arguments: {'role_id': roleId});
       } else {
-        final res = json.decode(request.body);
-
+        final res = jsonDecode(request.body);
         _resMessage = res['message'];
-
-        print(res);
         _isLoading = false;
         notifyListeners();
       }
     } on SocketException catch (_) {
       _isLoading = false;
-      _resMessage = "Internet connection is not available`";
+      _resMessage = "Connexion internet indisponible";
       notifyListeners();
     } catch (e) {
       _isLoading = false;
-      _resMessage = "Please try again`";
+      _resMessage = "Erreur lors de la connexion. Veuillez réessayer";
       notifyListeners();
-
-      print(":::: $e");
+      print("Erreur: $e");
     }
   }
 

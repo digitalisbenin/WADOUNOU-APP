@@ -2,6 +2,7 @@ import 'package:digitalis_restaurant_app/core/constants/constant.dart';
 import 'package:badges/badges.dart' as badge;
 import 'package:digitalis_restaurant_app/core/model/Cart.dart';
 import 'package:digitalis_restaurant_app/core/model/RestaurantCart.dart';
+import 'package:digitalis_restaurant_app/core/model/Users/Restaurant.dart';
 import 'package:digitalis_restaurant_app/core/utils/size_config.dart';
 import 'package:digitalis_restaurant_app/module/cart/restaurant_cart_summary.dart';
 import 'package:digitalis_restaurant_app/provider/cart_provider.dart';
@@ -10,9 +11,21 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ShopAppCart extends StatefulWidget {
-  const ShopAppCart({super.key, required this.restaurantId});
+  const ShopAppCart(
+      {super.key,
+      required this.restaurantId,
+      this.restaurant,
+      required this.restaurantName,
+      required this.restaurantMtnPay,
+      required this.restaurantMoovPay,
+      required this.restaurantCeltiisPay});
 
   final String restaurantId;
+  final String restaurantName;
+  final String restaurantMtnPay;
+  final String restaurantMoovPay;
+  final String restaurantCeltiisPay;
+  final Restaurant? restaurant;
 
   @override
   State<ShopAppCart> createState() => _ShopAppCartState();
@@ -25,9 +38,10 @@ class _ShopAppCartState extends State<ShopAppCart> {
     return Scaffold(
       backgroundColor: kBackground,
       appBar: AppBar(
-        title: const Text('Mon Paniers '),
+        iconTheme: const IconThemeData(color: kWhite),
+        title: const Text('Mon Paniers ', style: TextStyle(color: kWhite),),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: kOnBoardingBackgroundColor,
         elevation: 0,
         actions: [
           Center(
@@ -39,16 +53,16 @@ class _ShopAppCartState extends State<ShopAppCart> {
                 showBadge: cartItemCount > 0,
                 badgeContent: Text(
                   cartItemCount.toString(),
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: kPrimaryColor),
                 ),
-                badgeStyle: const badge.BadgeStyle(badgeColor: kPrimaryColor),
+                badgeStyle: const badge.BadgeStyle(badgeColor: kWhite),
                 child: const Icon(
                   CupertinoIcons.cart,
                 ),
               );
             }),
           ),
-          SizedBox(
+          const SizedBox(
             width: 20.0,
           ),
         ],
@@ -58,7 +72,8 @@ class _ShopAppCartState extends State<ShopAppCart> {
           Expanded(
             child:
                 Consumer<CartProvider>(builder: (context, cartProvider, child) {
-              List<RestaurantCart> restaurantCartItems = cartProvider.restaurantCartItems;
+              List<RestaurantCart> restaurantCartItems =
+                  cartProvider.restaurantCartItems;
               return restaurantCartItems.isEmpty
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -224,13 +239,17 @@ class _ShopAppCartState extends State<ShopAppCart> {
                     : true,
                 child: RestaurantCartSummary(
                   subTotal: cartProvider.getTotalRestaurantItemsPrice(),
-                  shipping_cost:
-                      500, // Remplacez cela par la valeur réelle de livraison
+                  shipping_cost: 500,
+                  // Remplacez cela par la valeur réelle de livraison
                   total: cartProvider.getTotalRestaurantItemsPrice() + 500,
-                  restaurantCartItems: cartProvider
-                      .restaurantCartItems, // Remplacez cela par la formule réelle
-                  restaurantId:
-                      widget.restaurantId, // Passer l'ID du restaurant
+                  restaurantCartItems: cartProvider.restaurantCartItems,
+                  // Remplacez cela par la formule réelle
+                  restaurantId: widget.restaurantId,
+                  // Passer l'ID du restaurant
+                  restaurantName: widget.restaurantName,
+                  restaurantMtnPay: widget.restaurantMtnPay,
+                  restaurantMoovPay: widget.restaurantMoovPay,
+                  restaurantCeltiisPay: widget.restaurantCeltiisPay,
                 ),
               ),
             );

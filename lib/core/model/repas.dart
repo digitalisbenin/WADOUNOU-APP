@@ -12,7 +12,7 @@ class RepasList {
 
   static Future<List<Repas>> getRepas() async {
 
-    const repasUrl = 'https://apiv6.sevenservicesplus.com/api/repas';
+    const repasUrl = 'https://apiv2.wadounnou.com/api/repas';
 
     final response = await http.get(Uri.parse(repasUrl));
 
@@ -23,7 +23,7 @@ class RepasList {
 
    Future<List<Repas>> getRepasByCategory(String categoryId) async {
     final response = await http.get(
-      Uri.parse('https://apiv6.sevenservicesplus.com/api/repas?category_id=$categoryId'),
+      Uri.parse('https://apiv2.wadounnou.com/api/repas?category_id=$categoryId'),
     );
 
     if (response.statusCode == 200) {
@@ -42,39 +42,15 @@ class RepasList {
   }
 
    Future<List<Repas>> getRepasByRestaurant(String restaurantId) async {
-    const repasUrl = 'https://apiv6.sevenservicesplus.com/api/menus?restaurant_id=';
+    const repasUrl = 'https://apiv2.wadounnou.com/api/repas?restaurant_id=';
     final response = await http.get(Uri.parse('$repasUrl$restaurantId'));
     final body = jsonDecode(response.body);
     return body['data'].map<Repas>((e) => Repas.fromJson(e)).toList();
   }
-/* 
-  Future<List<Menu>> getMenuByRestaurant(String restaurantId) async {
-  final response = await http.get(
-    Uri.parse('https://apiv6.sevenservicesplus.com/api/menus?restaurant_id=$restaurantId'),
-  );
 
-  if (response.statusCode == 200) {
-    // Si la requête est réussie, analysez les données JSON
-    final Map<String, dynamic> data = json.decode(response.body);
 
-    // Vérifiez si la clé 'data' existe dans la réponse JSON
-    if (data.containsKey('data')) {
-      // Accédez à la liste 'data' et convertissez-la en une liste de menus
-      final List<dynamic> menuData = data['data'];
-      List<Menu> menus = menuData.map((item) => Menu.fromJson(item)).toList();
-      return menus;
-    } else {
-      // Si la clé 'data' est manquante, lancez une exception
-      throw Exception("La clé 'data' est manquante dans la réponse JSON");
-    }
-  } else {
-    // Si la requête a échoué, lancez une exception
-    throw Exception('Erreur lors de la récupération des menus');
-  }
-} */
-
-Future<List<Repas>> getMenuByRestaurantId(String restaurantId)async{
-  final String apiUrl = '';
+Future<List<Repas>> getRepasByRestaurantId(String restaurantId)async{
+  const String apiUrl = 'https://apiv2.wadounnou.com/api/repas';
 
   try{
     final response = await http.get(Uri.parse(apiUrl));
@@ -99,7 +75,7 @@ Future<List<Repas>> getMenuByRestaurantId(String restaurantId)async{
 mafonction() async { 
   String jenesaispasauoimettre = '';
   try {
-    List<Repas> menu = await getMenuByRestaurantId(jenesaispasauoimettre);
+    List<Repas> menu = await getRepasByRestaurantId(jenesaispasauoimettre);
     for(Repas repas in menu){
       print('Nom du repas: ${repas.name}, Prix: ${repas.prix}');
     }

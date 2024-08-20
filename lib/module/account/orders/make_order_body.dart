@@ -282,7 +282,7 @@ class _MakeOrderBodyState extends State<MakeOrderBody> {
             key: _formKey,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: ListView(
+              /*child: ListView(
                 children: [
                   SizedBox(
                     height: SizeConfig.screenHeight * 0.02,
@@ -396,12 +396,12 @@ class _MakeOrderBodyState extends State<MakeOrderBody> {
                           borderRadius: BorderRadius.all(Radius.circular(8.0)),
                         ),
                       ),
-                      /*validator: (value) {
+                      *//*validator: (value) {
                         if (value == null) {
                           return 'Veuillez sélectionner un restaurant';
                         }
                         return null;
-                      },*/
+                      },*//*
                     ),
                   ),
                   SizedBox(
@@ -614,7 +614,7 @@ class _MakeOrderBodyState extends State<MakeOrderBody> {
                             _formKey.currentState!.save();
                             final success = await openKkiapayPayment();
                             if (success) {
-                              /*  ordering.postOrder(
+                              *//*  ordering.postOrder(
                                 name: _nameController.text.trim(),
                                 adresse: _deliveryAddressController.text.trim(),
                                 contact: _phoneController.text.trim(),
@@ -625,7 +625,7 @@ class _MakeOrderBodyState extends State<MakeOrderBody> {
                                 quantite: _quantityController.text.trim(),
                                 montant: newPrice.toString(),
                                 context: context,
-                              ); */
+                              ); *//*
                               dispose();
 
                               showMessage(
@@ -654,15 +654,15 @@ class _MakeOrderBodyState extends State<MakeOrderBody> {
                             quantite: _numberOfItem.toString(),
                             montant: newPrice.toString(),
                             repas_id: selectedRepas!.id.toString(),
-                            /* commande_id: arguments.commandes!.id
-                                              .toString() */
+                            *//* commande_id: arguments.commandes!.id
+                                              .toString() *//*
                           );
                         },
                       );
                     }),
                   ),
                 ],
-              ),
+              ),*/
             ),
           );
         });

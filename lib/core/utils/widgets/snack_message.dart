@@ -8,5 +8,5 @@ void showMessage({String? message, BuildContext? context}) {
         message!,
         style: TextStyle(color: kWhite),
       ),
-      backgroundColor: kcStatusConfirmed));
+      ));
 }

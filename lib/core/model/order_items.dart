@@ -5,6 +5,7 @@ class OrderItem {
   final String? status;
   final String? description;
   final String? repasId;
+  final String? restaurantId;
   final String? quantity;
   final String? totalPrice;
 
@@ -12,6 +13,7 @@ class OrderItem {
     this.name,
     this.description,
     this.repasId,
+    this.restaurantId,
     this.quantity,
     this.totalPrice,
     this.adresse,

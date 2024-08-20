@@ -2,10 +2,13 @@ import 'package:digitalis_restaurant_app/core/constants/constant.dart';
 import 'package:digitalis_restaurant_app/core/model/Users/Restaurant.dart';
 import 'package:digitalis_restaurant_app/core/model/arguments/restaurant_detail_arguments.dart';
 import 'package:digitalis_restaurant_app/core/utils/size_config.dart';
+import 'package:digitalis_restaurant_app/core/utils/widgets/routers.dart';
 import 'package:digitalis_restaurant_app/core/utils/widgets/snack_message.dart';
 import 'package:digitalis_restaurant_app/module/cart/shop_app_cart.dart';
 import 'package:digitalis_restaurant_app/module/restaurants_page/presentation/home/homePage/widgets/restaurants_details/widgets/restaurants_new_items/other_arrivals_widgets/daily_food_screen.dart';
 import 'package:digitalis_restaurant_app/module/restaurants_page/presentation/home/homePage/widgets/restaurants_details/restaurant_info_details.dart';
+import 'package:digitalis_restaurant_app/module/screens/login/login_page.dart';
+import 'package:digitalis_restaurant_app/module/selected_role_page/selected_role_screen.dart';
 import 'package:digitalis_restaurant_app/provider/booking_provider.dart';
 import 'package:digitalis_restaurant_app/provider/cart_provider.dart';
 import 'package:digitalis_restaurant_app/shared/ui/widgets/buttons/app_fill_button.dart';
@@ -13,16 +16,17 @@ import 'package:badges/badges.dart' as badge;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class RestaurantBody extends StatefulWidget {
+  final Restaurant restaurant;
+
   const RestaurantBody({
     super.key,
     required this.restaurant,
   });
-
-  final Restaurant restaurant;
 
   static String routeName = "/restaurant_body";
 
@@ -32,6 +36,14 @@ class RestaurantBody extends StatefulWidget {
 
 class _RestaurantBodyState extends State<RestaurantBody> {
   final _formKey = GlobalKey<FormState>();
+
+  final nomUser = GetStorage().read('userName') ?? 'Nom d\'utilisateur';
+
+  final token = GetStorage().read('token');
+
+  final mailUser = GetStorage().read('userMail') ?? 'test@gmail.com';
+
+  String? globalRoleId;
 
  /*  String? restaurantId; */
 
@@ -45,6 +57,12 @@ class _RestaurantBodyState extends State<RestaurantBody> {
   TimeOfDay? _selectedTime;
   final TextEditingController _partySizeController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    globalRoleId = GetStorage().read('role_id');
+  }
 
   @override
   void dispose() {
@@ -392,9 +410,6 @@ class _RestaurantBodyState extends State<RestaurantBody> {
                                             widget.restaurant.id!.toString(),
                                         context: context,
                                       );
-
-                                      dispose();
-
                                       Navigator.of(context).pop();
 
                                       if (bookInRestaurant
@@ -443,15 +458,13 @@ class _RestaurantBodyState extends State<RestaurantBody> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        statusBarColor: kBackground, statusBarIconBrightness: Brightness.dark));
     arguments =
         ModalRoute.of(context)?.settings.arguments as RestaurantDetailArgument?;
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: kOnBoardingBackgroundColor,
           centerTitle: true,
-          title: const Text("WADOUNOU", style: TextStyle(fontWeight: FontWeight.w500),),
+          title: const Text("WADOUNNOU", style: TextStyle(fontWeight: FontWeight.w500, color: kWhite),),
           elevation: 0,
           automaticallyImplyLeading: false,
           leading: Padding(
@@ -462,6 +475,7 @@ class _RestaurantBodyState extends State<RestaurantBody> {
               },
               icon: const Icon(
                 Icons.arrow_back_ios,
+                color: kWhite,
                 size: 18.0,
               ),
             ),
@@ -475,10 +489,9 @@ class _RestaurantBodyState extends State<RestaurantBody> {
               restaurant: widget.restaurant,
             ),
             SizedBox(
-              height: SizeConfig.screenHeight * 0.05,
+              height: SizeConfig.screenHeight * 0.01,
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
+            const Center(
               child: Text(
                 "Mets du jour",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -506,7 +519,77 @@ class _RestaurantBodyState extends State<RestaurantBody> {
               String restaurantId = widget.restaurant.id ?? "";
               debugPrint("ID du restaurant sélectionné : $restaurantId");
               // modal bottom sheet
-              _showBottomSheet(context);
+              if (token == null && globalRoleId == null) {
+                showDialog(context: context, builder: (context){
+                  return Dialog(
+                    insetPadding:
+                    const EdgeInsets.all(10),
+                    child: Container(
+                      width: double.infinity,
+                      height: SizeConfig.screenHeight *0.33,
+                      decoration: BoxDecoration(
+                        color: kWhite,
+                        borderRadius:
+                        BorderRadius.circular(
+                            12),
+                      ),
+                      padding: const EdgeInsets
+                          .fromLTRB(
+                          20, 30, 20, 20),
+                      child: SingleChildScrollView(
+                        child: Stack(
+                          children: [
+                            Positioned(
+                                right: 5,
+                                child: IconButton(onPressed: () => Navigator.of(context).pop(), icon: Icon(Icons.cancel_outlined))),
+                            Column(
+                              children: [
+                                SizedBox(
+                                  height: SizeConfig.screenHeight * 0.05,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    child: AppFilledButton(
+                                      text: "Se connecter",
+                                      onPressed: () {
+                                        PageNavigator(ctx: context).nextPageOnly(page: const LoginPage());
+                                        /*Navigator.pushNamed(
+                                    context, LoginPage.routeName);*/
+                                      },
+                                      color: kWhite,
+                                      txtColor: kPrimaryColor,
+                                    ),
+                                  ),
+                                ),
+                                const Text("ou", style: TextStyle(fontSize: 18)),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    child: AppFilledButton(
+                                      text: "S'inscrire",
+                                      onPressed: () {
+                                        PageNavigator(ctx: context).nextPageOnly(page: const SelectedRoleScreen());
+                                      },
+                                      color: kPrimaryColor,
+                                      txtColor: kWhite,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                });
+              } else {
+                _showBottomSheet(context);
+              }
+
             },
             child: const Text(
               "Réserver dans ce restaurant",
@@ -538,12 +621,86 @@ class _RestaurantBodyState extends State<RestaurantBody> {
             child: FloatingActionButton(
               backgroundColor: Colors.white,
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ShopAppCart(
-                              restaurantId: widget.restaurant.id ?? '',
-                            )));
+                if (token == null && globalRoleId == null) {
+                  showDialog(context: context, builder: (context){
+                    return Dialog(
+                      insetPadding:
+                      const EdgeInsets.all(10),
+                      child: Container(
+                        width: double.infinity,
+                        height: SizeConfig.screenHeight *0.33,
+                        decoration: BoxDecoration(
+                          color: kWhite,
+                          borderRadius:
+                          BorderRadius.circular(
+                              12),
+                        ),
+                        padding: const EdgeInsets
+                            .fromLTRB(
+                            20, 30, 20, 20),
+                        child: SingleChildScrollView(
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                  right: 5,
+                                  child: IconButton(onPressed: () => Navigator.of(context).pop(), icon: Icon(Icons.cancel_outlined))),
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    height: SizeConfig.screenHeight * 0.05,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                    child: SizedBox(
+                                      width: double.infinity,
+                                      child: AppFilledButton(
+                                        text: "Se connecter",
+                                        onPressed: () {
+                                          PageNavigator(ctx: context).nextPageOnly(page: const LoginPage());
+                                          /*Navigator.pushNamed(
+                                    context, LoginPage.routeName);*/
+                                        },
+                                        color: kWhite,
+                                        txtColor: kPrimaryColor,
+                                      ),
+                                    ),
+                                  ),
+                                  const Text("ou", style: TextStyle(fontSize: 18)),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                    child: SizedBox(
+                                      width: double.infinity,
+                                      child: AppFilledButton(
+                                        text: "S'inscrire",
+                                        onPressed: () {
+                                          PageNavigator(ctx: context).nextPageOnly(page: const SelectedRoleScreen());
+                                        },
+                                        color: kPrimaryColor,
+                                        txtColor: kWhite,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  });
+                } else {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ShopAppCart(
+                            restaurantId: widget.restaurant.id ?? '',
+                            restaurantName: widget.restaurant.name ?? '',
+                            restaurantMtnPay: widget.restaurant.mtnpay ?? '',
+                            restaurantMoovPay: widget.restaurant.moovpay ?? '',
+                            restaurantCeltiisPay: widget.restaurant.celtispay ?? '',
+                          )));
+                }
+
               },
               child: const Icon(
                 CupertinoIcons.cart,

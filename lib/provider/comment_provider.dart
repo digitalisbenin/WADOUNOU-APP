@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:digitalis_restaurant_app/core/constants/url.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class CommentProvider extends ChangeNotifier {
@@ -27,6 +28,7 @@ class CommentProvider extends ChangeNotifier {
 
     var addCommentUrl = Uri.https(requestBaseUrl, '/api/commentaires');
     var client = http.Client();
+    final userToken = GetStorage().read('token');
 
     final body = {
       "content" : content,
@@ -35,7 +37,7 @@ class CommentProvider extends ChangeNotifier {
     print(body);
 
     try {
-      var response = await client.post(addCommentUrl, body: body);
+      var response = await client.post(addCommentUrl, body: body, headers: {'Authorization': 'Bearer $userToken'});
       print(response.statusCode);
       print(response.body);
 
@@ -58,7 +60,7 @@ class CommentProvider extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       _isLoading = false;
-      _resMessage = "Please try again";
+      _resMessage = "Rééssayez encore";
       notifyListeners();
 
       print(":::: $e");

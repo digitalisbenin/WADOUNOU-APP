@@ -26,171 +26,73 @@ class _SingleRestaurantCardState extends State<SingleRestaurantCard> {
       padding: EdgeInsets.symmetric(vertical: SizeConfig.screenHeight * 0.01),
       child: GestureDetector(
         onTap: widget.press,
-        child: Container(
-          width: SizeConfig.screenWidth,
-          height: SizeConfig.screenHeight,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 3,
-                blurRadius: 10,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              InkWell(
-                onTap: widget.press,
-                child: Container(
-                  width: SizeConfig.screenWidth * 0.4,
-                  alignment: Alignment.center,
-                  child: Image.network(
-                    widget.restaurants.image_url.toString(),
-                    height: SizeConfig.screenHeight * 0.5,
-                    width: SizeConfig.screenWidth * 0.4,
-                  ),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+          child: Container(
+            width: SizeConfig.screenWidth,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 3,
+                  blurRadius: 10,
+                  offset: const Offset(0, 3),
                 ),
-              ),
-              SizedBox(
-                 width: SizeConfig.screenWidth * 0.5, 
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              ],
+            ),
+            child: Stack(
+              children: [
+                Column(
                   children: [
-                    Text(
-                      widget.restaurants.name.toString(),
-                      style: TextStyle(
-                          fontSize: SizeConfig.screenHeight * 0.025,
-                          fontWeight: FontWeight.bold,
-                          overflow: TextOverflow.ellipsis),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          top: 5.0, left: 5.0, right: 5.0),
+                      child: Container(
+                        height: SizeConfig.screenHeight * 0.25,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: NetworkImage(
+                                    widget.restaurants.imageUrl.toString()),
+                                fit: BoxFit.cover),
+                            borderRadius: BorderRadius.circular(8)),
+                      ),
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          "Adresse : ",
-                          style: TextStyle(
-                            fontSize: SizeConfig.screenHeight * 0.016,
-                            color: Colors.grey.shade500,
-                            fontStyle: FontStyle.italic,
-                            fontWeight: FontWeight.w400,
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Container(
+                        width: double.infinity,
+                        decoration: const BoxDecoration(color: Colors.white),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Center(
+                                child: Text(
+                                  "${widget.restaurants.name.toString()} / ${widget.restaurants.specialite.toString()}",
+                                  style: const TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              SizedBox(
+                                height: SizeConfig.screenHeight * 0.005,
+                              ),
+                              Center(
+                                child: Text(
+                                    '${widget.restaurants.adresse.toString()} / ${widget.restaurants.heure_douverture} - ${widget.restaurants.heure_fermeture}'),
+                              ),
+                            ],
                           ),
                         ),
-                        Expanded(
-                          child: Text(
-                            widget.restaurants.adresse.toString(),
-                            style: TextStyle(
-                                fontSize: SizeConfig.screenHeight * 0.016,
-                                color: Colors.grey.shade500,
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.w400,),
-                                overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "Spécialité : ",
-                          style: TextStyle(
-                              fontSize: SizeConfig.screenHeight * 0.016,
-                              color: Colors.grey.shade500,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w400,
-                              overflow: TextOverflow.ellipsis),
-                        ),
-                        Expanded(
-                          child: Text(
-                            widget.restaurants.specilite.toString(),
-                            style: TextStyle(
-                              fontSize: SizeConfig.screenHeight * 0.016,
-                              color: Colors.grey.shade500,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "Heure d'ouverture : ",
-                          style: TextStyle(
-                            fontSize: SizeConfig.screenHeight * 0.016,
-                            color: Colors.grey.shade500,
-                            fontStyle: FontStyle.italic,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        Text(
-                          "${widget.restaurants.heure_douverture}",
-                          maxLines: 2,
-                          style: TextStyle(
-                              fontSize: SizeConfig.screenHeight * 0.016,
-                              color: Colors.grey.shade500,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w400,
-                              overflow: TextOverflow.ellipsis),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "Heure de fermerture : ",
-                          style: TextStyle(
-                              fontSize: SizeConfig.screenHeight * 0.016,
-                              color: Colors.grey.shade500,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w400,
-                              overflow: TextOverflow.ellipsis),
-                        ),
-                        Text(
-                          "${widget.restaurants.heure_fermeture}",
-                          maxLines: 2,
-                          style: TextStyle(
-                            fontSize: SizeConfig.screenHeight * 0.016,
-                            color: Colors.grey.shade500,
-                            fontStyle: FontStyle.italic,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "Contacts : ",
-                          style: TextStyle(
-                            fontSize: SizeConfig.screenHeight * 0.016,
-                            color: Colors.grey.shade500,
-                            fontStyle: FontStyle.italic,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        Text(
-                          widget.restaurants.phone.toString(),
-                          maxLines: 2,
-                          style: TextStyle(
-                            fontSize: SizeConfig.screenHeight * 0.016,
-                            color: Colors.grey.shade500,
-                            fontStyle: FontStyle.italic,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    )
                   ],
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

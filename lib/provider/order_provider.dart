@@ -6,6 +6,7 @@ import 'package:digitalis_restaurant_app/core/model/order_items.dart';
 import 'package:digitalis_restaurant_app/core/model/restaurant_order_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class OrderProvider extends ChangeNotifier {
@@ -15,12 +16,16 @@ class OrderProvider extends ChangeNotifier {
   bool _isLoading = false;
   String _resMessage = '';
   String? _commandeId;
+
   /* String? _transactionId; */
 
   // getter
   bool get isLoading => _isLoading;
+
   String get resMessage => _resMessage;
+
   String? get commandeId => _commandeId;
+
   /* String? get transactionId => _transactionId; */
 
   /* void sayHello() {
@@ -47,21 +52,26 @@ class OrderProvider extends ChangeNotifier {
 
     var client = http.Client();
 
+    final userToken = GetStorage().read('token');
+    final userId = GetStorage().read('userId');
+
     final body = {
+      "restaurant_id": restaurant_id,
+      "user_id": userId,
       "name": name,
       "adresse": adresse,
       "contact": contact,
       "description": description,
       "status": "En attente",
       "repas_id": repas_id,
-      "restaurant_id": restaurant_id,
       "montant": montant,
       "quantite": quantite,
     };
     print(body);
 
     try {
-      var response = await client.post(addOrderUrl, body: body);
+      var response = await client.post(addOrderUrl,
+          body: body, headers: {'Authorization': 'Bearer $userToken'});
       print(response.statusCode);
       print(response.body);
 
@@ -78,7 +88,9 @@ class OrderProvider extends ChangeNotifier {
           repas_id: repas_id.toString(),
           commande_id: commandeId.toString(),
         );
-        postPaymentMethod(commandeId: commandeId.toString(), transactionId: transactionId.toString());
+        postPaymentMethod(
+            commandeId: commandeId.toString(),
+            transactionId: transactionId.toString());
         notifyListeners();
         // transition vers une page
       } else {
@@ -95,7 +107,8 @@ class OrderProvider extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       _isLoading = false;
-      _resMessage = "Please try again";
+      print("reeepooonssssssssssse : $e");
+      _resMessage = "Rééssayez encore";
       notifyListeners();
 
       print(":::: $e");
@@ -127,10 +140,14 @@ class OrderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> sendOrderItemToBackend(OrderItem it, String? transactionId) async {
+  Future<void> sendOrderItemToBackend(
+      OrderItem it, String? transactionId) async {
     var addOrderUrl = Uri.https(requesBaseUrl, '/api/commandes');
 
     var client = http.Client();
+
+    final userToken = GetStorage().read('token');
+    final userId = GetStorage().read('userId');
 
     debugPrint("-----adresse  : ${it.adresse}");
     debugPrint("-----name  : ${it.name}");
@@ -139,6 +156,7 @@ class OrderProvider extends ChangeNotifier {
     debugPrint("-----status  : ${it.status}");
 
     final body = {
+      "user_id": userId,
       "name": it.name,
       "adresse": it.adresse,
       "contact": it.contact,
@@ -150,7 +168,9 @@ class OrderProvider extends ChangeNotifier {
     };
 
     try {
-      var response = await client.post(addOrderUrl, body: body);
+      var response = await client.post(addOrderUrl, body: body, headers: {
+        'Authorization': 'Bearer $userToken'
+      });
 
       print(response.statusCode);
       print(response.body);
@@ -167,7 +187,9 @@ class OrderProvider extends ChangeNotifier {
           repas_id: it.repasId.toString(),
           commande_id: commandeId.toString(),
         );
-        postPaymentMethod(commandeId: commandeId.toString(), transactionId: transactionId.toString());
+        postPaymentMethod(
+            commandeId: commandeId.toString(),
+            transactionId: transactionId.toString());
         debugPrint(res);
 
         _resMessage = "Votre order à été bien placé";
@@ -202,6 +224,7 @@ class OrderProvider extends ChangeNotifier {
     required String description,
     required String status,
     String? repas_id,
+    String? restaurant_id,
     required String montant,
     required String quantite,
     required List<RestaurantOrderItem> restaurantItems,
@@ -221,6 +244,10 @@ class OrderProvider extends ChangeNotifier {
 
     var client = http.Client();
 
+    final userToken = GetStorage().read('token');
+    final userId = GetStorage().read('userId');
+
+
     debugPrint("-----adresse  : ${restItem.adresse}");
     debugPrint("-----name  : ${restItem.name}");
     debugPrint("-----description  : ${restItem.description}");
@@ -228,18 +255,22 @@ class OrderProvider extends ChangeNotifier {
     debugPrint("-----status  : ${restItem.status}");
 
     final body = {
+      "user_id": userId,
       "name": restItem.name,
       "adresse": restItem.adresse,
       "contact": restItem.contact,
       "description": restItem.description,
       "repas_id": restItem.repasId,
+      "restaurant_id": restItem.restaurantId,
       "montant": restItem.totalPrice,
       "status": 'En attente',
       "quantite": restItem.quantity,
     };
 
     try {
-      var response = await client.post(addOrderUrl, body: body);
+      var response = await client.post(addOrderUrl, body: body, headers: {
+        'Authorization': 'Bearer $userToken'
+      });
 
       print(response.statusCode);
       print(response.body);
@@ -249,17 +280,22 @@ class OrderProvider extends ChangeNotifier {
 
         var commandeId = res['data']['id'];
 
-        print("Commande envoyée avec succès");
-        debugPrint(res);
-
-        /*  _resMessage = "Votre order à été bien placé"; */
         postOrderToCommandLineBackend(
           quantite: restItem.quantity.toString(),
           montant: restItem.totalPrice.toString(),
           repas_id: restItem.repasId.toString(),
           commande_id: commandeId.toString(),
         );
-        postPaymentMethod(commandeId: commandeId.toString(), transactionId: transactionId.toString());
+
+        print("Commande envoyée avec succès");
+        print("commandId :::: $commandeId");
+        debugPrint(res);
+
+        /*  _resMessage = "Votre order à été bien placé"; */
+
+        postPaymentMethod(
+            commandeId: commandeId.toString(),
+            transactionId: transactionId.toString());
         notifyListeners();
       } else {
         final res = jsonDecode(response.body);
@@ -303,7 +339,11 @@ class OrderProvider extends ChangeNotifier {
 
     var client = http.Client();
 
+    final userToken = GetStorage().read('token');
+    final userId = GetStorage().read('userId');
+
     final body = {
+      "user_id": userId,
       "name": name,
       "adresse": adresse,
       "contact": contact,
@@ -316,7 +356,9 @@ class OrderProvider extends ChangeNotifier {
     print(body);
 
     try {
-      var response = await client.post(addOrderUrl, body: body);
+      var response = await client.post(addOrderUrl, body: body, headers: {
+        'Authorization': 'Bearer $userToken'
+      });
       print(response.statusCode);
       print(response.body);
 
@@ -332,7 +374,9 @@ class OrderProvider extends ChangeNotifier {
           repas_id: repas_id.toString(),
           commande_id: commandeId.toString(),
         );
-        postPaymentMethod(commandeId: commandeId.toString(), transactionId: transactionId.toString());
+        postPaymentMethod(
+            commandeId: commandeId.toString(),
+            transactionId: transactionId.toString());
         notifyListeners();
         // transition vers une page
       } else {
@@ -349,17 +393,17 @@ class OrderProvider extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       _isLoading = false;
-      _resMessage = "Please try again";
+      _resMessage = "Rééssayez encore";
       notifyListeners();
 
       print(":::: $e");
     }
   }
 
-  void postOrderToCommandLineBackend({
+  Future<void> postOrderToCommandLineBackend({
     required String quantite,
     required String montant,
-    required String repas_id,
+    String? repas_id,
     String? commande_id,
     BuildContext? context,
   }) async {
@@ -371,6 +415,9 @@ class OrderProvider extends ChangeNotifier {
 
     var client = http.Client();
 
+    final userToken = GetStorage().read('token');
+
+
     final body = {
       "commande_id": commande_id,
       "repas_id": repas_id,
@@ -380,7 +427,9 @@ class OrderProvider extends ChangeNotifier {
     print(body);
 
     try {
-      var response = await client.post(addOrderUrlToCommandLine, body: body);
+      var response = await client.post(addOrderUrlToCommandLine, body: body,  headers: {
+        'Authorization': 'Bearer $userToken'
+      });
       print(response.statusCode);
       print(response.body);
 
@@ -402,7 +451,7 @@ class OrderProvider extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       _isLoading = false;
-      _resMessage = "Please try again";
+      _resMessage = "Rééssayez encore";
       notifyListeners();
 
       print(":::: $e");
@@ -434,7 +483,11 @@ class OrderProvider extends ChangeNotifier {
 
     var client = http.Client();
 
+    final userToken = GetStorage().read('token');
+    final userId = GetStorage().read('userId');
+
     final body = {
+      "user_id": userId,
       "name": name,
       "adresse": adresse,
       "contact": contact,
@@ -448,13 +501,21 @@ class OrderProvider extends ChangeNotifier {
     print(body);
 
     try {
-      var response = await client.post(addOrderUrl, body: body);
+      var response = await client.post(addOrderUrl, body: body, headers: {
+        'Authorization': 'Bearer $userToken'
+      });
       print(response.statusCode);
       print(response.body);
 
       if (response.statusCode == 201 || response.statusCode == 200) {
-        _isLoading = false;
+
         var res = jsonDecode(response.body);
+
+        _isLoading = false;
+        _resMessage = "Commande envoyée avec succès!";
+        notifyListeners();
+
+       // _resMessage = res['message'];
 
         var commandeId = res['data']['id'];
         /* _resMessage = "Votre order à été bien placé"; */
@@ -464,7 +525,9 @@ class OrderProvider extends ChangeNotifier {
           repas_id: repas_id.toString(),
           commande_id: commandeId.toString(),
         );
-        postPaymentMethod(commandeId: commandeId.toString(), transactionId: transactionId.toString());
+        postPaymentMethod(
+            commandeId: commandeId.toString(),
+            transactionId: transactionId.toString());
         notifyListeners();
         // transition vers une page
       } else {
@@ -481,7 +544,7 @@ class OrderProvider extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       _isLoading = false;
-      _resMessage = "Please try again";
+      _resMessage = "Rééssayez encore";
       notifyListeners();
 
       print(":::: $e");
@@ -505,6 +568,9 @@ class OrderProvider extends ChangeNotifier {
 
     var client = http.Client();
 
+    final userToken = GetStorage().read('token');
+    final userId = GetStorage().read('userId');
+
     final body = {
       "transationId": transactionId,
       "commande_id": commandeId,
@@ -512,7 +578,9 @@ class OrderProvider extends ChangeNotifier {
     print(body);
 
     try {
-      var response = await client.post(addOrderUrlToCommandLine, body: body);
+      var response = await client.post(addOrderUrlToCommandLine, body: body, headers: {
+        'Authorization': 'Bearer $userToken'
+      });
 
       print(response.statusCode);
       print(response.body);

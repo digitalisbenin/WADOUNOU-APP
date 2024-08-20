@@ -118,7 +118,7 @@ class _MakeReservationBodyState extends State<MakeReservationBody> {
                       .firstWhere((restaurant) => restaurant.id == value);
                   setState(() {
                     selectedRestaurants = selectedRestaurant;
-                    selectedRestaurantImage = selectedRestaurant.image_url;
+                    selectedRestaurantImage = selectedRestaurant.imageUrl;
                     selectedRestaurantDescription =
                         selectedRestaurant.description;
                   });
@@ -164,7 +164,7 @@ class _MakeReservationBodyState extends State<MakeReservationBody> {
                     if (selectedRestaurantDescription != null)
                       Expanded(
                           child: Text(
-                        selectedRestaurantDescription ?? '',
+                        selectedRestaurantDescription ?? 'Ce restaurant ne possède aucune description',
                         maxLines: 4,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.justify,
@@ -381,8 +381,9 @@ class _MakeReservationBodyState extends State<MakeReservationBody> {
                         restaurant_id: selectedRestaurants!.id.toString(),
                         context: context,
                       );
-                      dispose();
+                      
                       Navigator.pushNamed(context, HomeScreen.routeName);
+                      dispose();
                     } else if (_nameController.text.isEmpty ||
                         _phoneController.text.isEmpty ||
                         _dateTimeController.text.isEmpty ||

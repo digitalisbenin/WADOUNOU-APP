@@ -9,7 +9,7 @@ class GetCommandeService {
 
   Future<List<Map<String, dynamic>>> getAllOrders() async {
     // APi url for check commandes
-    const String apiUrl = 'https://apiv6.sevenservicesplus.com/api/commandes';
+    const String apiUrl = 'https://apiwadounou.wadounnou.com/api/lignecommandes';
 
     try {
       final response = await http.get(Uri.parse(apiUrl));
@@ -31,7 +31,7 @@ class GetCommandeService {
 
   Future<List<Map<String, dynamic>>> getAllLigneCommande() async {
     // APi url for check commandes
-    const String apiUrl = 'https://apiv6.sevenservicesplus.com/api/lignecommandes';
+    const String apiUrl = 'https://apiwadounou.wadounnou.com/api/lignecommandes';
 
     try {
       final response = await http.get(Uri.parse(apiUrl));
@@ -51,10 +51,31 @@ class GetCommandeService {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getOrdersByPhoneNumber(
+  Future<List<Map<String, dynamic>>> getOrdersByPhoneNumber(String phoneNumber) async {
+  // Liste pour récupérer toutes les commandes
+  List<Map<String, dynamic>> allOrders = await getAllLigneCommande();
+  debugPrint("------------------allOrders = ${allOrders.length}");
+  
+  // Filtrer les commandes en fonction du numéro de téléphone
+  List<Map<String, dynamic>> filtredOrders = allOrders.where((order) {
+    // Vérifier si la clé "contact" contient le numéro de téléphone saisi
+    if (order['commande']['contact'] != null && order['commande']['contact'].toString().contains(phoneNumber)) {
+      // Assurer que le numéro de téléphone est identique, en supprimant les espaces et en le comparant en minuscules
+      // Cela garantit que les différences mineures dans la saisie (comme les espaces en trop) ne provoqueront pas de non-correspondance
+      return order['commande']['contact'].toString().replaceAll(RegExp(r'\s+'), '') == phoneNumber.replaceAll(RegExp(r'\s+'), '');
+    }
+    return false; // Ne pas inclure cette commande dans les résultats filtrés
+  }).toList();
+
+  debugPrint("------------------filtredOrders = ${filtredOrders.length}");
+  return filtredOrders;
+}
+
+
+ /*  Future<List<Map<String, dynamic>>> getOrdersByPhoneNumber(
       String phoneNumber) async {
     //Liste pour récupérer toutes les commandes
-    List<Map<String, dynamic>> allOrders = await getAllLigneCommande();
+    List<Map<String, dynamic>> allOrders = await getAllOrders();
     debugPrint("------------------allOrders = ${allOrders.length}");
     // filtrer les commandes en fonction du numéro de Telephone
     List<Map<String, dynamic>> filtredOrders =
@@ -64,5 +85,5 @@ class GetCommandeService {
         
 
     return filtredOrders;
-  }
+  } */
 }

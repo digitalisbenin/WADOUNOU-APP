@@ -1,36 +1,49 @@
 import 'package:digitalis_restaurant_app/core/constants/constant.dart';
 import 'package:digitalis_restaurant_app/core/utils/size_config.dart';
+import 'package:digitalis_restaurant_app/core/utils/widgets/routers.dart';
+import 'package:digitalis_restaurant_app/module/screens/login/login_page.dart';
+import 'package:digitalis_restaurant_app/module/screens/signup/sign_up_page.dart';
+import 'package:digitalis_restaurant_app/module/selected_role_page/selected_role_screen.dart';
 import 'package:digitalis_restaurant_app/module/start/presentation/landing/presentation/widgets/background.dart';
 import 'package:digitalis_restaurant_app/module/restaurants_page/presentation/home/homePage/home_screen.dart';
 import 'package:digitalis_restaurant_app/shared/ui/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class LandingScreenBody extends StatelessWidget {
-  LandingScreenBody({super.key});
+class LandingScreenBody extends StatefulWidget {
+  LandingScreenBody({super.key, this.selectedRoleId});
 
+  final String? selectedRoleId;
+
+  @override
+  State<LandingScreenBody> createState() => _LandingScreenBodyState();
+}
+
+class _LandingScreenBodyState extends State<LandingScreenBody> {
   var ctime;
 
   @override
   Widget build(BuildContext context) {
+    print('LandingScreenBody received role ID: ${widget.selectedRoleId}');
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
     ));
     return WillPopScope(
       onWillPop: () async {
-          DateTime now = DateTime.now();
-          if (ctime == null || now.difference(ctime) > const Duration(seconds: 2)) {
-            //add duration of press gap
-            ctime = now;
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text(
-                    'Appuyer encore pour quitter'))); //scaffold message, you can show Toast message too.
-            return Future.value(false);
-          }
+        DateTime now = DateTime.now();
+        if (ctime == null ||
+            now.difference(ctime) > const Duration(seconds: 2)) {
+          //add duration of press gap
+          ctime = now;
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text(
+                  'Appuyer encore pour quitter'))); //scaffold message, you can show Toast message too.
+          return Future.value(false);
+        }
 
-          return Future.value(true);
-        },
+        return Future.value(true);
+      },
       child: Stack(
         children: [
           const BackgroundImage(),
@@ -70,7 +83,7 @@ class LandingScreenBody extends StatelessWidget {
                       height: 40.0,
                     ),
                     Text(
-                      "Trouvez les repas que vous aimez !",
+                      "Trouvez vos mets préférés chez nous !",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: SizeConfig.screenHeight * 0.03,
@@ -81,7 +94,7 @@ class LandingScreenBody extends StatelessWidget {
                       height: 20.0,
                     ),
                     Text(
-                      "Découvrez les meilleurs repas de plus de 100 restaurants",
+                      "Venez découvrir nos différentes variétés gastronomiques du Bénin",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: SizeConfig.screenHeight * 0.016,
@@ -94,16 +107,23 @@ class LandingScreenBody extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          /*MaterialButton(
+                          MaterialButton(
                               height: 55.0,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(18.0)),
                               color: kPrimaryColor,
                               onPressed: () {
-                                Navigator.push(
+                                /*Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => SignUpScreen()));
+                                        builder: (context) => SignUpScreen()));*/
+                                Navigator.pushNamed(
+                                  context, SelectedRoleScreen.routeName,
+                                  //context, SignUpScreen.routeName,
+                                  //arguments: widget.selectedRoleId
+                                );
+                                print(
+                                    "Navigating with role ID: ${widget.selectedRoleId}");
                               },
                               child: const Text(
                                 "Inscrivez - vous",
@@ -119,6 +139,8 @@ class LandingScreenBody extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(18.0)),
                               color: Colors.white,
                               onPressed: () {
+                                /*Navigator.pushNamed(
+                                    context, LoginPage.routeName);*/
                                 Navigator.pushNamed(
                                     context, LoginPage.routeName);
                               },
@@ -128,8 +150,24 @@ class LandingScreenBody extends StatelessWidget {
                                     fontSize: 18.0,
                                     color: kPrimaryColor,
                                     fontWeight: FontWeight.bold),
-                              )),*/
-                          SizedBox(
+                              )),
+                          verticalSpaceSmall,
+                          verticalSpaceSmall,
+                          verticalSpaceSmall,
+                          TextButton(
+                              onPressed: () {
+                                PageNavigator(ctx: context).nextPageOnly(page: const HomeScreen());
+                              },
+                              child: Text(
+                                'Parcourir l\'application',
+                                style: TextStyle(
+                                    fontSize: 20.0,
+                                    color: Colors.white,
+                                    decoration: TextDecoration.underline,
+                                    decorationColor: Colors.white,
+                                    decorationStyle: TextDecorationStyle.solid),
+                              ))
+                          /*SizedBox(
                             height: SizeConfig.screenHeight * 0.2,
                           ),
                           MaterialButton(
@@ -149,7 +187,7 @@ class LandingScreenBody extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ), textAlign: TextAlign.center,),
                             ),
-                          )
+                          )*/
                           /*DefaultButton(
                             text: 'Commandez ou Réservez en cliquant ici !',
                             press: () {

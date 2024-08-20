@@ -2,9 +2,11 @@ import 'package:clippy_flutter/clippy_flutter.dart';
 import 'package:digitalis_restaurant_app/core/constants/constant.dart';
 import 'package:digitalis_restaurant_app/core/model/arguments/repas_detail_arguments.dart';
 import 'package:digitalis_restaurant_app/core/utils/size_config.dart';
+import 'package:digitalis_restaurant_app/core/utils/widgets/routers.dart';
 import 'package:digitalis_restaurant_app/core/utils/widgets/snack_message.dart';
 import 'package:digitalis_restaurant_app/module/payment_methods/kkiapay_methods/kkiaPay_sample.dart';
 import 'package:digitalis_restaurant_app/module/payment_methods/kkiapay_methods/success_screen_from_restaurant.dart';
+import 'package:digitalis_restaurant_app/module/restaurants_page/presentation/home/homePage/home_screen.dart';
 import 'package:digitalis_restaurant_app/provider/order_provider.dart';
 import 'package:digitalis_restaurant_app/shared/ui/widgets/buttons/app_fill_button.dart';
 import 'package:flutter/cupertino.dart';
@@ -74,9 +76,9 @@ class _ItemDetailsPageState extends State<ItemDetailsPage> {
     return Scaffold(
       backgroundColor: kBackground,
       appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: kOnBoardingBackgroundColor,
           centerTitle: true,
-          title: const Text("WADOUNOU", style: TextStyle(fontWeight: FontWeight.w500),),
+          title: const Text("WADOUNNOU", style: TextStyle(fontWeight: FontWeight.w500, color: kWhite),),
           elevation: 0,
           automaticallyImplyLeading: false,
           leading: IconButton(
@@ -85,154 +87,152 @@ class _ItemDetailsPageState extends State<ItemDetailsPage> {
             },
             icon: const Icon(
               Icons.arrow_back_ios,
+              color: kWhite,
               size: 18.0,
             ),
           )),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 5),
-        child: SingleChildScrollView(
-          child: Column(
-            //crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(5),
-                child: Image.network(
-                  arguments.repas.image_url.toString(),
-                  height: SizeConfig.screenHeight * 0.42, //
-                  width: SizeConfig.screenWidth * 0.4,
-                ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              height: 300,
+              decoration: BoxDecoration(
+                image: DecorationImage(image: NetworkImage(arguments.repas.image_url ?? ''), fit: BoxFit.fill)
               ),
-              Arc(
-                edge: Edge.TOP,
-                arcType: ArcType.CONVEY,
-                height: SizeConfig.screenHeight * 0.04,
-                child: Container(
-                  width: double.infinity,
-                  color: Colors.white,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: SizeConfig.screenWidth * 0.04),
-                    child: Column(
+            ),
+            /* Padding(
+              padding: const EdgeInsets.all(5),
+              child: Image.network(
+                arguments.repas.image_url.toString(),
+                height: SizeConfig.screenHeight * 0.42, //
+                width: SizeConfig.screenWidth * 0.4,
+              ),
+            ), */
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: SizeConfig.screenWidth * 0.04),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20, bottom: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 60, bottom: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const SizedBox(),
-                              Text(
-                                "${(newPrice).toStringAsFixed(0)} FCFA",
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                            ],
+                        const SizedBox(),
+                        Text(
+                          "${(newPrice).toStringAsFixed(0)} FCFA",
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: 10,
-                            bottom: 20,
-                          ),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(
-                                  width: SizeConfig.screenWidth * 0.6,
-                                  child: Text(
-                                    arguments.repas.name.toString(),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                        fontSize: 26,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                Container(
-                                  width: SizeConfig.screenWidth * 0.25,
-                                  padding: const EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey.shade200,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        height: SizeConfig.screenHeight * 0.024,
-                                        decoration: BoxDecoration(
-                                            color:
-                                                kPrimaryColor.withOpacity(0.7),
-                                            borderRadius:
-                                                BorderRadius.circular(5)),
-                                        child: GestureDetector(
-                                          onTap: decreaseNumberOfItem,
-                                          child: const Icon(
-                                            CupertinoIcons.minus,
-                                            color: Colors.white,
-                                            size: 18,
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        "$_numberOfItem",
-                                        style: const TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Container(
-                                        height: SizeConfig.screenHeight * 0.024,
-                                        decoration: BoxDecoration(
-                                            color: Colors.grey.shade100,
-                                            borderRadius:
-                                                BorderRadius.circular(5)),
-                                        child: GestureDetector(
-                                          onTap: increaseNumberOfItem,
-                                          child: const Icon(
-                                            CupertinoIcons.plus,
-                                            color: kPrimaryColor,
-                                            size: 18,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ]),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 10,
-                          ),
-                          child: Text(
-                            arguments.repas.description.toString(),
-                            style: const TextStyle(fontSize: 16),
-                            textAlign: TextAlign.justify,
-                          ),
-                        ),
-                        SizedBox(
-                          height: SizeConfig.screenHeight * 0.1,
-                        ),
-                        AppFilledButton(
-                          text: "Commander ce repas !",
-                          onPressed: () {
-                            String repasId = arguments.repas.id ?? "";
-                            print("ID du repas sélectionné : $repasId");
-                            _showBottomSheet(context, arguments!);
-                          },
-                        ),
-                        SizedBox(
-                          height: SizeConfig.screenHeight * 0.06,
                         )
                       ],
                     ),
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 10,
+                      bottom: 20,
+                    ),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: SizeConfig.screenWidth * 0.6,
+                            child: Text(
+                              arguments.repas.name.toString(),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                  fontSize: 23.5,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            width: SizeConfig.screenWidth * 0.25,
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                color: Colors.grey.shade200,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  height: SizeConfig.screenHeight * 0.024,
+                                  decoration: BoxDecoration(
+                                      color:
+                                          kPrimaryColor.withOpacity(0.7),
+                                      borderRadius:
+                                          BorderRadius.circular(5)),
+                                  child: GestureDetector(
+                                    onTap: decreaseNumberOfItem,
+                                    child: const Icon(
+                                      CupertinoIcons.minus,
+                                      color: Colors.white,
+                                      size: 18,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  "$_numberOfItem",
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Container(
+                                  height: SizeConfig.screenHeight * 0.024,
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey.shade100,
+                                      borderRadius:
+                                          BorderRadius.circular(5)),
+                                  child: GestureDetector(
+                                    onTap: increaseNumberOfItem,
+                                    child: const Icon(
+                                      CupertinoIcons.plus,
+                                      color: kPrimaryColor,
+                                      size: 18,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ]),
+                  ),
+                  SizedBox(
+                    height: SizeConfig.screenHeight * 0.03,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 10,
+                    ),
+                    child: Text(
+                      arguments.repas.description.toString(),
+                      style: const TextStyle(fontSize: 16, color: kYellowColor),
+                      textAlign: TextAlign.justify,
+                    ),
+                  ),
+                  SizedBox(
+                    height: SizeConfig.screenHeight * 0.13,
+                  ),
+                  AppFilledButton(
+                    text: "Commander ce repas !",
+                    onPressed: () {
+                      String repasId = arguments.repas.id ?? "";
+                      print("ID du repas sélectionné : $repasId");
+                      _showBottomSheet(context, arguments);
+                    },
+                  ),
+                  SizedBox(
+                    height: SizeConfig.screenHeight * 0.06,
+                  )
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -512,13 +512,16 @@ class _ItemDetailsPageState extends State<ItemDetailsPage> {
                                   });
                                   return AppFilledButton(
                                     text: "Commander maintenant !",
-                                    onPressed: () async {
+                                    /*onPressed: () async {
                                       if (_formkey.currentState!.validate()) {
                                         _formkey.currentState!.save();
 
                                         String? repasId = arguments.repas.id;
+                                        String? restaurantId = arguments.repas.restaurant!.id;
                                         print(
                                             'ID du repas sélectionné : $repasId');
+                                        print(
+                                            'ID du restaurant sélectionné : $restaurantId');
 
                                         final success =
                                             await openKkiapayPayment();
@@ -562,10 +565,279 @@ class _ItemDetailsPageState extends State<ItemDetailsPage> {
                                           quantite: _numberOfItem.toString(),
                                           montant: newPrice.toString(),
                                           repas_id:
-                                              arguments.repas.id!.toString(),
-                                          /* commande_id: arguments.commandes!.id
-                                              .toString() */);
-                                              /* quickOrder.postPaymentMethod(transactionId: transactionId.toString()); */
+                                              arguments.repas.id!.toString(),);
+
+                                    },*/
+                                    onPressed: () async {
+                                      if (_formkey.currentState!.validate()) {
+                                        _formkey.currentState!.save();
+
+                                        String? repasId = arguments.repas.id;
+                                        String? restaurantId =
+                                            arguments.repas.restaurant!.id;
+                                        print(
+                                            'ID du repas sélectionné : $repasId');
+
+                                        print(
+                                            'ID du restaurant sélectionné : $restaurantId');
+
+                                        quickOrder
+                                            .postOrderFromRestaurant(
+                                            name: _nameController.text
+                                                .trim(),
+                                            adresse:
+                                            _addressController
+                                                .text
+                                                .trim(),
+                                            contact:
+                                            _contactController
+                                                .text
+                                                .trim(),
+                                            description:
+                                            _descriptionController
+                                                .text
+                                                .trim(),
+                                            status: 'En attente',
+                                            repas_id:
+                                            arguments
+                                                .repas.id!
+                                                .toString(),
+                                            restaurant_id: arguments.repas.restaurant!.id.toString(),
+                                            montant: newPrice.toString(),
+                                            quantite:
+                                            _numberOfItem.toString(),
+                                            context: context);
+
+                                        showDialog(context: context, builder: (context){
+                                          return Dialog(
+                                            insetPadding:
+                                            const EdgeInsets.all(10),
+                                            child: Container(
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                color: kWhite,
+                                                borderRadius:
+                                                BorderRadius.circular(
+                                                    12),
+                                              ),
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: SingleChildScrollView(
+                                                  child: Column(
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment: MainAxisAlignment.end,
+                                                        children: [
+                                                          IconButton(
+                                                              onPressed: () {
+                                                                ScaffoldMessenger.of(
+                                                                    context)
+                                                                    .showSnackBar(const SnackBar(
+                                                                    content:
+                                                                    Text('Votre commande est bien reçue et est en cours de traitement')));
+                                                                PageNavigator(
+                                                                    ctx:
+                                                                    context)
+                                                                    .nextPageOnly(
+                                                                    page:
+                                                                    const HomeScreen());
+                                                              },
+                                                              icon: const Icon(
+                                                                  Icons
+                                                                      .cancel_outlined)),
+                                                        ],
+                                                      ),
+                                                      /*Center(
+                                                        child: Text(arguments.repas.restaurant!.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),),
+                                                      ),*/
+                                                      Center(
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                                          child: Column(
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            children: [
+                                                              if (arguments.repas.restaurant!.mtnpay == "")
+                                                                Row(
+                                                                  children: [
+                                                                    Text("MTN : Non disponible", style: TextStyle(fontSize: SizeConfig.screenHeight * 0.02),),
+                                                                  ],
+                                                                ),
+                                                              // MTNPAY
+                                                              if (arguments.repas.restaurant!.mtnpay != "")
+                                                                Row(
+                                                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                                  children: [
+                                                                    Text("MTN : ", style: TextStyle(fontSize: SizeConfig.screenHeight * 0.02),),
+                                                                    GestureDetector(
+                                                                      onLongPress: () {
+                                                                        Clipboard.setData(
+                                                                            ClipboardData(text: arguments.repas.restaurant!.mtnpay.toString()));
+                                                                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                                            content: Text(
+                                                                                'Le code a été copié dans le presse-papier')));
+                                                                      },
+                                                                      child: SelectableText(
+                                                                        arguments.repas.restaurant!.mtnpay.toString(),
+                                                                        style: TextStyle(
+                                                                            fontSize: SizeConfig.screenHeight * 0.02,
+                                                                            color: kPrimaryColor,
+                                                                            fontWeight: FontWeight.bold),
+                                                                      ),
+                                                                    ),
+                                                                    const SizedBox(height: 5.0,),
+                                                                    IconButton(onPressed: () {
+                                                                      Clipboard.setData(
+                                                                          ClipboardData(text: arguments.repas.restaurant!.mtnpay.toString()));
+                                                                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                                          content: Text(
+                                                                              'Le code a été copié dans le presse-papier')));
+                                                                    }, icon: const Icon(Icons.copy)),
+                                                                    /*ElevatedButton(onPressed: () {}, child: const Row(
+                                                                    children: [
+                                                                      Icon(Icons.copy),
+                                                                      Text("COPIER"),
+                                                                    ],
+                                                                  ))*/
+                                                                  ],
+                                                                ),
+                                                              if (arguments.repas.restaurant!.moovpay == "")
+                                                                Row(
+                                                                  children: [
+                                                                    Text("MOOV : Non disponible", style: TextStyle(fontSize: SizeConfig.screenHeight * 0.02),),
+                                                                  ],
+                                                                ),
+                                                              // MOOVPAY
+                                                              if (arguments.repas.restaurant!.moovpay != "")
+                                                                Row(
+                                                                  children: [
+                                                                    Text("MOOV : ", style: TextStyle(fontSize: SizeConfig.screenHeight * 0.02),),
+                                                                    GestureDetector(
+                                                                      onLongPress: () {
+                                                                        Clipboard.setData(
+                                                                            ClipboardData(text: arguments.repas.restaurant!.moovpay.toString()));
+                                                                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                                            content: Text(
+                                                                                'Le code a été copié dans le presse-papier')));
+                                                                      },
+                                                                      child: SelectableText(
+                                                                        arguments.repas.restaurant!.moovpay.toString(),
+                                                                        style: TextStyle(
+                                                                            fontSize: SizeConfig.screenHeight * 0.02,
+                                                                            color: kPrimaryColor,
+                                                                            fontWeight: FontWeight.bold),
+                                                                      ),
+                                                                    ),
+                                                                    const SizedBox(height: 5.0,),
+                                                                    IconButton(onPressed: () {
+                                                                      Clipboard.setData(ClipboardData(text: arguments.repas.restaurant!.moovpay.toString()));
+                                                                      ScaffoldMessenger.of(context).showSnackBar(
+                                                                        const SnackBar(content: Text('Le code a été copié dans le presse-papier')),
+                                                                      );
+                                                                    }, icon: const Icon(Icons.copy)),
+                                                                  ],
+                                                                ),
+                                                              if (arguments.repas.restaurant!.celtispay == "")
+                                                                Row(
+                                                                  children: [
+                                                                    Text("CELTIIS : Non disponible", style: TextStyle(fontSize: SizeConfig.screenHeight * 0.02),),
+                                                                  ],
+                                                                ),
+                                                              // CELTIISPAY
+                                                              if (arguments.repas.restaurant!.celtispay != "")
+                                                                Row(
+                                                                  children: [
+                                                                    Text("CELTIIS : ", style: TextStyle(fontSize: SizeConfig.screenHeight * 0.02),),
+                                                                    GestureDetector(
+                                                                      onLongPress: () {
+                                                                        Clipboard.setData(
+                                                                            ClipboardData(text: arguments.repas.restaurant!.celtispay.toString()));
+                                                                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                                            content: Text(
+                                                                                'Le code a été copié dans le presse-papier')));
+                                                                      },
+                                                                      child: SelectableText(
+                                                                        arguments.repas.restaurant!.celtispay.toString(),
+                                                                        style: TextStyle(
+                                                                            fontSize: SizeConfig.screenHeight * 0.02,
+                                                                            color: kPrimaryColor,
+                                                                            fontWeight: FontWeight.bold),
+                                                                      ),
+                                                                    ),
+                                                                    const SizedBox(height: 5.0,),
+                                                                    IconButton(onPressed: () {
+                                                                      Clipboard.setData(
+                                                                          ClipboardData(text: arguments.repas.restaurant!.celtispay.toString()));
+                                                                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                                          content: Text(
+                                                                              'Le code a été copié dans le presse-papier')));
+                                                                    }, icon: const Icon(Icons.copy))
+                                                                  ],
+                                                                ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        });
+
+                                        /* final success =
+                                            await openKkiapayPayment();*/
+
+                                        /*if (success) {
+                                          quickOrderFromRestaurant
+                                              .postOrderFromRestaurant(
+                                                  name: _nameController.text
+                                                      .trim(),
+                                                  adresse:
+                                                      _addressController
+                                                          .text
+                                                          .trim(),
+                                                  contact:
+                                                      _contactController
+                                                          .text
+                                                          .trim(),
+                                                  description:
+                                                      _descriptionController
+                                                          .text
+                                                          .trim(),
+                                                  status: 'En attente',
+                                                  repas_id:
+                                                      arguments
+                                                          .repas.id!
+                                                          .toString(),
+                                                          restaurant_id: arguments.restaurant!.id.toString(),
+                                                  montant: newPrice.toString(),
+                                                  quantite:
+                                                      _numberOfItem.toString(),
+                                                  context: context);
+                                          print('Succes : $success');
+                                        } else {
+                                          // Gérer l'échec du paiement
+                                          showMessage(
+                                              message: 'Échec du paiement',
+                                              context: context);
+                                        }*/
+
+                                      } else if (_nameController.text.isEmpty ||
+                                          _contactController.text.isEmpty ||
+                                          _addressController.text.isEmpty) {
+                                        showMessage(
+                                          message:
+                                          'Tous les champs sont obligatoires',
+                                          context: context,
+                                        );
+                                        dispose();
+                                      }
+                                      quickOrder.postOrderToCommandLineBackend(
+                                        quantite: _numberOfItem.toString(),
+                                        montant: newPrice.toString(),
+                                        repas_id:
+                                        arguments.repas.id!.toString(),);
                                     },
                                   );
                                 }),

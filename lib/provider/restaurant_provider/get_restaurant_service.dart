@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 class GetRestaurant {
   final requestBaseUrl = AppUrl.baseUrl;
 
-  Future<List<Restaurant>> getRestaurants() async {
+  Future<List<RestaurantModel>> getRestaurants() async {
     var client = http.Client();
     var restaurantUrl = Uri.https(requestBaseUrl, '/api/restaurants');
 
@@ -17,8 +17,8 @@ class GetRestaurant {
         final responseData = jsonDecode(response.body);
         if (responseData != null && responseData['data'] != null) {
           List<dynamic> restaurantsData = responseData['data'];
-          List<Restaurant> restaurantsList = restaurantsData
-              .map((restaurant) => Restaurant.fromJson(restaurant))
+          List<RestaurantModel> restaurantsList = restaurantsData
+              .map((restaurant) => RestaurantModel.fromJson(restaurant))
               .toList();
           return restaurantsList;
         } else {

@@ -15,6 +15,9 @@ Repas _$RepasFromJson(Map<String, dynamic> json) => Repas(
       categoris: json['categoris'] == null
           ? null
           : Categoris.fromJson(json['categoris'] as Map<String, dynamic>),
+      restaurant: json['restaurant'] == null
+          ? null
+          : Restaurant.fromJson(json['restaurant'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$RepasToJson(Repas instance) => <String, dynamic>{
@@ -24,4 +27,5 @@ Map<String, dynamic> _$RepasToJson(Repas instance) => <String, dynamic>{
       'prix': instance.prix,
       'image_url': instance.image_url,
       'categoris': instance.categoris,
+      'restaurant': instance.restaurant,
     };

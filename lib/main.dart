@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:digitalis_restaurant_app/core/constants/constant.dart';
-import 'package:digitalis_restaurant_app/core/routing/app_route.dart';
+import 'package:digitalis_restaurant_app/core/model/livreurs/livreur_addinInfo_provider.dart';
+import 'package:digitalis_restaurant_app/core/model/livreurs/livreur_uploadfile_provider.dart';
+import 'package:digitalis_restaurant_app/core/routing/routes.dart';
 import 'package:digitalis_restaurant_app/core/services/storage_service.dart';
 import 'package:digitalis_restaurant_app/module/start/presentation/splash_screen/splash_screen.dart';
 import 'package:digitalis_restaurant_app/provider/app_provider.dart';
@@ -11,7 +13,10 @@ import 'package:digitalis_restaurant_app/provider/cart_provider.dart';
 import 'package:digitalis_restaurant_app/provider/comment_provider.dart';
 import 'package:digitalis_restaurant_app/provider/database/db_provider.dart';
 import 'package:digitalis_restaurant_app/provider/database/user_model_provider.dart';
+import 'package:digitalis_restaurant_app/provider/forgot_password_provider.dart';
+import 'package:digitalis_restaurant_app/provider/modify_user_profile_provider.dart';
 import 'package:digitalis_restaurant_app/provider/order_provider.dart';
+import 'package:digitalis_restaurant_app/provider/role_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -71,6 +76,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
+          ChangeNotifierProvider(create: (_) => ForgotPasswordProvider()),
+          ChangeNotifierProvider(create: (_) => ModifyUserProfile()),
+          ChangeNotifierProvider(create: (_) => LivreurUploadFileProvider()),
+          ChangeNotifierProvider(create: (_) => LivreurAddingInfoProvider()),
+          ChangeNotifierProvider(create: (_) => RoleProvider()),
           ChangeNotifierProvider(create: (_) => CartProvider()),
           ChangeNotifierProvider(create: (_) => AppProvider()),
           ChangeNotifierProvider(create: (_) => CommentProvider()),

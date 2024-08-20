@@ -204,10 +204,14 @@ class _UsersBookingsPageState extends State<UsersBookingsPage> {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            Text(
-                              reservation['id'],
-                              maxLines: 2,
-                              style: const TextStyle(fontSize: 17.0, overflow: TextOverflow.ellipsis),
+                            SizedBox(
+                               width: SizeConfig.screenWidth * 0.5,
+                              child: Text(
+                                reservation['id'],
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: const TextStyle(fontSize: 17.0, overflow: TextOverflow.ellipsis),
+                              ),
                             ),
                           ],
                         ),

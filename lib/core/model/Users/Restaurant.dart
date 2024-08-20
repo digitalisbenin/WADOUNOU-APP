@@ -29,66 +29,45 @@ class RestaurantModel {
 @JsonSerializable()
 class Restaurant {
 
-  String? id;
-  String? name;
-  String? adresse;
-  String? phone;
-  String? description;
-  String? specilite;
-  Menu? menu;
+  final String id;
+  final String adresse;
+  final String specialite;
+  final String name;
+  final String description;
+  final String imageUrl;
+  final String heure_douverture;
+  final String heure_fermeture;
+  final String mtnpay;
+  final String moovpay;
+  final String celtispay;
 
-  String? heure_douverture;
-  String? heure_fermeture;
-  String? document_url;
-  String? capacite;
-  String? image_url;
 
   Restaurant({
-    this.id,
-    this.name,
-    this.adresse,
-    this.phone,
-    this.description,
-    this.specilite,
-    this.menu,
-    this.heure_douverture,
-    this.heure_fermeture,
-    this.document_url,
-    this.capacite,
-    this.image_url,
-  });
+    required this.heure_douverture,
+    required this.heure_fermeture,
+    required this.specialite,
+    required this.adresse,
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.mtnpay,
+    required this.moovpay,
+    required this.celtispay,
+    required this.imageUrl});
 
   factory Restaurant.fromJson(Map<String, dynamic> json) {
-  return Restaurant(
-    id: json['id'],
-    name: json['name'],
-    adresse: json['adresse'],
-    phone: json['phone'],
-    description: json['description'],
-    specilite: json['specilite'],
-    menu: json['repas'] == null ? null : Menu.fromJson(json['repas']),
-    heure_douverture: json['heure_douverture'],
-    heure_fermeture: json['heure_fermeture'],
-    document_url: json['document_url'],
-    capacite: json['capacite'],
-    image_url: json['image_url'],
-  );
-}
-
-  factory Restaurant.fromJsonNoMenu(Map<String, dynamic> json) {
     return Restaurant(
       id: json['id'],
-      name: json['name'],
       adresse: json['adresse'],
-      phone: json['phone'],
-      description: json['description'],
-      specilite: json['specilite'],
-      menu: json['repas'] == null ? null : Menu.fromJson(json),
-      heure_douverture: json['heure_douverture'],
-      heure_fermeture: json['heure_fermeture'],
-      document_url: json['document_url'],
-      capacite: json['capacite'],
-      image_url: json['image_url'],
+      specialite: json['specialite']['name'],
+      name: json['name'],
+      description: json['description'] ?? '',
+      imageUrl: json['image_url'] ?? '',
+      heure_douverture: json['heure_douverture'] ?? '',
+      heure_fermeture: json['heure_fermeture'] ?? '',
+      mtnpay: json['mtnpay'] ?? '',
+      moovpay: json['moovpay'] ?? '',
+      celtispay: json['celtispay'] ?? '',
     );
   }
 

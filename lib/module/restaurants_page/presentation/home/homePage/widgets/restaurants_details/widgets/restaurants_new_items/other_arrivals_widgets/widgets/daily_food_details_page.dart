@@ -75,6 +75,7 @@ class _DailyFoodDetailPageState extends State<DailyFoodDetailPage> {
       appBar: AppBar(
           backgroundColor: Colors.transparent,
           centerTitle: true,
+          title: Text(arguments.restaurant!.name.toString(), style: TextStyle(fontWeight: FontWeight.w500),),
           elevation: 0,
           automaticallyImplyLeading: false,
           leading: IconButton(
@@ -91,138 +92,142 @@ class _DailyFoodDetailPageState extends State<DailyFoodDetailPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Padding(
+               Container(
+                width: double.infinity,
+                height: 300,
+                decoration: BoxDecoration(
+                  image: DecorationImage(image: NetworkImage(arguments.repas.image_url ?? ''), fit: BoxFit.fill)
+                ),
+              ),
+              /* Padding(
                 padding: const EdgeInsets.all(5),
                 child: Image.network(
                   arguments.repas.image_url.toString(),
                   height: SizeConfig.screenHeight * 0.42, //
                   width: SizeConfig.screenWidth * 0.4,
                 ),
-              ),
-              Arc(
-                edge: Edge.TOP,
-                arcType: ArcType.CONVEY,
-                height: SizeConfig.screenHeight * 0.04,
-                child: Container(
-                  width: double.infinity,
-                  color: Colors.white,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: SizeConfig.screenWidth * 0.04),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 60, bottom: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const SizedBox(),
-                              Text(
-                                "${(newPrice).toStringAsFixed(0)} FCFA",
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: 10,
-                            bottom: 20,
-                          ),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  arguments.repas.name.toString(),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                      fontSize: 26,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Container(
-                                  width: SizeConfig.screenWidth * 0.25,
-                                  padding: const EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey.shade200,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        height: SizeConfig.screenHeight * 0.024,
-                                        decoration: BoxDecoration(
-                                            color:
-                                                kPrimaryColor.withOpacity(0.7),
-                                            borderRadius:
-                                                BorderRadius.circular(5)),
-                                        child: GestureDetector(
-                                          onTap: decreaseNumberOfItem,
-                                          child: const Icon(
-                                            CupertinoIcons.minus,
-                                            color: Colors.white,
-                                            size: 18,
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        "$_numberOfItem",
-                                        style: const TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Container(
-                                        height: SizeConfig.screenHeight * 0.024,
-                                        decoration: BoxDecoration(
-                                            color: Colors.grey.shade100,
-                                            borderRadius:
-                                                BorderRadius.circular(5)),
-                                        child: GestureDetector(
-                                          onTap: increaseNumberOfItem,
-                                          child: const Icon(
-                                            CupertinoIcons.plus,
-                                            color: kPrimaryColor,
-                                            size: 18,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ]),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 10,
-                          ),
-                          child: Text(
-                            arguments.repas.description.toString(),
-                            style: const TextStyle(fontSize: 16),
-                            textAlign: TextAlign.justify,
-                          ),
-                        ),
-                        SizedBox(
-                          height: SizeConfig.screenHeight * 0.1,
-                        ),
-                        AppFilledButton(
-                          text: "Commander ce repas !",
-                          onPressed: () {
-                            String repasId = arguments.repas.id ?? "";
-                            print("ID du repas sélectionné : $repasId");
-                            _showBottomSheet(context, arguments);
-                          },
-                        ),
-                        SizedBox(
-                          height: SizeConfig.screenHeight * 0.06,
-                        )
-                      ],
+              ), */
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: SizeConfig.screenWidth * 0.04),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20, bottom: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const SizedBox(),
+                          Text(
+                            "${(newPrice).toStringAsFixed(0)} FCFA",
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 10,
+                        bottom: 20,
+                      ),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: SizeConfig.screenWidth * 0.6,
+                              child: Text(
+                                arguments.repas.name.toString(),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    fontSize: 23.5,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Container(
+                              width: SizeConfig.screenWidth * 0.25,
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                  color: Colors.grey.shade200,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    height: SizeConfig.screenHeight * 0.024,
+                                    decoration: BoxDecoration(
+                                        color:
+                                            kPrimaryColor.withOpacity(0.7),
+                                        borderRadius:
+                                            BorderRadius.circular(5)),
+                                    child: GestureDetector(
+                                      onTap: decreaseNumberOfItem,
+                                      child: const Icon(
+                                        CupertinoIcons.minus,
+                                        color: Colors.white,
+                                        size: 18,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    "$_numberOfItem",
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Container(
+                                    height: SizeConfig.screenHeight * 0.024,
+                                    decoration: BoxDecoration(
+                                        color: Colors.grey.shade100,
+                                        borderRadius:
+                                            BorderRadius.circular(5)),
+                                    child: GestureDetector(
+                                      onTap: increaseNumberOfItem,
+                                      child: const Icon(
+                                        CupertinoIcons.plus,
+                                        color: kPrimaryColor,
+                                        size: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ]),
+                    ),
+                    SizedBox(
+                      height: SizeConfig.screenHeight * 0.03,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                      ),
+                      child: Text(
+                        arguments.repas.description.toString(),
+                        style: const TextStyle(fontSize: 16, color: kYellowColor),
+                        textAlign: TextAlign.justify,
+                      ),
+                    ),
+                    SizedBox(
+                      height: SizeConfig.screenHeight * 0.15,
+                    ),
+                    AppFilledButton(
+                      text: "Commander ce repas !",
+                      onPressed: () {
+                        String repasId = arguments.repas.id ?? "";
+                        print("ID du repas sélectionné : $repasId");
+                        _showBottomSheet(context, arguments);
+                      },
+                    ),
+                    SizedBox(
+                      height: SizeConfig.screenHeight * 0.06,
+                    )
+                  ],
                 ),
               ),
             ],

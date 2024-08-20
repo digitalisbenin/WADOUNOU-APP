@@ -17,11 +17,11 @@ class SearchRestaurantFieldForUsers extends StatelessWidget {
     return Form(
       key: _formKey,
       child: Container(
-          width: SizeConfig.screenWidth * 0.79,
+          width: double.infinity,
           height: 45,
           decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
                     color: Colors.grey.withOpacity(0.5),
@@ -41,8 +41,9 @@ class SearchRestaurantFieldForUsers extends StatelessWidget {
                 enabledBorder: InputBorder.none,
                 focusColor: Colors.orange,
                 focusedBorder: InputBorder.none,
-                hintText: "Rechercher un restaurant",
-                prefixIcon: const Icon(CupertinoIcons.search),
+                hintText: "Rechercher un restaurant...",
+                hintStyle: const TextStyle(color: Colors.grey),
+                prefixIcon: const Icon(CupertinoIcons.search, color: Colors.grey,),
                 contentPadding: EdgeInsets.symmetric(
                     horizontal: getProportionateScreenWidth(20),
                     vertical: getProportionateScreenWidth(9))),

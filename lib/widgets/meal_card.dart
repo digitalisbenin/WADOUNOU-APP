@@ -72,22 +72,28 @@ class _SingleProductCardState extends State<SingleProductCard> {
                     ),
                   ],
                 ),
-                Container(
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.network(
-                      widget.repas.image_url.toString(),
-                      height: SizeConfig.screenHeight * 0.17,
+                SizedBox(
+                    height: SizeConfig.screenHeight * 0.01,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: SizeConfig.screenHeight * 0.15,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      image: DecorationImage(image: NetworkImage(widget.repas.image_url ?? ''), fit: BoxFit.cover)
                     ),
                   ),
-                ),
-                Text(
-                  widget.repas.name.toString(),
-                  style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      overflow: TextOverflow.ellipsis),
+                SizedBox(
+                  width: SizeConfig.screenWidth * 0.6,
+                  child: Text(
+                    widget.repas.name.toString(),
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        overflow: TextOverflow.ellipsis),
+                  ),
                 ),
                 SizedBox(
                   height: SizeConfig.screenHeight * 0.01,
@@ -98,7 +104,7 @@ class _SingleProductCardState extends State<SingleProductCard> {
                     style: TextStyle(
                       fontSize: SizeConfig.screenHeight * 0.016,
                       overflow: TextOverflow.ellipsis,
-                      color: Colors.blue, // Couleur que vous souhaitez utiliser
+                      color: kYellowColor, // Couleur que vous souhaitez utiliser
                       fontWeight: FontWeight.bold,
                     ),
                   ),

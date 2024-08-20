@@ -6,6 +6,7 @@ import 'package:digitalis_restaurant_app/module/start/presentation/landing/prese
 import 'package:digitalis_restaurant_app/provider/database/db_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_storage/get_storage.dart';
 
 class PopUpMenu extends StatefulWidget {
   const PopUpMenu({
@@ -37,28 +38,8 @@ class _PopUpMenuState extends State<PopUpMenu> {
                 height: 50,
                 width: 50,
                 child: PopupMenuButton<String>(
-                  iconSize: 27,
-                  onSelected: (String choice) {
-                    if (choice == 'Ajouter/Gérer un restaurant') {
-                      Navigator.pushNamed(context, LandingScreen.routeName);
-                    }
-                  },
-                  itemBuilder: (BuildContext context) {
-                    return [
-                      'Ajouter/Gérer un restaurant',
-                    ].map((String choice) {
-                      return PopupMenuItem(value: choice, child: Text(choice));
-                    }).toList();
-                  },
-                  padding: const EdgeInsets.all(0),
-                ));
-          } else {
-            return Container(
-                padding: EdgeInsets.all(getProportionateScreenWidth(12)),
-                height: 50,
-                width: 50,
-                child: PopupMenuButton<String>(
                   color: Colors.white,
+                  iconColor: kWhite,
                   iconSize: 27,
                   onSelected: (String choice) {
                     if (choice == 'Mes commandes') {
@@ -68,6 +49,9 @@ class _PopUpMenuState extends State<PopUpMenu> {
                       Navigator.pushNamed(context, UsersBookingsPage.routeName);
                     }
                     if (choice == 'Quitter l\'application') {
+                      GetStorage().remove('role_id');
+                      GetStorage().remove('token');
+                      DatabaseProvider().logOut(context);
                       SystemNavigator.pop();
                     }
                   },
@@ -82,6 +66,8 @@ class _PopUpMenuState extends State<PopUpMenu> {
                   },
                   padding: const EdgeInsets.all(0),
                 ));
+          } else {
+            return const SizedBox();
           }
         }
       },

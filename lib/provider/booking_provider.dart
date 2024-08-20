@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:digitalis_restaurant_app/core/constants/url.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class BookingProvider extends ChangeNotifier {
@@ -36,18 +37,25 @@ class BookingProvider extends ChangeNotifier {
 
     var client = http.Client();
 
+    final userToken = GetStorage().read('token');
+    final userId = GetStorage().read('userId');
+
     final body = {
+      "restaurant_id": restaurant_id,
+      "user_id": userId,
       "name": name,
       "contact": contact,
-      "date": dateAndTime,
       "place": place,
       "description": description,
-      "restaurant_id": restaurant_id
+      "date": dateAndTime,
     };
     print(body);
 
     try {
-      var response = await client.post(addBookingUrl, body: body);
+      var response = await client.post(addBookingUrl, body: body, headers: {
+
+        'Authorization': 'Bearer $userToken'
+      });
       print(response.statusCode);
       print(response.body);
 
@@ -73,7 +81,7 @@ class BookingProvider extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       _isLoading = false;
-      _resMessage = "Please try again";
+      _resMessage = "Rééssayez encore";
       _isSuccess = false;
       notifyListeners();
 

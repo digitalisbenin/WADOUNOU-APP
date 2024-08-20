@@ -47,33 +47,31 @@ class _UsersOrdersPageState extends State<UsersOrdersPage> {
               ),
             )),
         body: SingleChildScrollView(
-      child: Column(
-        children: [
-          isButtonClicked
-              ? _buildResultWidget()
-              : _buildFormWidget(), // Afficher le champ et le bouton ou le résultat en fonction de l'état
-          SizedBox(
-            height: SizeConfig.screenHeight * 0.02,
+          child: Column(
+            children: [
+              isButtonClicked
+                  ? _buildResultWidget()
+                  : _buildFormWidget(), // Afficher le champ et le bouton ou le résultat en fonction de l'état
+              SizedBox(
+                height: SizeConfig.screenHeight * 0.02,
+              ),
+            ],
           ),
-        ],
-      ),
-    ),
+        ),
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Container(
             decoration: BoxDecoration(
-              color: kWhite,
-              borderRadius: BorderRadius.circular(12)
-            ),
+                color: kWhite, borderRadius: BorderRadius.circular(12)),
             child: AppFilledButton(
-                text: "Vérifier",
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                    checkOrders(_phoneController.text);
-                  }
-                },
-              ),
+              text: "Vérifier",
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  _formKey.currentState!.save();
+                  checkOrders(_phoneController.text);
+                }
+              },
+            ),
           ),
         ),
       ),
@@ -121,30 +119,20 @@ class _UsersOrdersPageState extends State<UsersOrdersPage> {
                   hintStyle: TextStyle(color: kTextColor),
                 ),
                 validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Renseignez votre numéro de téléphone";
-                        }
+                  if (value!.isEmpty) {
+                    return "Renseignez votre numéro de téléphone";
+                  }
 
-                        if (value.length == 8 ||
-                            value.length == 12 ||
-                            value.length == 13) {
-                          return null; // La taille du numéro de téléphone est valide
-                        } else {
-                          return "Le numéro de téléphone n'est pas valide";
-                        }
-                      },
+                  if (value.length == 8 ||
+                      value.length == 12 ||
+                      value.length == 13) {
+                    return null; // La taille du numéro de téléphone est valide
+                  } else {
+                    return "Le numéro de téléphone n'est pas valide";
+                  }
+                },
               ),
             ),
-            /* const SizedBox(width: 10.0),
-            AppFilledButton(
-              text: "Vérifier",
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  checkOrders(_phoneController.text);
-                }
-              },
-            ), */
           ],
         ),
       ),
@@ -161,7 +149,9 @@ class _UsersOrdersPageState extends State<UsersOrdersPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Center(
-                child: CircularProgressIndicator(color: kPrimaryColor,),
+                child: CircularProgressIndicator(
+                  color: kPrimaryColor,
+                ),
               ),
             ],
           );
@@ -191,7 +181,7 @@ class _UsersOrdersPageState extends State<UsersOrdersPage> {
                 ],
               ),
               child: Column(
-                children: ordersList.map((order) {    
+                children: ordersList.map((order) {
                   return Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Column(
@@ -245,7 +235,7 @@ class _UsersOrdersPageState extends State<UsersOrdersPage> {
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.w500)),
                             Text(
-                              order['repas']['prix'] ?? "",
+                              '${order['repas']['prix']} FCFA' ?? "",
                               style: const TextStyle(fontSize: 17.0),
                             ),
                           ],
@@ -275,7 +265,7 @@ class _UsersOrdersPageState extends State<UsersOrdersPage> {
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.w500)),
                             Text(
-                              order['montant'] ?? "",
+                              '${order['montant']} FCFA' ?? "",
                               style: const TextStyle(fontSize: 17.0),
                             ),
                           ],
@@ -299,7 +289,9 @@ class _UsersOrdersPageState extends State<UsersOrdersPage> {
           );
         } else {
           return const Text(
-              'Problème de connexion', textAlign: TextAlign.center,); // Retourner un conteneur vide tant que le chargement n'est pas terminé
+            'Problème de connexion',
+            textAlign: TextAlign.center,
+          ); // Retourner un conteneur vide tant que le chargement n'est pas terminé
         }
       },
     );
@@ -312,7 +304,8 @@ class _UsersOrdersPageState extends State<UsersOrdersPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Aucunes commandes en raport avec ce numéro.", textAlign: TextAlign.center,
+            "Aucunes commandes en raport avec ce numéro.",
+            textAlign: TextAlign.center,
             style: TextStyle(fontSize: 20.0),
           ),
           SizedBox(height: 8.0),

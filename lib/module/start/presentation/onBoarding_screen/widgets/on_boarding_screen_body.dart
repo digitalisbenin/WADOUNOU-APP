@@ -1,5 +1,6 @@
 import 'package:digitalis_restaurant_app/core/constants/constant.dart';
 import 'package:digitalis_restaurant_app/core/utils/size_config.dart';
+import 'package:digitalis_restaurant_app/module/selected_role_page/selected_role_screen.dart';
 import 'package:digitalis_restaurant_app/module/start/presentation/landing/presentation/landing_screen.dart';
 import 'package:digitalis_restaurant_app/module/start/presentation/onBoarding_screen/widgets/on_boarding_screen_content.dart';
 import 'package:digitalis_restaurant_app/widgets/default_button.dart';
@@ -77,7 +78,8 @@ class _OnBoardingScreenBodyState extends State<OnBoardingScreenBody> {
                       press: () async {
                         final onBoardingPrefs = await SharedPreferences.getInstance();
                         await onBoardingPrefs.setBool('showOnboarding', false);
-                       Navigator.pushNamed(context, LandingScreen.routeName);
+                      //Navigator.pushNamed(context, LandingScreen.routeName);
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const LandingScreen()));
                       },
                     ),
                     const Spacer(),

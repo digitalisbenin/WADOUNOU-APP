@@ -1,5 +1,6 @@
 
 import 'package:digitalis_restaurant_app/core/model/Deliver_person/deliver_person.dart';
+import 'package:digitalis_restaurant_app/core/model/Users/Restaurant.dart';
 import 'package:digitalis_restaurant_app/module/account/account_view_page.dart';
 import 'package:digitalis_restaurant_app/module/account/add_delivery_person/add_delivery_person_page.dart';
 import 'package:digitalis_restaurant_app/module/account/add_meal/add_meal_page.dart';
@@ -53,7 +54,7 @@ final Map<String, WidgetBuilder> routes = {
   LandingScreen.routeName: (context) => const LandingScreen(),
   ItemDetailsPage.routeName: (context) => const ItemDetailsPage(),
   CartPage.routeName: (context) => const CartPage(),
-  /* RestaurantBody.routeName: (context) => RestaurantBody(), */
+  /* RestaurantBody.routeName: (context) => RestaurantBody(restaurant: Restaurant(),), */
   LoginPage.routeName: (context) => const LoginPage(),
   SignUpScreen.routeName: (context) => const SignUpScreen(),
   CreateRestaurant.routeName: (context) => const CreateRestaurant(),

@@ -1,3 +1,4 @@
+/* 
 import 'dart:io';
 
 import 'package:badges/badges.dart';
@@ -37,7 +38,7 @@ class CreateRestaurant extends StatefulWidget {
 class _CreateRestaurantState extends State<CreateRestaurant> {
   final _formkey = GlobalKey<FormState>();
 
-  Restaurant? newRestaurant;
+  RestaurantModel? newRestaurant;
 
   String? restaurantName;
   String? restaurantLocalisationAddress;
@@ -287,7 +288,8 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
                                         },
                                         context: context);
 
-                                    /*AppFilledButton(
+                                    
+AppFilledButton(
                                         text: "Suivant",
                                         onPressed: () async {
                                           if (_formkey.currentState!.validate()) {
@@ -295,7 +297,8 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
                                             await startLoading();
                                           }
                                         },
-                                      );*/
+                                      );
+
                                   }),
                                 ),
                                 verticalSpaceRegular,
@@ -314,7 +317,7 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
                           const SizedBox(
                             height: 12.0,
                           ),
-                          /*
+
                           Padding(
                             padding: const EdgeInsets.all(10.0),
                             child: Row(
@@ -362,7 +365,8 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
                                 )
                               ],
                             ),
-                          ), */
+                          ),
+
                         ],
                       ),
                     ),
@@ -415,7 +419,8 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
                 )
               ],
             ),
-            /*InkWell(
+          
+InkWell(
               child: badge.Badge(
                 badgeContent: const SizedBox(
                   height: 10,
@@ -441,7 +446,8 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
               onTap: () {
                 _selectRestaurantLogo();
               },
-            ),*/
+            ),
+
             horizontalSpaceRegular,
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -635,7 +641,8 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
     );
   }
 
-  /*Widget bottomSheet(BuildContext context){
+
+Widget bottomSheet(BuildContext context){
     return Container(
       height: 100,
       width: 100,
@@ -667,8 +674,9 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
         ],
       ),
     );
-  }*/
-}
+  }}
+
+
 
 class LoginSignuoBtn extends StatelessWidget {
   const LoginSignuoBtn({
@@ -703,3 +711,4 @@ class LoginSignuoBtn extends StatelessWidget {
     );
   }
 }
+ */

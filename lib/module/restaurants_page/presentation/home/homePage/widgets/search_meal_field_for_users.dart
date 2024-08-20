@@ -15,7 +15,7 @@ class SearchMealFieldForUsers extends StatelessWidget {
     return Form(
       key: _formKey,
       child: Container(
-          width: SizeConfig.screenWidth * 0.79,
+          width: SizeConfig.screenWidth * 0.9,
           height: 45,
           decoration: BoxDecoration(
               color: Colors.white,
@@ -36,6 +36,7 @@ class SearchMealFieldForUsers extends StatelessWidget {
             },
             cursorColor: Colors.orange,
             decoration: InputDecoration(
+              isDense: true,
                 enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
                 hintText: "Rechercher un repas",

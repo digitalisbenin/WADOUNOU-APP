@@ -5,8 +5,8 @@ import 'package:digitalis_restaurant_app/core/services/storage_service.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static String baseUrl = "https://apiv6.sevenservicesplus.com/api/auth";
-  static String apiBaseUrl = "https://apiv6.sevenservicesplus.com/api";
+  static String baseUrl = "https://apiwadounou.wadounnou.com/api/auth";
+  static String apiBaseUrl = "https://apiwadounou.wadounnou.com/api";
   StorageService storageService = StorageService();
 
 

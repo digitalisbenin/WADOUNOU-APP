@@ -140,9 +140,4 @@ void showMessageCart({required String message, required BuildContext context}) {
   ));
 }
 
-/* void addToCard(BuildContext context,Repas repas){
-  CartProvider cartProvider = Provider.of<CartProvider>(context, listen: false);
-cartProvider.addToCard(repas, context);
-} */
-
  

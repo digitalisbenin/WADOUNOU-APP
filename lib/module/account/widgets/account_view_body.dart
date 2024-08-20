@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 
 final _menu = [
   {'title': 'Gérer mon abonnement', 'route': SubscriptionPage.routeName},
-  {'title': 'Créer un nouveau restaurant', 'route': CreateRestaurant.routeName},
+ // {'title': 'Créer un nouveau restaurant', 'route': CreateRestaurant.routeName},
   {'title': 'Ajouter un Repas', 'route': AddMealPage.routeName},
   {'title': 'Ajouter un Livreur', 'route': AddDeliveryPersonPage.routeName},
   {'title': 'Voir mes livreurs', 'route': DeliveryPersonListviewPage.routeName},
@@ -79,7 +79,7 @@ class _AccountViewBodyState extends State<AccountViewBody> {
                           final routeName = _menu[i]['route'];
                           final action = _menu[i]['action'];
                           if (routeName != null) {
-                            snapshot.profile();
+                          //  snapshot.usersProfile();
                             Navigator.of(context).pushNamed(routeName);
                           } else if (action == 'logout') {
                             // Effectuer les étapes de déconnexion

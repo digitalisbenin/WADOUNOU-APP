@@ -12,23 +12,23 @@ class RestaurantList {
 
   static Future<List<Restaurant>> getRestaurants() async {
 
-    const restaurantUrl = 'https://apiv6.sevenservicesplus.com/api/restaurants';
+    const restaurantUrl = 'https://apiv2.wadounnou.com/api/restaurants';
 
     final response = await http.get(Uri.parse(restaurantUrl));
 
-    final body = jsonDecode(response.body);
+    List<dynamic> data = jsonDecode(response.body)['data'];
 
-    return body['data'].map<Restaurant>((e) => Restaurant.fromJson(e)).toList();
+    return data.map((e) => Restaurant.fromJson(e)).toList();
   }
 
-  Future<List<dynamic>>checkResto(String nameMenu) async{
+  /*Future<List<dynamic>>checkResto(String nameMenu) async{
   //Url vers l'API pour checker les menus
-    const restaurantUrl = 'https://apiv6.sevenservicesplus.com/api/menus';
+    const restaurantUrl = 'https://apiv2.wadounnou.com/api/repas';
 
     final response = await http.get(Uri.parse(restaurantUrl));
 
       if(response.statusCode == 200){
-      // Decodage du json récupéré 
+      // Decodage du json récupéré
       Map<String, dynamic> responseData = json.decode(response.body);
       if (responseData.containsKey('data') && responseData['data'] is List) {
         List<dynamic> restaurantsData = responseData['data'];
@@ -41,7 +41,7 @@ class RestaurantList {
                 return restoInfo['name'];
               }
           }
-        
+
           return null;
       }).where((name) => name != null).toList();
 
@@ -49,9 +49,9 @@ class RestaurantList {
       }
       }
       return [];
-}
+}*/
 
-  static Future<Restaurant> getRestaurantById(String restaurantId) async {
+  /*static Future<Object> getRestaurantById(String restaurantId) async {
     var client = http.Client();
     var getRestaurantByIdUrl =
         Uri.https(AppUrl.baseUrl, '/api/restaurants/$restaurantId');
@@ -72,5 +72,5 @@ class RestaurantList {
       print("Erreur inattendue: $e");
       return Future.error(e.toString());
     }
-  }
+  }*/
 }

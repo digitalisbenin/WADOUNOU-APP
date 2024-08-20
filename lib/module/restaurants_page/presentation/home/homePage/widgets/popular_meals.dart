@@ -73,7 +73,7 @@ class _PopularMealItemState extends State<PopularMealItem> {
               decoration: BoxDecoration(
                 color: kWhite,
                 border: Border.all(color: Colors.black),
-                borderRadius: BorderRadius.all(Radius.circular(10))
+                borderRadius: const BorderRadius.all(Radius.circular(10))
               ),
               child: const Center(
                 child: Text(
@@ -137,7 +137,7 @@ class _PopularMealItemState extends State<PopularMealItem> {
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: DefaultButton(text: "Faire une commande", press: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AllMealsScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const AllMealsScreen()));
                 }),
               )
             ],
