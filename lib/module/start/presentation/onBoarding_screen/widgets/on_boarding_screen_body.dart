@@ -3,6 +3,7 @@ import 'package:digitalis_restaurant_app/core/utils/size_config.dart';
 import 'package:digitalis_restaurant_app/module/selected_role_page/selected_role_screen.dart';
 import 'package:digitalis_restaurant_app/module/start/presentation/landing/presentation/landing_screen.dart';
 import 'package:digitalis_restaurant_app/module/start/presentation/onBoarding_screen/widgets/on_boarding_screen_content.dart';
+import 'package:digitalis_restaurant_app/module/terms_&_conditions/terms_and_conditions.screen.dart';
 import 'package:digitalis_restaurant_app/widgets/default_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -79,7 +80,7 @@ class _OnBoardingScreenBodyState extends State<OnBoardingScreenBody> {
                         final onBoardingPrefs = await SharedPreferences.getInstance();
                         await onBoardingPrefs.setBool('showOnboarding', false);
                       //Navigator.pushNamed(context, LandingScreen.routeName);
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const LandingScreen()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const TermsAndConditionsScreen()));
                       },
                     ),
                     const Spacer(),
