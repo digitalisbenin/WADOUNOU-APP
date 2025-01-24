@@ -39,7 +39,10 @@ class _ShopAppCartState extends State<ShopAppCart> {
       backgroundColor: kBackground,
       appBar: AppBar(
         iconTheme: const IconThemeData(color: kWhite),
-        title: const Text('Mon Paniers ', style: TextStyle(color: kWhite),),
+        title: const Text(
+          'Mon Paniers ',
+          style: TextStyle(color: kWhite),
+        ),
         centerTitle: true,
         backgroundColor: kOnBoardingBackgroundColor,
         elevation: 0,
@@ -136,11 +139,17 @@ class _ShopAppCartState extends State<ShopAppCart> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(
-                                              "${restaurantCartItems[index].repas.name}",
-                                              style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500),
+                                            Expanded(
+                                              child: Text(
+                                                "${restaurantCartItems[index].repas.name}",
+                                                style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                                overflow: TextOverflow
+                                                    .ellipsis, // Tronque le texte avec "..."
+                                                maxLines: 3,
+                                              ),
                                             ),
                                             InkWell(
                                                 onTap: () {

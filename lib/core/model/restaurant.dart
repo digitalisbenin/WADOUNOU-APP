@@ -12,7 +12,7 @@ class RestaurantList {
 
   static Future<List<Restaurant>> getRestaurants() async {
 
-    const restaurantUrl = 'https://apiv2.wadounnou.com/api/restaurants';
+    const restaurantUrl = 'https://apiwadounnou.wadounnou.com/api/restaurants';
 
     final response = await http.get(Uri.parse(restaurantUrl));
 

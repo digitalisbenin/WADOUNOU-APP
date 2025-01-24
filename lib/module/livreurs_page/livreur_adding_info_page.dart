@@ -5,6 +5,8 @@ import 'package:digitalis_restaurant_app/core/model/livreurs/livreur_uploadfile_
 import 'package:digitalis_restaurant_app/core/utils/size_config.dart';
 import 'package:digitalis_restaurant_app/core/utils/widgets/snack_message.dart';
 import 'package:digitalis_restaurant_app/inputs/base_input_field.dart';
+import 'package:digitalis_restaurant_app/module/restaurants_page/presentation/home/homePage/home_screen.dart';
+import 'package:digitalis_restaurant_app/module/screens/login/widgets/login_form.dart';
 import 'package:digitalis_restaurant_app/shared/ui/colors.dart';
 import 'package:digitalis_restaurant_app/shared/ui/widgets/buttons/app_fill_button.dart';
 import 'package:file_picker/file_picker.dart';
@@ -205,16 +207,58 @@ class _LivreurAddingInfoPageState extends State<LivreurAddingInfoPage> {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
                       addInfo.addLivreurInfo(
-                          name: _nameController.text.trim(),
-                          description: _descriptionController.text.trim(),
-                          adresse: _addressController.text.trim(),
-                          phone: _phoneController.text.trim(),
-                          position: _positionController.text.trim(),
-                          image_url: imageUrl.toString(),
-                          document_url: documentUrl.toString(),
-                          status: selectedStatus,
-                          context: context, );
+                        name: _nameController.text.trim(),
+                        description: _descriptionController.text.trim(),
+                        adresse: _addressController.text.trim(),
+                        phone: _phoneController.text.trim(),
+                        position: _positionController.text.trim(),
+                        image_url: imageUrl.toString(),
+                        document_url: documentUrl.toString(),
+                        status: selectedStatus,
+                        context: context,
+                      );
+                      showMessage(
+                        message:
+                            "Vos informations ont été mises à jour avec succès !",
+                        context: context,
+                      );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                      );
                     }
+
+                    else if (_nameController.text.isEmpty ||
+                                _descriptionController.text.isEmpty ||
+                                _addressController.text.isEmpty ||
+                                _phoneController.text.isEmpty ||
+                                _positionController.text.isEmpty
+                               
+                          
+                            ) {
+                          showMessage(
+                            message: 'Certains champs sont obligatoires',
+                            context: context,
+                          );
+                        }
+                    
+
+                     else {
+                            showMessage(
+                              message:
+                                  "Quelque chose s'est mal passer veuillez vous reconnectez !",
+                             
+                              context: context,
+                            );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const LoginForm()),
+                            );
+
+                            
+                          }
                   },
                 );
               })
@@ -336,7 +380,7 @@ class _LivreurAddingInfoPageState extends State<LivreurAddingInfoPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          "document en format PDF",
+          "Pièces d'identité en format PDF",
           style: TextStyle(
               fontSize: 16.0,
               color: Color.fromARGB(255, 134, 134, 134),
@@ -500,8 +544,10 @@ class _LivreurAddingInfoPageState extends State<LivreurAddingInfoPage> {
               }
 
               if (value.length == 8 ||
+                  value.length == 10 ||
                   value.length == 12 ||
-                  value.length == 13) {
+                  value.length == 13 ||
+                  value.length == 15) {
                 return null; // La taille du numéro de téléphone est valide
               } else {
                 return "Le numéro de téléphone n'est pas valide";

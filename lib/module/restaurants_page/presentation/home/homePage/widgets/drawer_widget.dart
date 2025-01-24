@@ -30,11 +30,11 @@ class DrawerWidget extends StatefulWidget {
 
 class _DrawerWidgetState extends State<DrawerWidget> {
 
-  final nomUser = GetStorage().read('userName') ?? 'Nom d\'utilisateur';
+  final nomUser = GetStorage().read('userName') ?? '';
 
   final token = GetStorage().read('token');
 
-  final mailUser = GetStorage().read('userMail') ?? 'test@gmail.com';
+  final mailUser = GetStorage().read('userMail') ?? '';
 
   String? globalRoleId;
 

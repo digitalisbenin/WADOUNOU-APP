@@ -41,7 +41,7 @@ class ForgotPasswordProvider extends ChangeNotifier {
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         _isLoading = false;
-        _resMessage = "eMail envoyé avec succès";
+        _resMessage = "Email envoyé avec succès";
         notifyListeners();
         PageNavigator(ctx: context).nextPageOnly(page: const PasswordResetMailSent());
       } else {

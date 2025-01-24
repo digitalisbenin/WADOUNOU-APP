@@ -26,7 +26,7 @@ class _AllDeliveryBodyPageState extends State<AllDeliveryBodyPage> {
   }
 
   Future<void> fetchLivreursById() async {
-    final url = "https://apiv2.wadounnou.com/api/livreur?user_id=$userId";
+    final url = "https://apiwadounnou.wadounnou.com/api/livreur?user_id=$userId";
 
     final response = await http.get(Uri.parse(url));
 
@@ -52,7 +52,7 @@ class _AllDeliveryBodyPageState extends State<AllDeliveryBodyPage> {
   Future<void> fetchDeliveryDatas() async {
     String livreur_id = GetStorage().read('livreursId');
     final url =
-        "https://apiv2.wadounnou.com/api/livraisonsuser?livreur_id=${livreur_id}";
+        "https://apiwadounnou.wadounnou.com/api/livraisonsuser?livreur_id=${livreur_id}";
 
     print('object :::::::::::::::: $livreur_id');
 
@@ -86,7 +86,29 @@ class _AllDeliveryBodyPageState extends State<AllDeliveryBodyPage> {
               DataColumn(label: Text('Spécialité')),
               DataColumn(label: Text('Status')),
             ],
-            rows: delivery.asMap().entries.map((entry) {
+            rows: delivery.isEmpty
+    ? [
+        DataRow(cells: [
+          DataCell(Text('', style: TextStyle(fontSize: 16))),
+          DataCell(Text(
+            "Aucune donnée disponible",
+            style: TextStyle(
+              fontStyle: FontStyle.italic,
+              color: Colors.grey,
+              fontSize: 16, // Taille de police augmentée
+            ),
+          )),
+           // Cellules vides avec style
+          DataCell(Text('', style: TextStyle(fontSize: 16))),
+          DataCell(Text('', style: TextStyle(fontSize: 16))),
+          DataCell(Text('', style: TextStyle(fontSize: 16))),
+          DataCell(Text('', style: TextStyle(fontSize: 16))),
+          DataCell(Text('', style: TextStyle(fontSize: 16))),
+          DataCell(Text('', style: TextStyle(fontSize: 16))),
+        ])
+      ]:
+            
+             delivery.asMap().entries.map((entry) {
               final int index = entry.key + 1;
               final Map<String, dynamic> deliver = entry.value;
 

@@ -28,11 +28,11 @@ class DailyFood extends StatefulWidget {
 class _DailyFoodState extends State<DailyFood> {
   List<Repas>? menuItems;
 
-  final nomUser = GetStorage().read('userName') ?? 'Nom d\'utilisateur';
+  final nomUser = GetStorage().read('userName') ?? '';
 
   final token = GetStorage().read('token');
 
-  final mailUser = GetStorage().read('userMail') ?? 'test@gmail.com';
+  final mailUser = GetStorage().read('userMail') ?? '';
 
   String? globalRoleId;
 
@@ -46,7 +46,7 @@ class _DailyFoodState extends State<DailyFood> {
   // Fonction pour récupérer les repas du restaurant depuis l'API
   void fetchMenuItems() async {
     try {
-      final response = await http.get(Uri.parse('https://apiv2.wadounnou.com/api/repa?restaurant_id=${widget.restaurant.id}'));
+      final response = await http.get(Uri.parse('https://apiwadounnou.wadounnou.com/api/repa?restaurant_id=${widget.restaurant.id}'));
       if (response.statusCode == 200) {
         // Si la requête réussit, on parse les données JSON
         final List<dynamic> decodedData = json.decode(response.body)['data'];

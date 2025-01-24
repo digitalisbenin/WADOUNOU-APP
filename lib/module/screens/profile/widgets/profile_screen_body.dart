@@ -24,9 +24,9 @@ class ProfileScreenBody extends StatefulWidget {
 class _ProfileScreenBodyState extends State<ProfileScreenBody> {
   final _formKey = GlobalKey<FormState>();
 
-  final nomUser = GetStorage().read('userName') ?? 'Nom d\'utilisateur';
+  final nomUser = GetStorage().read('userName') ?? '';
   final token = GetStorage().read('token');
-  final mailUser = GetStorage().read('userMail') ?? 'test@gmail.com';
+  final mailUser = GetStorage().read('userMail') ?? '';
 
   String? globalRoleId;
   bool isEditing = false;
@@ -66,15 +66,15 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
                     style: TextStyle(color: kPrimaryColor, fontSize: 12.5),
                   ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, ForgotPasswordPage.routeName);
-                  },
-                  child: const Text(
-                    'Changer de mot de passe',
-                    style: TextStyle(color: kPrimaryColor, fontSize: 12.5),
-                  ),
-                ),
+                // TextButton(
+                //   onPressed: () {
+                //     Navigator.pushNamed(context, ForgotPasswordPage.routeName);
+                //   },
+                //   child: const Text(
+                //     'Changer de mot de passe',
+                //     style: TextStyle(color: kPrimaryColor, fontSize: 12.5),
+                //   ),
+                // ),
                 Divider(
                   height: 4,
                   color: kSecondaryColor.withOpacity(0.3),
@@ -103,22 +103,22 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
                     style:
                         TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600),
                   ),
-                  OutlinedButton(
-                    onPressed: () {
-                      setState(() {
-                        isEditing = !isEditing;
-                      });
-                    },
-                    child: isEditing
-                        ? const Text(
-                            "Annuler",
-                            style: TextStyle(color: kPrimaryColor),
-                          )
-                        : const Text(
-                            "Modifier",
-                            style: TextStyle(color: kPrimaryColor),
-                          ),
-                  ),
+                  // OutlinedButton(
+                  //   onPressed: () {
+                  //     setState(() {
+                  //       isEditing = !isEditing;
+                  //     });
+                  //   },
+                  //   child: isEditing
+                  //       ? const Text(
+                  //           "Annuler",
+                  //           style: TextStyle(color: kPrimaryColor),
+                  //         )
+                  //       : const Text(
+                  //           "Modifier",
+                  //           style: TextStyle(color: kPrimaryColor),
+                  //         ),
+                  // ),
                 ],
               ),
             ),
@@ -206,7 +206,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
                               }
                             : null,
                         child: Text(
-                          'Valider'.toUpperCase(),
+                          ''.toUpperCase(),
                           style: const TextStyle(
                               fontSize: 15.0, fontWeight: FontWeight.w700),
                         ),

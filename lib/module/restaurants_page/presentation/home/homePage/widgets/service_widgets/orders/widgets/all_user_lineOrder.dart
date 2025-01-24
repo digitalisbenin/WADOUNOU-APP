@@ -24,13 +24,15 @@ class _AllUserLineOrdersBodyState extends State<AllUserLineOrdersBody> {
   }
 
   Future<void> fetchOrdersLineData() async {
-    final url = "https://apiv2.wadounnou.com/api/lignecommandeid?commande_id=${widget.commandeId}";
+    final url =
+        "https://apiwadounnou.wadounnou.com/api/lignecommandeid?commande_id=${widget.commandeId}";
 
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
       final List<dynamic> responseData = json.decode(response.body)['data'];
-
+      print(responseData);
+      print(widget.commandeId);
       setState(() {
         ordersLine = responseData;
       });
@@ -44,7 +46,10 @@ class _AllUserLineOrdersBodyState extends State<AllUserLineOrdersBody> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kOnBoardingBackgroundColor,
-        title: const Text('Mes Commandes', style: TextStyle(color: kWhite),),
+        title: const Text(
+          'Détails Commandes',
+          style: TextStyle(color: kWhite),
+        ),
         centerTitle: true,
       ),
       body: ListView(
@@ -54,24 +59,41 @@ class _AllUserLineOrdersBodyState extends State<AllUserLineOrdersBody> {
             child: DataTable(
               columns: const [
                 DataColumn(label: Text('No.')),
-               // DataColumn(label: Text('Photo du mets')),
+                // DataColumn(label: Text('Photo du mets')),
                 DataColumn(label: Text('Repas')),
 
-               // DataColumn(label: Text('Categorie')),
+                // DataColumn(label: Text('Categorie')),
                 DataColumn(label: Text('Prix')),
                 DataColumn(label: Text('Quantité')),
 
                 DataColumn(label: Text('Montant')),
-               // DataColumn(label: Text('Adresse de livraison')),
-               // DataColumn(label: Text('Status de la livraison')),
+                // DataColumn(label: Text('Adresse de livraison')),
+                // DataColumn(label: Text('Status de la livraison')),
               ],
-              rows: ordersLine.asMap().entries.map((entry) {
+              rows: ordersLine.isEmpty
+    ? [
+        DataRow(cells: [
+          DataCell(Text('')),
+          DataCell(Text(
+            "Aucune donnée disponible",
+            style: TextStyle(fontStyle: FontStyle.italic, color: Colors.grey,fontSize: 20),
+          )),
+          DataCell(Text('')),
+          DataCell(Text('')),
+          DataCell(Text('')),
+        
+        ])
+      ]
+    :
+              
+               ordersLine.asMap().entries.map((entry) {
                 final int index = entry.key + 1;
                 final Map<String, dynamic> order = entry.value;
 
                 final String mealPhoto = order["repas"]["image_url"];
                 final String mealName = order["repas"]["name"];
-                final String mealCategorie = order["repas"]["categoris"]["name"];
+                final String mealCategorie =
+                    order["repas"]["categoris"]["name"];
                 final String mealPrice = order["repas"]["prix"];
                 final String mealQuantity = order["quantite"];
                 final String mealAmount = order["montant"];
@@ -89,13 +111,13 @@ class _AllUserLineOrdersBodyState extends State<AllUserLineOrdersBody> {
                   )),*/
                   DataCell(Text(mealName)),
 
-                //  DataCell(Text(mealCategorie)),
+                  //  DataCell(Text(mealCategorie)),
                   DataCell(Text(mealPrice)),
                   DataCell(Text(mealQuantity)),
 
                   DataCell(Text(mealAmount)),
-                 // DataCell(Text(deliveryAddress)),
-                 // DataCell(Text(deliveryStatus)),
+                  // DataCell(Text(deliveryAddress)),
+                  // DataCell(Text(deliveryStatus)),
                 ]);
               }).toList(),
             ),

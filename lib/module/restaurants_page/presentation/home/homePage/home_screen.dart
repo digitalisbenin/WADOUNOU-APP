@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 searchQuery: searchRestaurantQuery,
               ),
               const MakeReservationScreen(),
-              const ProfileScreen(),
+               const ProfileScreen(),
             ],
             onPageChanged: (index) {
               setState(() {

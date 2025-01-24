@@ -7,7 +7,7 @@ class CategoriesList {
   Future<List<Categoris>> categories = getCategories();
 
   static Future<List<Categoris>> getCategories() async {
-    const categoriesUrl = 'https://apiwadounou.wadounnou.com/api/categorys';
+    const categoriesUrl = 'https://apiwadounnou.wadounnou.com/api/categorys';
 
     final response = await http.get(Uri.parse(categoriesUrl));
 

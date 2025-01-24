@@ -26,15 +26,19 @@ class CommentProvider extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    var addCommentUrl = Uri.https(requestBaseUrl, '/api/commentaires');
+    var addCommentUrl = Uri.https(requestBaseUrl, '/api/commentairerespas');
     var client = http.Client();
     final userToken = GetStorage().read('token');
+    final userIds = GetStorage().read('userId');
 
     final body = {
       "content" : content,
-      "repas_id" : repas_id,
+      "respas_id" : repas_id,
+      "user_id" : userIds,
     };
     print(body);
+    print("user tokennn  $userToken");
+    print("user id  $userIds");
 
     try {
       var response = await client.post(addCommentUrl, body: body, headers: {'Authorization': 'Bearer $userToken'});

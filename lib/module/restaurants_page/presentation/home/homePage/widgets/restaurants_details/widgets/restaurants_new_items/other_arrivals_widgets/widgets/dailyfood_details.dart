@@ -441,8 +441,10 @@ class _DailyFoodDetailPageState extends State<DailyFoodDetailPage> {
                                       }
 
                                       if (value.length == 8 ||
+                                          value.length == 10 ||
                                           value.length == 12 ||
-                                          value.length == 13) {
+                                          value.length == 13 ||
+                                          value.length == 15) {
                                         return null; // La taille du numéro de téléphone est valide
                                       } else {
                                         return "Le numéro de téléphone n'est pas valide";

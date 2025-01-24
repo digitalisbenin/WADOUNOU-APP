@@ -23,7 +23,6 @@ class RestaurantBySpecialiteBody extends StatefulWidget {
 
 class _RestaurantBySpecialiteBodyState
     extends State<RestaurantBySpecialiteBody> {
-
   late Future<List<Speciality>> _specialities;
 
   @override
@@ -94,7 +93,7 @@ class _RestaurantBySpecialiteBodyState
                             color: kWhite,
                             border: Border.all(color: Colors.black),
                             borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
+                                const BorderRadius.all(Radius.circular(10)),
                           ),
                           child: const Center(
                             child: Text(
@@ -107,9 +106,12 @@ class _RestaurantBySpecialiteBodyState
                         ),
                       );
                     } else {
-
-                      final specialities = snapshot.data!;
-
+                      // final specialities = snapshot.data!;
+                      final specialities = [
+                        Speciality(
+                            id: "", name: "Tous"), // Ajouter l'option "Tous"
+                        ...snapshot.data!,
+                      ];
                       return DefaultTabController(
                           length: specialities.length,
                           child: SizedBox(
@@ -117,7 +119,8 @@ class _RestaurantBySpecialiteBodyState
                             child: Column(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10.0),
                                   child: TabBar(
                                     tabAlignment: TabAlignment.center,
                                     dividerColor: Colors.transparent,
@@ -127,9 +130,11 @@ class _RestaurantBySpecialiteBodyState
                                     labelColor: kWhite,
                                     unselectedLabelColor: kTextColor,
                                     labelStyle: const TextStyle(
-                                        fontSize: 14, fontWeight: FontWeight.w700),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w700),
                                     unselectedLabelStyle: const TextStyle(
-                                        fontSize: 14, fontWeight: FontWeight.w600),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600),
                                     indicator: ShapeDecoration(
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(15),
@@ -141,7 +146,8 @@ class _RestaurantBySpecialiteBodyState
                                         child: Container(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 12.0),
-                                          child: Text(specialites.name.toString()),
+                                          child:
+                                              Text(specialites.name.toString()),
                                         ),
                                       );
                                     }).toList(),
@@ -152,18 +158,28 @@ class _RestaurantBySpecialiteBodyState
                                 ),
                                 Expanded(
                                   child: TabBarView(
-                                    children: specialities.map((s) {
-                                      return RestaurantsScreen(
-                                        specialityId: s.id,
-                                      );
+                                    children: specialities.map((speciality) {
+                                      if (speciality.id == 0) {
+                                        // Affiche tous les restaurants
+                                        return const RestaurantsScreen(
+                                          specialityId: "", // Pas de filtre
+                                        );
+                                      } else {
+                                        // Affiche les restaurants filtrés par spécialité
+                                        return RestaurantsScreen(
+                                          specialityId: speciality.id,
+                                        );
+                                      }
+                                      // specialities.map((s) {
+                                      //   return RestaurantsScreen(
+                                      //     specialityId: s.id,
+                                      //   );
                                     }).toList(),
                                   ),
                                 ),
                               ],
                             ),
-                          )
-
-                      );
+                          ));
                     }
                   })
             ],

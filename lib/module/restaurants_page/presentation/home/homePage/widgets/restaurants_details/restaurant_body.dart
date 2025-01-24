@@ -37,11 +37,11 @@ class RestaurantBody extends StatefulWidget {
 class _RestaurantBodyState extends State<RestaurantBody> {
   final _formKey = GlobalKey<FormState>();
 
-  final nomUser = GetStorage().read('userName') ?? 'Nom d\'utilisateur';
+  final nomUser = GetStorage().read('userName') ?? '';
 
   final token = GetStorage().read('token');
 
-  final mailUser = GetStorage().read('userMail') ?? 'test@gmail.com';
+  final mailUser = GetStorage().read('userMail') ?? '';
 
   String? globalRoleId;
 
@@ -205,8 +205,10 @@ class _RestaurantBodyState extends State<RestaurantBody> {
                                     }
 
                                     if (value.length == 8 ||
+                                        value.length == 10 ||
                                         value.length == 12 ||
-                                        value.length == 13) {
+                                        value.length == 13 ||
+                                        value.length == 15) {
                                       return null; // La taille du numéro de téléphone est valide
                                     } else {
                                       return "Le numéro de téléphone n'est pas valide";

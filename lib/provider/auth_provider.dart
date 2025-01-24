@@ -63,15 +63,30 @@ class AuthenticationProvider extends ChangeNotifier {
       var response = await client.post(registerUrl, body: body);
       print(response.statusCode);
       print(response.body);
+         final res = jsonDecode(response.body);
+          print("res $res");
+      if (res['success'] == false && 
+             res['message'] == 'Validation errors') {
+    // Debugging additionnel
+    print("Validation error détectée.");
+    print("Email error: ${res['data']?['email']}");
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        final res = jsonDecode(response.body);
+    // Erreur de validation (email déjà utilisé)
+    _resMessage =  'L\'email est déjà en cours d\'utilisation';
+    _isLoading = false;
+    notifyListeners();
+      
+      
+      } else if (response.statusCode == 200 || response.statusCode == 201) {
+       
         _isLoading = false;
 
         _resMessage = "Compte créé avec succès!";
         notifyListeners();
         PageNavigator(ctx: context).nextPageOnly(page: const LoginPage());
-      } else {
+
+        }
+       else {
         final res = jsonDecode(response.body);
 
         _resMessage = res['message'];

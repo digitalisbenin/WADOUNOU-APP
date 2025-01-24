@@ -23,7 +23,7 @@ import 'package:kkiapay_flutter_sdk/src/widget_builder_view.dart';
 
 Future<List<Repas>> fetchRepasByCategory(String categoryId) async {
   final response = await http.get(Uri.parse(
-      'https://apiv2.wadounnou.com/api/repascategory?categoris_id=$categoryId'));
+      'https://apiwadounnou.wadounnou.com/api/repascategory?categoris_id=$categoryId'));
 
   if (response.statusCode == 200) {
     List<dynamic> data = jsonDecode(response.body)['data'];
@@ -626,8 +626,10 @@ class _RepasDetailPageState extends State<RepasDetailPage> {
                                       }
 
                                       if (value.length == 8 ||
+                                          value.length == 10 ||
                                           value.length == 12 ||
-                                          value.length == 13) {
+                                          value.length == 13 ||
+                                          value.length == 15) {
                                         return null; // La taille du numéro de téléphone est valide
                                       } else {
                                         return "Le numéro de téléphone n'est pas valide";

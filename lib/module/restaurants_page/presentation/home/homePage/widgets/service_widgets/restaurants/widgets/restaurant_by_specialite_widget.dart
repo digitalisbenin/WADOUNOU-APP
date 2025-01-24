@@ -4,6 +4,7 @@ import 'package:digitalis_restaurant_app/core/model/Users/Repas.dart';
 import 'package:digitalis_restaurant_app/core/model/Users/Restaurant.dart';
 import 'package:digitalis_restaurant_app/core/model/arguments/repas_detail_arguments.dart';
 import 'package:digitalis_restaurant_app/core/model/arguments/restaurant_detail_arguments.dart';
+import 'package:digitalis_restaurant_app/core/model/restaurant.dart';
 import 'package:digitalis_restaurant_app/core/utils/size_config.dart';
 import 'package:digitalis_restaurant_app/core/utils/widgets/snack_message.dart';
 import 'package:digitalis_restaurant_app/module/cart/shop_app_cart.dart';
@@ -11,6 +12,7 @@ import 'package:digitalis_restaurant_app/module/restaurants_page/presentation/ho
 import 'package:digitalis_restaurant_app/module/restaurants_page/presentation/home/homePage/widgets/restaurants_details/widgets/restaurants_new_items/other_arrivals_widgets/widgets/dailyfood_details.dart';
 import 'package:digitalis_restaurant_app/provider/booking_provider.dart';
 import 'package:digitalis_restaurant_app/provider/cart_provider.dart';
+import 'package:digitalis_restaurant_app/provider/restaurant_provider/get_restaurant_service.dart';
 import 'package:digitalis_restaurant_app/shared/ui/widgets/buttons/app_fill_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +27,7 @@ import 'package:provider/provider.dart';
 Future<List<Restaurant>> fetchRestaurantsBySpeciality(
     String specialityId) async {
   final response = await http.get(Uri.parse(
-      'https://apiv2.wadounnou.com/api/restaurantspecialite?specialite_id=$specialityId'));
+      'https://apiwadounnou.wadounnou.com/api/restaurantspecialite?specialite_id=$specialityId'));
 
   if (response.statusCode == 200) {
     List<dynamic> data = jsonDecode(response.body)['data'];
@@ -56,41 +58,79 @@ class _RestaurantsScreenState extends State<RestaurantsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Restaurant>>(
-      future: _restaurants,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
+    if (widget.specialityId == "") {
+      return FutureBuilder<List<Restaurant>>(
+        future: RestaurantList.getRestaurants(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-        if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text('Aucun restaurant pour le moment'));
-        }
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('Aucun restaurant pour le moment'));
+          }
 
-        if (snapshot.hasError) {
-          return const Center(
-              child: Text('Erreur lors du chargement des restaurants'));
-        }
+          if (snapshot.hasError) {
+            return const Center(
+                child: Text('Erreur lors du chargement des restaurants'));
+          }
 
-        final restaurants = snapshot.data!;
-        return ListView.builder(
-          itemCount: restaurants.length,
-          itemBuilder: (context, index) {
-            final restaurant = restaurants[index];
-            return SingleRestaurantCard(
-              press: () {
-                print('ID du Restaurant : ${restaurants[index].id}');
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) {
-                  return RestaurantBody(restaurant: restaurant);
-                }));
-              },
-              restaurants: restaurant,
-            );
-          },
-        );
-      },
-    );
+          final restaurants = snapshot.data!;
+          return ListView.builder(
+            itemCount: restaurants.length,
+            itemBuilder: (context, index) {
+              final restaurant = restaurants[index];
+              return SingleRestaurantCard(
+                press: () {
+                  print('ID du Restaurant : ${restaurants[index].id}');
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return RestaurantBody(restaurant: restaurant);
+                  }));
+                },
+                restaurants: restaurant,
+              );
+            },
+          );
+        },
+      );
+    } else {
+      return FutureBuilder<List<Restaurant>>(
+        future: _restaurants,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('Aucun restaurant pour le moment'));
+          }
+
+          if (snapshot.hasError) {
+            return const Center(
+                child: Text('Erreur lors du chargement des restaurants'));
+          }
+
+          final restaurants = snapshot.data!;
+          return ListView.builder(
+            itemCount: restaurants.length,
+            itemBuilder: (context, index) {
+              final restaurant = restaurants[index];
+              return SingleRestaurantCard(
+                press: () {
+                  print('ID du Restaurant : ${restaurants[index].id}');
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return RestaurantBody(restaurant: restaurant);
+                  }));
+                },
+                restaurants: restaurant,
+              );
+            },
+          );
+        },
+      );
+    }
   }
 }
 
@@ -157,7 +197,7 @@ class _SingleRestaurantCardState extends State<SingleRestaurantCard> {
                         width: double.infinity,
                         decoration: const BoxDecoration(color: Colors.white),
                         child: Padding(
-                          padding: const EdgeInsets.all(10.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -176,6 +216,7 @@ class _SingleRestaurantCardState extends State<SingleRestaurantCard> {
                                 child: Text(
                                     '${widget.restaurants.adresse.toString()} / ${widget.restaurants.heure_douverture} - ${widget.restaurants.heure_fermeture}'),
                               ),
+                             
                             ],
                           ),
                         ),
@@ -360,8 +401,10 @@ class _RestaurantBodyState extends State<RestaurantBody> {
                                     }
 
                                     if (value.length == 8 ||
+                                        value.length == 10 ||
                                         value.length == 12 ||
-                                        value.length == 13) {
+                                        value.length == 13 ||
+                                        value.length == 15) {
                                       return null; // La taille du numéro de téléphone est valide
                                     } else {
                                       return "Le numéro de téléphone n'est pas valide";
@@ -711,10 +754,12 @@ class _RestaurantBodyState extends State<RestaurantBody> {
                     MaterialPageRoute(
                         builder: (context) => ShopAppCart(
                               restaurantId: widget.restaurant.id ?? '',
-                          restaurantName: widget.restaurant.name ?? '',
-                          restaurantMtnPay: widget.restaurant.mtnpay ?? '',
-                          restaurantMoovPay: widget.restaurant.moovpay ?? '',
-                          restaurantCeltiisPay: widget.restaurant.celtispay ?? '',
+                              restaurantName: widget.restaurant.name ?? '',
+                              restaurantMtnPay: widget.restaurant.mtnpay ?? '',
+                              restaurantMoovPay:
+                                  widget.restaurant.moovpay ?? '',
+                              restaurantCeltiisPay:
+                                  widget.restaurant.celtispay ?? '',
                             )));
               },
               child: const Icon(
@@ -915,12 +960,14 @@ class _DailyFoodState extends State<DailyFood> {
 
   void fetchMenuItems() async {
     try {
-      final response = await http.get(Uri.parse('https://apiv2.wadounnou.com/api/repa?restaurant_id=${widget.restaurant.id}'));
+      final response = await http.get(Uri.parse(
+          'https://apiwadounnou.wadounnou.com/api/repa?restaurant_id=${widget.restaurant.id}'));
       if (response.statusCode == 200) {
         // Si la requête réussit, on parse les données JSON
         final List<dynamic> decodedData = json.decode(response.body)['data'];
         // On transforme les données en liste de Repas
-        List<Repas> meals = decodedData.map((data) => Repas.fromJson(data)).toList();
+        List<Repas> meals =
+            decodedData.map((data) => Repas.fromJson(data)).toList();
         setState(() {
           menuItems = meals;
         });

@@ -21,7 +21,7 @@ class _PubImageSliderState extends State<PubImageSlider> {
             images: [
               AssetImage("assets/images/délice.jpg"),
               AssetImage("assets/images/images (9).jpeg"),
-              AssetImage("assets/images/images (10).jpeg"),
+              // AssetImage("assets/images/images (10).jpeg"),
             ],
             dotSize: 4,
             indicatorBgPadding: 5.0,

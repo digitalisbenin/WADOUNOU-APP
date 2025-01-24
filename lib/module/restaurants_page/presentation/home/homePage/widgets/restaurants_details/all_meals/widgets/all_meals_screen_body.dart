@@ -39,11 +39,11 @@ class _AllMealsScreenBodyState extends State<AllMealsScreenBody> {
 
   late TextEditingController _searchMealController;
 
-  final nomUser = GetStorage().read('userName') ?? 'Nom d\'utilisateur';
+  final nomUser = GetStorage().read('userName') ?? '';
 
   final token = GetStorage().read('token');
 
-  final mailUser = GetStorage().read('userMail') ?? 'test@gmail.com';
+  final mailUser = GetStorage().read('userMail') ?? '';
 
   String? globalRoleId;
 

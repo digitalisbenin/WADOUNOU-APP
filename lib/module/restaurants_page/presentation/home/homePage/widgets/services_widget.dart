@@ -43,7 +43,7 @@ class _ServicesWidgetState extends State<ServicesWidget> {
   }
 
    fetchUserRoleId() async {
-    final response = await http.get(Uri.parse('https://apiv2.wadounnou.com/api/roles'));
+    final response = await http.get(Uri.parse('https://apiwadounnou.wadounnou.com/api/roles'));
 
     if (response.statusCode == 200) {
       final List<dynamic> roles = jsonDecode(response.body)['data'];

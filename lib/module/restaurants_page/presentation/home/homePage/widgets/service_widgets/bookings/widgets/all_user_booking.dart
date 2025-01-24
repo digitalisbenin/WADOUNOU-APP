@@ -25,7 +25,7 @@ class _AllUserBookingsPageState extends State<AllUserBookingsPage> {
 
   Future<void> fetchBookingDatas() async {
     final url =
-        "https://apiv2.wadounnou.com/api/reservationuser?user_id=$userId";
+        "https://apiwadounnou.wadounnou.com/api/reservationuser?user_id=$userId";
 
     final response = await http.get(Uri.parse(url));
 
@@ -56,7 +56,21 @@ class _AllUserBookingsPageState extends State<AllUserBookingsPage> {
              // DataColumn(label: Text('Spécialité')),
               DataColumn(label: Text('Place(s)')),
             ],
-            rows: booking.asMap().entries.map((entry) {
+            rows: booking.isEmpty
+    ? [
+        DataRow(cells: [
+          DataCell(Text('')),
+          DataCell(Text(
+            "Aucune donnée disponible",
+            style: TextStyle(fontStyle: FontStyle.italic, color: Colors.grey,fontSize: 20),
+          )),
+          DataCell(Text('')),
+          DataCell(Text('')),
+          DataCell(Text('')),
+        ])
+      ]
+    :
+             booking.asMap().entries.map((entry) {
               final int index = entry.key + 1;
               final Map<String, dynamic> bookings = entry.value;
 
