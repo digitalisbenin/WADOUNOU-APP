@@ -9,7 +9,7 @@ class GetCommandeService {
 
   Future<List<Map<String, dynamic>>> getAllOrders() async {
     // APi url for check commandes
-    const String apiUrl = 'https://apiwadounnou.wadounnou.com/api/lignecommandes';
+    const String apiUrl = 'https://api-wadounnou.api-mon-encadreur.com/lignecommandes';
 
     try {
       final response = await http.get(Uri.parse(apiUrl));
@@ -31,7 +31,7 @@ class GetCommandeService {
 
   Future<List<Map<String, dynamic>>> getAllLigneCommande() async {
     // APi url for check commandes
-    const String apiUrl = 'https://apiwadounnou.wadounnou.com/api/lignecommandes';
+    const String apiUrl = 'https://api-wadounnou.api-mon-encadreur.com/lignecommandes';
 
     try {
       final response = await http.get(Uri.parse(apiUrl));

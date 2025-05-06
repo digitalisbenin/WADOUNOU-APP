@@ -16,7 +16,7 @@ class Speciality {
 }
 
 Future<List<Speciality>> fetchSpecialities() async {
-  final response = await http.get(Uri.parse('https://apiwadounnou.wadounnou.com/api/specialites'));
+  final response = await http.get(Uri.parse('https://api-wadounnou.api-mon-encadreur.com/api/specialites'));
 
   if (response.statusCode == 200) {
     List<dynamic> data = json.decode(response.body)['data'];

@@ -12,7 +12,7 @@ class RepasList {
 
   static Future<List<Repas>> getRepas() async {
 
-    const repasUrl = 'https://apiv2.wadounnou.com/api/repas';
+    const repasUrl = 'https://api-wadounnou.api-mon-encadreur.com/api/repas';
 
     final response = await http.get(Uri.parse(repasUrl));
 
@@ -23,7 +23,7 @@ class RepasList {
 
    Future<List<Repas>> getRepasByCategory(String categoryId) async {
     final response = await http.get(
-      Uri.parse('https://apiv2.wadounnou.com/api/repas?category_id=$categoryId'),
+      Uri.parse('https://api-wadounnou.api-mon-encadreur.com/api/repas?category_id=$categoryId'),
     );
 
     if (response.statusCode == 200) {
@@ -42,7 +42,7 @@ class RepasList {
   }
 
    Future<List<Repas>> getRepasByRestaurant(String restaurantId) async {
-    const repasUrl = 'https://apiv2.wadounnou.com/api/repas?restaurant_id=';
+    const repasUrl = 'https://api-wadounnou.api-mon-encadreur.com/api/repas?restaurant_id=';
     final response = await http.get(Uri.parse('$repasUrl$restaurantId'));
     final body = jsonDecode(response.body);
     return body['data'].map<Repas>((e) => Repas.fromJson(e)).toList();
@@ -50,7 +50,7 @@ class RepasList {
 
 
 Future<List<Repas>> getRepasByRestaurantId(String restaurantId)async{
-  const String apiUrl = 'https://apiv2.wadounnou.com/api/repas';
+  const String apiUrl = 'https://api-wadounnou.api-mon-encadreur.com/api/repas';
 
   try{
     final response = await http.get(Uri.parse(apiUrl));

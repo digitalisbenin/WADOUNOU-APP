@@ -27,7 +27,7 @@ class _AllUserOrdersBodyPageState extends State<AllUserOrdersBodyPage> {
 
   Future<void> fetchOrdersData() async {
     final url =
-        "https://apiwadounnou.wadounnou.com/api/commandeuser?user_id=$userId";
+        "https://api-wadounnou.api-mon-encadreur.com/api/commandeuser?user_id=$userId";
 
     final response = await http.get(Uri.parse(url));
  print(response);

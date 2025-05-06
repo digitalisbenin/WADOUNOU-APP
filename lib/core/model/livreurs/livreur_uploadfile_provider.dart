@@ -28,7 +28,7 @@ class LivreurUploadFileProvider extends ChangeNotifier {
     final userToken = GetStorage().read("token");
 
     try {
-      var mediaUrl = 'https://apiv2.wadounnou.com/api/medias';
+      var mediaUrl = 'https://api-wadounnou.api-mon-encadreur.com/api/medias';
 
       var request = http.MultipartRequest("POST", Uri.parse(mediaUrl));
       request.files.add(await http.MultipartFile.fromPath(

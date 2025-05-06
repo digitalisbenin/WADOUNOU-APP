@@ -9,7 +9,7 @@ class GetReservationService {
   Future<List<Map<String, dynamic>>> getAllReservations() async {
     // APi url for check reservations
     final String apiUrl =
-        'https://apiwadounnou.wadounnou.com/api/reservations';
+        'https://api-wadounnou.api-mon-encadreur.com/api/reservations';
     try {
       final response = await http.get(Uri.parse(apiUrl));
       if (response.statusCode == 200 || response.statusCode == 201) {

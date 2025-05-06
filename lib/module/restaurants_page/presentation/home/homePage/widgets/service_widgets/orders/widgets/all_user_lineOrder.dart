@@ -25,7 +25,7 @@ class _AllUserLineOrdersBodyState extends State<AllUserLineOrdersBody> {
 
   Future<void> fetchOrdersLineData() async {
     final url =
-        "https://apiwadounnou.wadounnou.com/api/lignecommandeid?commande_id=${widget.commandeId}";
+        "https://api-wadounnou.api-mon-encadreur.com/api/lignecommandeid?commande_id=${widget.commandeId}";
 
     final response = await http.get(Uri.parse(url));
 

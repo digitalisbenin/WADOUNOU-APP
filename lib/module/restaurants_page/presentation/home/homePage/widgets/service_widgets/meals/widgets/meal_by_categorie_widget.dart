@@ -23,7 +23,7 @@ import 'package:kkiapay_flutter_sdk/src/widget_builder_view.dart';
 
 Future<List<Repas>> fetchRepasByCategory(String categoryId) async {
   final response = await http.get(Uri.parse(
-      'https://apiwadounnou.wadounnou.com/api/repascategory?categoris_id=$categoryId'));
+      'https://api-wadounnou.api-mon-encadreur.com/api/repascategory?categoris_id=$categoryId'));
 
   if (response.statusCode == 200) {
     List<dynamic> data = jsonDecode(response.body)['data'];

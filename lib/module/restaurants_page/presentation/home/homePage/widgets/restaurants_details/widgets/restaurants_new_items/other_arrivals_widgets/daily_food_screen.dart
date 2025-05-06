@@ -46,7 +46,7 @@ class _DailyFoodState extends State<DailyFood> {
   // Fonction pour récupérer les repas du restaurant depuis l'API
   void fetchMenuItems() async {
     try {
-      final response = await http.get(Uri.parse('https://apiwadounnou.wadounnou.com/api/repa?restaurant_id=${widget.restaurant.id}'));
+      final response = await http.get(Uri.parse('https://api-wadounnou.api-mon-encadreur.com/api/repa?restaurant_id=${widget.restaurant.id}'));
       if (response.statusCode == 200) {
         // Si la requête réussit, on parse les données JSON
         final List<dynamic> decodedData = json.decode(response.body)['data'];

@@ -25,7 +25,7 @@ class _AllUserBookingsPageState extends State<AllUserBookingsPage> {
 
   Future<void> fetchBookingDatas() async {
     final url =
-        "https://apiwadounnou.wadounnou.com/api/reservationuser?user_id=$userId";
+        "https://api-wadounnou.api-mon-encadreur.com/api/reservationuser?user_id=$userId";
 
     final response = await http.get(Uri.parse(url));
 

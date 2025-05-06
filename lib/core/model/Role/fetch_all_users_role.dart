@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<String> fetchUserRoleId() async {
-  final response = await http.get(Uri.parse('https://apiv2.wadounnou.com/api/roles'));
+  final response = await http.get(Uri.parse('https://api-wadounnou.api-mon-encadreur.com/api/roles'));
 
   if (response.statusCode == 200) {
     final List<dynamic> roles = jsonDecode(response.body)['data'];
@@ -20,7 +20,7 @@ Future<String> fetchUserRoleId() async {
 }
 
 Future<String> fetchLivreurRoleId() async {
-  final response = await http.get(Uri.parse('https://apiv2.wadounnou.com/api/roles'));
+  final response = await http.get(Uri.parse('https://api-wadounnou.api-mon-encadreur.com/api/roles'));
 
   if (response.statusCode == 200) {
     final List<dynamic> roles = jsonDecode(response.body)['data'];
@@ -38,7 +38,7 @@ Future<String> fetchLivreurRoleId() async {
 }
 
 Future<String> fetchRestaurantRoleId() async {
-  final response = await http.get(Uri.parse('https://apiv2.wadounnou.com/api/roles'));
+  final response = await http.get(Uri.parse('https://api-wadounnou.api-mon-encadreur.com/api/roles'));
 
   if (response.statusCode == 200) {
     final List<dynamic> roles = jsonDecode(response.body)['data'];

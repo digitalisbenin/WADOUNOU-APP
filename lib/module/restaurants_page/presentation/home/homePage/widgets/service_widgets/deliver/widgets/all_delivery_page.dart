@@ -52,7 +52,7 @@ class _AllDeliveryBodyPageState extends State<AllDeliveryBodyPage> {
   Future<void> fetchDeliveryDatas() async {
     String livreur_id = GetStorage().read('livreursId');
     final url =
-        "https://apiwadounnou.wadounnou.com/api/livraisonsuser?livreur_id=${livreur_id}";
+        "https://api-wadounnou.api-mon-encadreur.com/api/livraisonsuser?livreur_id=${livreur_id}";
 
     print('object :::::::::::::::: $livreur_id');
 
